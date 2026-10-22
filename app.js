@@ -1716,17 +1716,17 @@ function updatePaymentSubmitButtonLabel(context, amount) {
     const btnText = document.getElementById("qbPayBtnText");
     if (!btnText) return;
     if (selectedQbPaymentMethod === 'COD') {
-      btnText.textContent = `Confirm Order (Pay on Delivery ${formatted}) →`;
+      btnText.textContent = `Order COD (${formatted}) →`;
     } else {
-      btnText.textContent = `Pay ${formatted} Securely →`;
+      btnText.textContent = `Pay ${formatted} →`;
     }
   } else {
     const btnText = document.getElementById("cartPayBtnText");
     if (!btnText) return;
     if (selectedCartPaymentMethod === 'COD') {
-      btnText.textContent = `Confirm Order (Pay on Delivery ${formatted}) →`;
+      btnText.textContent = `Order COD (${formatted}) →`;
     } else {
-      btnText.textContent = `Pay ${formatted} Securely →`;
+      btnText.textContent = `Pay ${formatted} →`;
     }
   }
 }

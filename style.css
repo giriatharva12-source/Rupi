@@ -5896,25 +5896,26 @@ textarea.form-input.is-invalid {
   box-shadow: 0 0 0 3px rgba(23, 53, 10, 0.1);
 }
 
-/* Step 3: Payment Method Cards */
+/* Step 3: Payment Method Cards — 2X2 Grid Blocks */
 .payment-methods-container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.65rem;
-  margin: 1rem 0;
+  margin: 0.85rem 0;
 }
 
 .payment-method-card {
   display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  padding: 0.85rem 1rem;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.75rem 0.8rem;
   border: 1.5px solid var(--border-color);
   border-radius: var(--radius-md);
   background: #FFFFFF;
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
+  min-height: 80px;
 }
 
 .payment-method-card:hover {
@@ -5931,18 +5932,20 @@ textarea.form-input.is-invalid {
 
 .payment-method-radio {
   accent-color: #17350a;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .payment-method-icon {
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   background: var(--bg-parchment);
   border-radius: var(--radius-sm);
   flex-shrink: 0;
@@ -5950,27 +5953,30 @@ textarea.form-input.is-invalid {
 
 .payment-method-details {
   flex: 1;
+  min-width: 0;
 }
 
 .payment-method-title {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.92rem;
+  gap: 0.35rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--color-charcoal);
+  flex-wrap: wrap;
 }
 
 .payment-method-desc {
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   color: var(--color-muted);
   margin-top: 0.15rem;
+  line-height: 1.3;
 }
 
 .payment-method-badge {
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   font-weight: 700;
-  padding: 0.15rem 0.45rem;
+  padding: 0.12rem 0.4rem;
   border-radius: var(--radius-full);
   background: #e8f5e9;
   color: #1b5e20;
@@ -5980,6 +5986,126 @@ textarea.form-input.is-invalid {
 .payment-method-badge.instant {
   background: #fef3c7;
   color: #92400e;
+}
+
+/* Step 3: Single Line Actions (Pay + Confirm via WhatsApp + Back) */
+.step3-single-line-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.step3-btn-pay {
+  flex: 1.35;
+  min-width: 0;
+  background: #17350a;
+  color: #FFFFFF;
+  border: none;
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 0.86rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step3-btn-pay:hover {
+  background: #234d12;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(23, 53, 10, 0.2);
+}
+
+.step3-btn-whatsapp {
+  flex: 1.1;
+  min-width: 0;
+  background: #25d366;
+  color: #FFFFFF;
+  border: none;
+  padding: 0.75rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+}
+
+.step3-btn-whatsapp:hover {
+  background: #20bd5a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+}
+
+.step3-btn-back {
+  flex: 0 0 auto;
+  background: var(--bg-parchment);
+  color: var(--color-charcoal);
+  border: 1.5px solid var(--border-color);
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step3-btn-back:hover {
+  background: #FFFFFF;
+  border-color: var(--color-charcoal);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+  .payment-methods-container {
+    gap: 0.5rem;
+  }
+  .payment-method-card {
+    padding: 0.6rem 0.65rem;
+    min-height: 75px;
+    gap: 0.45rem;
+  }
+  .payment-method-title {
+    font-size: 0.8rem;
+  }
+  .payment-method-desc {
+    font-size: 0.68rem;
+  }
+  .step3-single-line-actions {
+    gap: 0.35rem;
+  }
+  .step3-btn-pay {
+    font-size: 0.78rem;
+    padding: 0.65rem 0.5rem;
+  }
+  .step3-btn-whatsapp {
+    font-size: 0.76rem;
+    padding: 0.65rem 0.45rem;
+  }
+  .step3-btn-back {
+    font-size: 0.76rem;
+    padding: 0.65rem 0.55rem;
+  }
 }
 
 /* Step 3: Order Breakdown Summary Box */

@@ -568,7 +568,7 @@
 
         <label style="font-size:0.88rem; font-weight:700; color:var(--color-charcoal); display:block; margin-bottom:0.5rem;">Select Payment Method:</label>
 
-        <!-- 4 Payment Options -->
+        <!-- 4 Payment Options (2X2 Grid Blocks) -->
         <div class="payment-methods-container" id="qbPaymentMethods">
           <!-- Option A: UPI / QR -->
           <label class="payment-method-card selected" onclick="selectPaymentMethod('UPI', 'qb')">
@@ -579,7 +579,7 @@
                 <span>UPI / QR</span>
                 <span class="payment-method-badge instant">Fastest</span>
               </div>
-              <div class="payment-method-desc">GPay, PhonePe, Paytm, BHIM, or Scan QR Code</div>
+              <div class="payment-method-desc">GPay, PhonePe, Paytm, QR</div>
             </div>
           </label>
 
@@ -589,9 +589,9 @@
             <div class="payment-method-icon">💳</div>
             <div class="payment-method-details">
               <div class="payment-method-title">
-                <span>Credit / Debit Cards</span>
+                <span>Cards</span>
               </div>
-              <div class="payment-method-desc">RuPay, Visa, Mastercard, Maestro (Encrypted Gateway)</div>
+              <div class="payment-method-desc">RuPay, Visa, Mastercard</div>
             </div>
           </label>
 
@@ -603,7 +603,7 @@
               <div class="payment-method-title">
                 <span>Net Banking</span>
               </div>
-              <div class="payment-method-desc">SBI, HDFC, ICICI, Axis, and 50+ Indian banks</div>
+              <div class="payment-method-desc">SBI, HDFC, ICICI, 50+ Banks</div>
             </div>
           </label>
 
@@ -616,22 +616,23 @@
                 <span>Cash on Delivery</span>
                 <span class="payment-method-badge">Pay at Door</span>
               </div>
-              <div class="payment-method-desc">Pay via cash or UPI upon doorstep parcel delivery</div>
+              <div class="payment-method-desc">Pay cash/UPI at delivery</div>
             </div>
           </label>
         </div>
 
-        <div class="cart-step2-actions" style="margin-top:1rem; display:flex; flex-direction:column; gap:0.6rem;">
-          <button type="button" class="cart-sticky-checkout-btn" id="qbMainSubmitPayBtn" onclick="submitQuickBuyOrder()">
+        <!-- Single Line Actions: Pay + Confirm via WhatsApp + Back -->
+        <div class="step3-single-line-actions">
+          <button type="button" class="step3-btn-pay" id="qbMainSubmitPayBtn" onclick="submitQuickBuyOrder()">
             <span id="qbPayBtnText">Pay ₹259 Securely →</span>
           </button>
 
-          <button type="button" class="btn-whatsapp-again" onclick="launchQuickBuyWhatsApp()" style="background:#e8f5e9; color:#166534; border:1px solid #bbf7d0; font-size:0.85rem; padding:0.6rem; border-radius:var(--radius-full); cursor:pointer;">
-            <span>💬 Or Confirm Order directly via WhatsApp</span>
+          <button type="button" class="step3-btn-whatsapp" onclick="launchQuickBuyWhatsApp()" title="Confirm Order directly via WhatsApp">
+            <span>💬 Confirm via WhatsApp</span>
           </button>
 
-          <button type="button" class="qb-back-step-btn" onclick="goToQuickBuyStep(2)" style="align-self:center; background:none; border:none; color:var(--color-muted); text-decoration:underline; font-size:0.8rem; cursor:pointer;">
-            <span>← Edit Address Details</span>
+          <button type="button" class="step3-btn-back" onclick="goToQuickBuyStep(2)" title="Back to delivery address">
+            <span>← Back</span>
           </button>
         </div>
 
@@ -887,7 +888,7 @@
 
         <label style="font-size:0.88rem; font-weight:700; color:var(--color-charcoal); display:block; margin-bottom:0.5rem;">Select Payment Method:</label>
 
-        <!-- 4 Payment Options -->
+        <!-- 4 Payment Options (2X2 Grid Blocks) -->
         <div class="payment-methods-container" id="cartPaymentMethods">
           <!-- Option A: UPI / QR -->
           <label class="payment-method-card selected" onclick="selectPaymentMethod('UPI', 'cart')">
@@ -898,7 +899,7 @@
                 <span>UPI / QR</span>
                 <span class="payment-method-badge instant">Fastest</span>
               </div>
-              <div class="payment-method-desc">GPay, PhonePe, Paytm, BHIM, or Scan QR Code</div>
+              <div class="payment-method-desc">GPay, PhonePe, Paytm, QR</div>
             </div>
           </label>
 
@@ -908,9 +909,9 @@
             <div class="payment-method-icon">💳</div>
             <div class="payment-method-details">
               <div class="payment-method-title">
-                <span>Credit / Debit Cards</span>
+                <span>Cards</span>
               </div>
-              <div class="payment-method-desc">RuPay, Visa, Mastercard, Maestro (Encrypted Gateway)</div>
+              <div class="payment-method-desc">RuPay, Visa, Mastercard</div>
             </div>
           </label>
 
@@ -922,7 +923,7 @@
               <div class="payment-method-title">
                 <span>Net Banking</span>
               </div>
-              <div class="payment-method-desc">SBI, HDFC, ICICI, Axis, and 50+ Indian banks</div>
+              <div class="payment-method-desc">SBI, HDFC, ICICI, 50+ Banks</div>
             </div>
           </label>
 
@@ -935,22 +936,23 @@
                 <span>Cash on Delivery</span>
                 <span class="payment-method-badge">Pay at Door</span>
               </div>
-              <div class="payment-method-desc">Pay via cash or UPI upon doorstep parcel delivery</div>
+              <div class="payment-method-desc">Pay cash/UPI at delivery</div>
             </div>
           </label>
         </div>
 
-        <div class="cart-step2-actions" style="margin-top:1rem; display:flex; flex-direction:column; gap:0.6rem;">
-          <button type="button" class="cart-sticky-checkout-btn" id="cartMainSubmitPayBtn" onclick="submitCartOrder()">
+        <!-- Single Line Actions: Pay + Confirm via WhatsApp + Back -->
+        <div class="step3-single-line-actions">
+          <button type="button" class="step3-btn-pay" id="cartMainSubmitPayBtn" onclick="submitCartOrder()">
             <span id="cartPayBtnText">Pay ₹0 Securely →</span>
           </button>
 
-          <button type="button" class="btn-whatsapp-again" onclick="proceedToWhatsAppCheckout()" style="background:#e8f5e9; color:#166534; border:1px solid #bbf7d0; font-size:0.85rem; padding:0.6rem; border-radius:var(--radius-full); cursor:pointer;">
-            <span>💬 Or Complete Order directly via WhatsApp</span>
+          <button type="button" class="step3-btn-whatsapp" onclick="proceedToWhatsAppCheckout()" title="Complete Order directly via WhatsApp">
+            <span>💬 Confirm via WhatsApp</span>
           </button>
 
-          <button type="button" class="cart-back-btn" onclick="goToCartStep(2)" style="align-self:center; background:none; border:none; color:var(--color-muted); text-decoration:underline; font-size:0.8rem; cursor:pointer;">
-            <span>← Edit Address Details</span>
+          <button type="button" class="step3-btn-back" onclick="goToCartStep(2)" title="Back to delivery address">
+            <span>← Back</span>
           </button>
         </div>
 
