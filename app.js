@@ -1287,33 +1287,59 @@ function handleResetDefaults() {
 
 
 /* ==========================================================================
-   2-STEP CHECKOUT CONTROLLERS (QUICK BUY & CART)
-   Step 1: Confirmation of Quantity & Type
-   Step 2: Address & Details
+   3-STEP CHECKOUT & PAYMENT SYSTEM CONTROLLERS (QUICK BUY & CART)
+   Step 1: Product / Bag Review & Specs
+   Step 2: Customer Delivery Address & Indian Validations
+   Step 3: Order Review & 4 Payment Methods (UPI/QR, Cards, Net Banking, COD)
    ========================================================================== */
 
 let currentQuickBuyStep = 1;
 let currentCartStep = 1;
+let selectedQbPaymentMethod = "UPI";
+let selectedCartPaymentMethod = "UPI";
+let lastConfirmedOrder = null;
+let currentAdminOrders = [];
+let currentAdminFilter = "all";
+
+// ==========================================================================
+// QUICK BUY 3-STEP CONTROLLER
+// ==========================================================================
 
 function goToQuickBuyStep(step) {
   currentQuickBuyStep = step;
   const view1 = document.getElementById("qbStep1View");
   const view2 = document.getElementById("qbStep2View");
+  const view3 = document.getElementById("qbStep3View");
+
   const pill1 = document.getElementById("qbStep1Pill");
   const pill2 = document.getElementById("qbStep2Pill");
+  const pill3 = document.getElementById("qbStep3Pill");
 
-  if (step === 2) {
+  // Reset pill states
+  [pill1, pill2, pill3].forEach(p => {
+    if (p) {
+      p.classList.remove("active", "completed");
+    }
+  });
+
+  if (step === 1) {
+    if (view1) view1.style.display = "block";
+    if (view2) view2.style.display = "none";
+    if (view3) view3.style.display = "none";
+    if (pill1) pill1.classList.add("active");
+  } else if (step === 2) {
     if (view1) view1.style.display = "none";
     if (view2) view2.style.display = "block";
-    if (pill1) { pill1.classList.remove("active"); pill1.classList.add("completed"); }
-    if (pill2) { pill2.classList.add("active"); }
+    if (view3) view3.style.display = "none";
+    if (pill1) pill1.classList.add("completed");
+    if (pill2) pill2.classList.add("active");
 
-    // Update Step 2 Summary Banner
+    // Populate Step 2 Mini Banner
     if (qbProduct) {
       const titleEl = document.getElementById("qbStep2SummaryTitle");
       const specsEl = document.getElementById("qbStep2SummarySpecs");
       const totalEl = document.getElementById("qbStep2TotalAmountDisplay");
-      
+
       const sizeObj = PRICING_MATRIX[qbSize] || PRICING_MATRIX["10x14"];
       const baseUnitPrice = getPriceForSpec(qbSize, qbPages);
       const subtotal = baseUnitPrice * qbQty;
@@ -1325,47 +1351,1004 @@ function goToQuickBuyStep(step) {
       if (specsEl) specsEl.textContent = `${sizeObj.dimensions} • ${qbPages} pgs • Qty: ${qbQty}${hasBulkDiscount ? ' (5% Off)' : ''}`;
       if (totalEl) totalEl.textContent = `₹${total.toLocaleString('en-IN')}`;
     }
-  } else {
-    if (view1) view1.style.display = "block";
+  } else if (step === 3) {
+    if (view1) view1.style.display = "none";
     if (view2) view2.style.display = "none";
-    if (pill1) { pill1.classList.add("active"); pill1.classList.remove("completed"); }
-    if (pill2) { pill2.classList.remove("active"); pill2.classList.remove("completed"); }
+    if (view3) view3.style.display = "block";
+    if (pill1) pill1.classList.add("completed");
+    if (pill2) pill2.classList.add("completed");
+    if (pill3) pill3.classList.add("active");
+
+    populateQuickBuyStep3Summary();
   }
 }
 
+// Validate Step 2 inputs before advancing to Step 3 (Quick Buy)
+function validateAndGoToQuickBuyStep(targetStep) {
+  if (targetStep === 3) {
+    const nameInput = document.getElementById("qbCustName");
+    const phoneInput = document.getElementById("qbCustPhone");
+    const emailInput = document.getElementById("qbCustEmail");
+    const houseInput = document.getElementById("qbCustHouse");
+    const streetInput = document.getElementById("qbCustStreet");
+    const cityInput = document.getElementById("qbCustCity");
+    const stateInput = document.getElementById("qbCustState");
+    const pincodeInput = document.getElementById("qbCustPincode");
+
+    let isValid = true;
+    let firstInvalid = null;
+
+    // Helper for validation
+    function checkField(input, errorId, condition) {
+      const errorEl = document.getElementById(errorId);
+      if (!condition) {
+        if (input) input.classList.add("is-invalid");
+        if (errorEl) errorEl.style.display = "block";
+        isValid = false;
+        if (!firstInvalid && input) firstInvalid = input;
+      } else {
+        if (input) input.classList.remove("is-invalid");
+        if (errorEl) errorEl.style.display = "none";
+      }
+    }
+
+    // Name
+    checkField(nameInput, "qbNameError", nameInput && nameInput.value.trim().length >= 2);
+
+    // Mobile: 10 digits starting with 6, 7, 8, or 9
+    const phoneClean = (phoneInput ? phoneInput.value : "").replace(/\D/g, "");
+    checkField(phoneInput, "qbPhoneError", /^[6-9]\d{9}$/.test(phoneClean));
+
+    // Email (optional, but validate format if present)
+    if (emailInput && emailInput.value.trim().length > 0) {
+      checkField(emailInput, "qbEmailError", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim()));
+    } else {
+      checkField(emailInput, "qbEmailError", true);
+    }
+
+    // House
+    checkField(houseInput, "qbHouseError", houseInput && houseInput.value.trim().length > 0);
+
+    // Street
+    checkField(streetInput, "qbStreetError", streetInput && streetInput.value.trim().length > 0);
+
+    // City
+    checkField(cityInput, "qbCityError", cityInput && cityInput.value.trim().length > 0);
+
+    // State
+    checkField(stateInput, "qbStateError", stateInput && stateInput.value.trim().length > 0);
+
+    // PIN code: 6 digits
+    const pinClean = (pincodeInput ? pincodeInput.value : "").replace(/\D/g, "");
+    checkField(pincodeInput, "qbPincodeError", /^[1-9]\d{5}$/.test(pinClean));
+
+    if (!isValid) {
+      if (firstInvalid) firstInvalid.focus();
+      showToast("Please complete required address fields correctly. ⚠️");
+      return;
+    }
+  }
+
+  goToQuickBuyStep(targetStep);
+}
+
+// Populate Step 3 details in Quick Buy
+function populateQuickBuyStep3Summary() {
+  if (!qbProduct) return;
+
+  const sizeObj = PRICING_MATRIX[qbSize] || PRICING_MATRIX["10x14"];
+  const unitPrice = getPriceForSpec(qbSize, qbPages);
+  const subtotal = unitPrice * qbQty;
+  const hasBulkDiscount = qbQty >= 10;
+  const discount = hasBulkDiscount ? Math.round(subtotal * 0.05) : 0;
+  const deliveryFee = (subtotal - discount) >= 799 ? 0 : 60;
+  const finalTotal = (subtotal - discount) + deliveryFee;
+
+  // Title & specs
+  const titleEl = document.getElementById("qbStep3ItemTitle");
+  const specEl = document.getElementById("qbStep3ItemSpec");
+  const priceEl = document.getElementById("qbStep3ItemPrice");
+  if (titleEl) titleEl.textContent = `${qbProduct.designNumber}. ${qbProduct.name}`;
+  if (specEl) specEl.textContent = `${sizeObj.dimensions} • ${qbPages} pgs • Qty: ${qbQty}`;
+  if (priceEl) priceEl.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+
+  // Address Chip
+  const name = (document.getElementById("qbCustName")?.value || "Customer").trim();
+  const house = (document.getElementById("qbCustHouse")?.value || "").trim();
+  const street = (document.getElementById("qbCustStreet")?.value || "").trim();
+  const city = (document.getElementById("qbCustCity")?.value || "").trim();
+  const state = (document.getElementById("qbCustState")?.value || "").trim();
+  const pin = (document.getElementById("qbCustPincode")?.value || "").trim();
+
+  const addrNameEl = document.getElementById("qbStep3AddrName");
+  const addrTextEl = document.getElementById("qbStep3AddrText");
+  if (addrNameEl) addrNameEl.textContent = name;
+  if (addrTextEl) addrTextEl.textContent = `${house}, ${street}, ${city}, ${state} - ${pin}`;
+
+  // Breakdown
+  const subtotalEl = document.getElementById("qbStep3Subtotal");
+  const discountRow = document.getElementById("qbStep3DiscountRow");
+  const discountEl = document.getElementById("qbStep3Discount");
+  const deliveryEl = document.getElementById("qbStep3DeliveryFee");
+  const totalEl = document.getElementById("qbStep3PayableTotal");
+
+  if (subtotalEl) subtotalEl.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+  if (discountRow) {
+    if (discount > 0) {
+      discountRow.style.display = "flex";
+      if (discountEl) discountEl.textContent = `-₹${discount.toLocaleString('en-IN')}`;
+    } else {
+      discountRow.style.display = "none";
+    }
+  }
+  if (deliveryEl) deliveryEl.textContent = deliveryFee === 0 ? "FREE" : `₹${deliveryFee}`;
+  if (totalEl) totalEl.textContent = `₹${finalTotal.toLocaleString('en-IN')}`;
+
+  updatePaymentSubmitButtonLabel('qb', finalTotal);
+}
+
+// ==========================================================================
+// CART DRAWER 3-STEP CONTROLLER
+// ==========================================================================
+
 function goToCartStep(step) {
-  if (step === 2 && cart.length === 0) {
+  if (step > 1 && cart.length === 0) {
     showToast("Your shopping bag is empty! Add books to proceed.");
     return;
   }
-  
+
   currentCartStep = step;
   const view1 = document.getElementById("cartStep1View");
   const view2 = document.getElementById("cartStep2View");
+  const view3 = document.getElementById("cartStep3View");
+
   const pill1 = document.getElementById("cartStep1Pill");
   const pill2 = document.getElementById("cartStep2Pill");
+  const pill3 = document.getElementById("cartStep3Pill");
+  const stickyFooter = document.getElementById("cartDrawerStickyFooter");
 
-  if (step === 2) {
+  [pill1, pill2, pill3].forEach(p => {
+    if (p) p.classList.remove("active", "completed");
+  });
+
+  if (step === 1) {
+    if (view1) view1.style.display = "block";
+    if (view2) view2.style.display = "none";
+    if (view3) view3.style.display = "none";
+    if (pill1) pill1.classList.add("active");
+    if (stickyFooter) stickyFooter.style.display = "block";
+  } else if (step === 2) {
     if (view1) view1.style.display = "none";
     if (view2) view2.style.display = "block";
-    if (pill1) { pill1.classList.remove("active"); pill1.classList.add("completed"); }
-    if (pill2) { pill2.classList.add("active"); }
+    if (view3) view3.style.display = "none";
+    if (pill1) pill1.classList.add("completed");
+    if (pill2) pill2.classList.add("active");
+    if (stickyFooter) stickyFooter.style.display = "none";
 
-    // Update Step 2 Cart Summary
+    // Summary banner in step 2
     const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
     const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
-    const discountAmount = totalItems >= 10 ? Math.round(subtotal * 0.05) : 0;
-    const finalTotal = subtotal - discountAmount;
+    const discount = totalItems >= 10 ? Math.round(subtotal * 0.05) : 0;
+    const finalTotal = subtotal - discount;
 
     const countEl = document.getElementById("cartStep2ItemsCount");
     const totalEl = document.getElementById("cartStep2TotalPreview");
     if (countEl) countEl.textContent = `${totalItems} ${totalItems === 1 ? 'diary' : 'diaries'} in Bag`;
-    if (totalEl) totalEl.textContent = `Total: ₹${finalTotal.toLocaleString('en-IN')}${discountAmount > 0 ? ' (incl. 5% off)' : ''}`;
-  } else {
-    // Step 1
-    if (view1) view1.style.display = "block";
+    if (totalEl) totalEl.textContent = `Total: ₹${finalTotal.toLocaleString('en-IN')}${discount > 0 ? ' (incl. 5% off)' : ''}`;
+  } else if (step === 3) {
+    if (view1) view1.style.display = "none";
     if (view2) view2.style.display = "none";
-    if (pill1) { pill1.classList.add("active"); pill1.classList.remove("completed"); }
-    if (pill2) { pill2.classList.remove("active"); pill2.classList.remove("completed"); }
+    if (view3) view3.style.display = "block";
+    if (pill1) pill1.classList.add("completed");
+    if (pill2) pill2.classList.add("completed");
+    if (pill3) pill3.classList.add("active");
+    if (stickyFooter) stickyFooter.style.display = "none";
+
+    populateCartStep3Summary();
   }
 }
+
+// Validate Step 2 inputs before advancing to Step 3 (Cart)
+function validateAndGoToCartStep(targetStep) {
+  if (targetStep === 3) {
+    const nameInput = document.getElementById("custName");
+    const phoneInput = document.getElementById("custPhone");
+    const emailInput = document.getElementById("custEmail");
+    const houseInput = document.getElementById("custHouse");
+    const streetInput = document.getElementById("custStreet");
+    const cityInput = document.getElementById("custCity");
+    const stateInput = document.getElementById("custState");
+    const pincodeInput = document.getElementById("custPincode");
+
+    let isValid = true;
+    let firstInvalid = null;
+
+    function checkField(input, errorId, condition) {
+      const errorEl = document.getElementById(errorId);
+      if (!condition) {
+        if (input) input.classList.add("is-invalid");
+        if (errorEl) errorEl.style.display = "block";
+        isValid = false;
+        if (!firstInvalid && input) firstInvalid = input;
+      } else {
+        if (input) input.classList.remove("is-invalid");
+        if (errorEl) errorEl.style.display = "none";
+      }
+    }
+
+    checkField(nameInput, "cartNameError", nameInput && nameInput.value.trim().length >= 2);
+    const phoneClean = (phoneInput ? phoneInput.value : "").replace(/\D/g, "");
+    checkField(phoneInput, "cartPhoneError", /^[6-9]\d{9}$/.test(phoneClean));
+
+    if (emailInput && emailInput.value.trim().length > 0) {
+      checkField(emailInput, "cartEmailError", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim()));
+    } else {
+      checkField(emailInput, "cartEmailError", true);
+    }
+
+    checkField(houseInput, "cartHouseError", houseInput && houseInput.value.trim().length > 0);
+    checkField(streetInput, "cartStreetError", streetInput && streetInput.value.trim().length > 0);
+    checkField(cityInput, "cartCityError", cityInput && cityInput.value.trim().length > 0);
+    checkField(stateInput, "cartStateError", stateInput && stateInput.value.trim().length > 0);
+
+    const pinClean = (pincodeInput ? pincodeInput.value : "").replace(/\D/g, "");
+    checkField(pincodeInput, "cartPincodeError", /^[1-9]\d{5}$/.test(pinClean));
+
+    if (!isValid) {
+      if (firstInvalid) firstInvalid.focus();
+      showToast("Please complete required address fields correctly. ⚠️");
+      return;
+    }
+  }
+
+  goToCartStep(targetStep);
+}
+
+// Populate Step 3 details in Cart Drawer
+function populateCartStep3Summary() {
+  const itemsContainer = document.getElementById("cartStep3ItemsList");
+  if (!itemsContainer) return;
+
+  const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
+  const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+  const discount = totalItems >= 10 ? Math.round(subtotal * 0.05) : 0;
+  const net = subtotal - discount;
+  const deliveryFee = net >= 799 ? 0 : 60;
+  const finalTotal = net + deliveryFee;
+
+  // Render items
+  itemsContainer.innerHTML = cart.map(item => `
+    <div class="step3-item-row">
+      <div class="step3-item-info">
+        <span class="step3-item-title">${escapeHTML(item.name)}</span>
+        <span class="step3-item-spec">${escapeHTML(item.size)} • ${item.pages} pgs • Qty: ${item.quantity}</span>
+      </div>
+      <span class="step3-item-price">₹${(item.price * item.quantity).toLocaleString('en-IN')}</span>
+    </div>
+  `).join("");
+
+  // Address chip
+  const name = (document.getElementById("custName")?.value || "Customer").trim();
+  const house = (document.getElementById("custHouse")?.value || "").trim();
+  const street = (document.getElementById("custStreet")?.value || "").trim();
+  const city = (document.getElementById("custCity")?.value || "").trim();
+  const state = (document.getElementById("custState")?.value || "").trim();
+  const pin = (document.getElementById("custPincode")?.value || "").trim();
+
+  const addrNameEl = document.getElementById("cartStep3AddrName");
+  const addrTextEl = document.getElementById("cartStep3AddrText");
+  if (addrNameEl) addrNameEl.textContent = name;
+  if (addrTextEl) addrTextEl.textContent = `${house}, ${street}, ${city}, ${state} - ${pin}`;
+
+  // Breakdown
+  const subtotalEl = document.getElementById("cartStep3Subtotal");
+  const discountRow = document.getElementById("cartStep3DiscountRow");
+  const discountEl = document.getElementById("cartStep3Discount");
+  const deliveryEl = document.getElementById("cartStep3DeliveryFee");
+  const totalEl = document.getElementById("cartStep3PayableTotal");
+
+  if (subtotalEl) subtotalEl.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+  if (discountRow) {
+    if (discount > 0) {
+      discountRow.style.display = "flex";
+      if (discountEl) discountEl.textContent = `-₹${discount.toLocaleString('en-IN')}`;
+    } else {
+      discountRow.style.display = "none";
+    }
+  }
+  if (deliveryEl) deliveryEl.textContent = deliveryFee === 0 ? "FREE" : `₹${deliveryFee}`;
+  if (totalEl) totalEl.textContent = `₹${finalTotal.toLocaleString('en-IN')}`;
+
+  updatePaymentSubmitButtonLabel('cart', finalTotal);
+}
+
+// ==========================================================================
+// PAYMENT METHOD SELECTION
+// ==========================================================================
+
+function selectPaymentMethod(method, context) {
+  if (context === 'qb') {
+    selectedQbPaymentMethod = method;
+    const cards = document.querySelectorAll("#qbPaymentMethods .payment-method-card");
+    cards.forEach(c => {
+      const radio = c.querySelector('input[type="radio"]');
+      if (radio && radio.value === method) {
+        radio.checked = true;
+        c.classList.add("selected");
+      } else {
+        c.classList.remove("selected");
+      }
+    });
+
+    const sizeObj = PRICING_MATRIX[qbSize] || PRICING_MATRIX["10x14"];
+    const baseUnitPrice = getPriceForSpec(qbSize, qbPages);
+    const subtotal = baseUnitPrice * qbQty;
+    const discount = qbQty >= 10 ? Math.round(subtotal * 0.05) : 0;
+    const delivery = (subtotal - discount) >= 799 ? 0 : 60;
+    const total = (subtotal - discount) + delivery;
+    updatePaymentSubmitButtonLabel('qb', total);
+
+  } else {
+    selectedCartPaymentMethod = method;
+    const cards = document.querySelectorAll("#cartPaymentMethods .payment-method-card");
+    cards.forEach(c => {
+      const radio = c.querySelector('input[type="radio"]');
+      if (radio && radio.value === method) {
+        radio.checked = true;
+        c.classList.add("selected");
+      } else {
+        c.classList.remove("selected");
+      }
+    });
+
+    const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
+    const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+    const discount = totalItems >= 10 ? Math.round(subtotal * 0.05) : 0;
+    const delivery = (subtotal - discount) >= 799 ? 0 : 60;
+    const total = (subtotal - discount) + delivery;
+    updatePaymentSubmitButtonLabel('cart', total);
+  }
+}
+
+function updatePaymentSubmitButtonLabel(context, amount) {
+  const formatted = `₹${amount.toLocaleString('en-IN')}`;
+  if (context === 'qb') {
+    const btnText = document.getElementById("qbPayBtnText");
+    if (!btnText) return;
+    if (selectedQbPaymentMethod === 'COD') {
+      btnText.textContent = `Confirm Order (Pay on Delivery ${formatted}) →`;
+    } else {
+      btnText.textContent = `Pay ${formatted} Securely →`;
+    }
+  } else {
+    const btnText = document.getElementById("cartPayBtnText");
+    if (!btnText) return;
+    if (selectedCartPaymentMethod === 'COD') {
+      btnText.textContent = `Confirm Order (Pay on Delivery ${formatted}) →`;
+    } else {
+      btnText.textContent = `Pay ${formatted} Securely →`;
+    }
+  }
+}
+
+// ==========================================================================
+// ORDER SUBMISSION & PAYMENT GATEWAY INTEGRATION
+// ==========================================================================
+
+async function submitQuickBuyOrder() {
+  if (!qbProduct) return;
+
+  const submitBtn = document.getElementById("qbMainSubmitPayBtn");
+  const retryAlert = document.getElementById("qbPaymentRetryAlert");
+  if (retryAlert) retryAlert.style.display = "none";
+
+  const customer = {
+    name: document.getElementById("qbCustName")?.value.trim(),
+    phone: document.getElementById("qbCustPhone")?.value.trim(),
+    email: document.getElementById("qbCustEmail")?.value.trim() || null,
+    address: {
+      house: document.getElementById("qbCustHouse")?.value.trim(),
+      street: document.getElementById("qbCustStreet")?.value.trim(),
+      landmark: document.getElementById("qbCustLandmark")?.value.trim() || "",
+      city: document.getElementById("qbCustCity")?.value.trim(),
+      state: document.getElementById("qbCustState")?.value.trim(),
+      pincode: document.getElementById("qbCustPincode")?.value.trim()
+    },
+    deliveryInstructions: document.getElementById("qbCustInstructions")?.value.trim() || ""
+  };
+
+  const items = [{
+    id: qbProduct.id,
+    name: `${qbProduct.designNumber}. ${qbProduct.name}`,
+    designNumber: qbProduct.designNumber,
+    size: qbSize,
+    pages: qbPages,
+    quantity: qbQty,
+    customization: document.getElementById("qbCustCustomization")?.value.trim() || ""
+  }];
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = "Processing Order...";
+  }
+
+  try {
+    const res = await fetch("/api/create-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customer,
+        items,
+        paymentMethod: selectedQbPaymentMethod
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      if (data.code === "GATEWAY_NOT_CONFIGURED") {
+        showRetryAlert('qb', `${data.message} You can select 'Cash on Delivery' below to place your order right now.`);
+      } else {
+        showToast(data.message || "Failed to create order. ⚠️");
+      }
+      return;
+    }
+
+    // 1. Cash on Delivery (Instant Placement)
+    if (selectedQbPaymentMethod === "COD") {
+      closeQuickBuyModal();
+      showOrderSuccessModal(data.order);
+      return;
+    }
+
+    // 2. Online Payment Gateway (UPI / Cards / Net Banking)
+    launchRazorpayCheckout({
+      keyId: data.keyId,
+      amount: data.amount,
+      currency: data.currency,
+      orderId: data.orderId,
+      razorpayOrderId: data.razorpayOrderId,
+      customer: data.customer,
+      context: 'qb'
+    });
+
+  } catch (err) {
+    console.error("Order submit error:", err);
+    showRetryAlert('qb', "Could not communicate with checkout server. Please verify your connection.");
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      const sizeObj = PRICING_MATRIX[qbSize] || PRICING_MATRIX["10x14"];
+      const baseUnitPrice = getPriceForSpec(qbSize, qbPages);
+      const subtotal = baseUnitPrice * qbQty;
+      const discount = qbQty >= 10 ? Math.round(subtotal * 0.05) : 0;
+      const delivery = (subtotal - discount) >= 799 ? 0 : 60;
+      updatePaymentSubmitButtonLabel('qb', (subtotal - discount) + delivery);
+    }
+  }
+}
+
+async function submitCartOrder() {
+  if (cart.length === 0) {
+    showToast("Shopping bag is empty! ⚠️");
+    return;
+  }
+
+  const submitBtn = document.getElementById("cartMainSubmitPayBtn");
+  const retryAlert = document.getElementById("cartPaymentRetryAlert");
+  if (retryAlert) retryAlert.style.display = "none";
+
+  const customer = {
+    name: document.getElementById("custName")?.value.trim(),
+    phone: document.getElementById("custPhone")?.value.trim(),
+    email: document.getElementById("custEmail")?.value.trim() || null,
+    address: {
+      house: document.getElementById("custHouse")?.value.trim(),
+      street: document.getElementById("custStreet")?.value.trim(),
+      landmark: document.getElementById("custLandmark")?.value.trim() || "",
+      city: document.getElementById("custCity")?.value.trim(),
+      state: document.getElementById("custState")?.value.trim(),
+      pincode: document.getElementById("custPincode")?.value.trim()
+    },
+    deliveryInstructions: document.getElementById("custNotes")?.value.trim() || ""
+  };
+
+  const items = cart.map(item => ({
+    id: item.id,
+    name: item.name,
+    designNumber: item.designNumber || "01",
+    size: item.size === "Large (14x17.5)" || item.size === "14x17.5" ? "14x17.5" : "10x14",
+    pages: parseInt(item.pages, 10) || 10,
+    quantity: item.quantity,
+    customization: item.customization || ""
+  }));
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = "Processing Bag Order...";
+  }
+
+  try {
+    const res = await fetch("/api/create-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customer,
+        items,
+        paymentMethod: selectedCartPaymentMethod
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      if (data.code === "GATEWAY_NOT_CONFIGURED") {
+        showRetryAlert('cart', `${data.message} You can select 'Cash on Delivery' below to place your order right now.`);
+      } else {
+        showToast(data.message || "Failed to create order. ⚠️");
+      }
+      return;
+    }
+
+    // 1. Cash on Delivery
+    if (selectedCartPaymentMethod === "COD") {
+      cart = [];
+      saveCart();
+      updateCartUI();
+      closeCart();
+      showOrderSuccessModal(data.order);
+      return;
+    }
+
+    // 2. Online Payment Gateway (UPI / Cards / Net Banking)
+    launchRazorpayCheckout({
+      keyId: data.keyId,
+      amount: data.amount,
+      currency: data.currency,
+      orderId: data.orderId,
+      razorpayOrderId: data.razorpayOrderId,
+      customer: data.customer,
+      context: 'cart'
+    });
+
+  } catch (err) {
+    console.error("Cart order submit error:", err);
+    showRetryAlert('cart', "Could not communicate with checkout server. Please verify your connection.");
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
+      const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+      const discount = totalItems >= 10 ? Math.round(subtotal * 0.05) : 0;
+      const delivery = (subtotal - discount) >= 799 ? 0 : 60;
+      updatePaymentSubmitButtonLabel('cart', (subtotal - discount) + delivery);
+    }
+  }
+}
+
+function launchRazorpayCheckout(opts) {
+  if (typeof Razorpay === "undefined") {
+    showRetryAlert(opts.context, "Payment gateway script failed to load. Please refresh the page or choose Cash on Delivery.");
+    return;
+  }
+
+  const rzpOptions = {
+    key: opts.keyId,
+    amount: opts.amount,
+    currency: opts.currency,
+    name: "Rupantar",
+    description: "Handcrafted Rice Husk Paper Diaries",
+    image: "assets/images/rupaantar-logo.png",
+    order_id: opts.razorpayOrderId,
+    prefill: {
+      name: opts.customer.name,
+      contact: opts.customer.phone,
+      email: opts.customer.email || ""
+    },
+    theme: {
+      color: "#17350a"
+    },
+    handler: async function (response) {
+      await verifyPaymentSignature({
+        orderId: opts.orderId,
+        razorpay_order_id: response.razorpay_order_id,
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_signature: response.razorpay_signature,
+        context: opts.context
+      });
+    },
+    modal: {
+      ondismiss: function () {
+        showRetryAlert(opts.context, "Payment was cancelled. Your order details are saved! You can retry or choose Cash on Delivery.");
+      }
+    }
+  };
+
+  const rzp = new Razorpay(rzpOptions);
+  rzp.on('payment.failed', function (res) {
+    showRetryAlert(opts.context, `Payment failed: ${res.error?.description || "Transaction declined"}. You can try another method or choose COD.`);
+  });
+  rzp.open();
+}
+
+async function verifyPaymentSignature(payload) {
+  try {
+    showToast("Verifying payment with bank... ⏳");
+    const res = await fetch("/api/verify-payment", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        orderId: payload.orderId,
+        razorpay_order_id: payload.razorpay_order_id,
+        razorpay_payment_id: payload.razorpay_payment_id,
+        razorpay_signature: payload.razorpay_signature
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.ok && data.success) {
+      if (payload.context === 'qb') {
+        closeQuickBuyModal();
+      } else {
+        cart = [];
+        saveCart();
+        updateCartUI();
+        closeCart();
+      }
+      showOrderSuccessModal(data.order);
+    } else {
+      showRetryAlert(payload.context, data.message || "Payment signature verification failed.");
+    }
+  } catch (err) {
+    console.error("Verification error:", err);
+    showRetryAlert(payload.context, "Could not verify payment with server. Please check order status.");
+  }
+}
+
+function showRetryAlert(context, message) {
+  const alertEl = document.getElementById(context === 'qb' ? "qbPaymentRetryAlert" : "cartPaymentRetryAlert");
+  const msgEl = document.getElementById(context === 'qb' ? "qbPaymentRetryMsg" : "cartPaymentRetryMsg");
+  if (alertEl) alertEl.style.display = "flex";
+  if (msgEl) msgEl.textContent = message;
+}
+
+// ==========================================================================
+// ORDER CONFIRMATION / SUCCESS MODAL
+// ==========================================================================
+
+function showOrderSuccessModal(order) {
+  lastConfirmedOrder = order;
+  const modal = document.getElementById("checkoutSuccessModalBackdrop");
+  if (!modal) return;
+
+  const orderIdEl = document.getElementById("receiptOrderId");
+  const badgeEl = document.getElementById("receiptPaymentBadge");
+  const itemsEl = document.getElementById("receiptItemsList");
+  const totalEl = document.getElementById("receiptTotalAmount");
+  const addrEl = document.getElementById("receiptShippingAddress");
+  const iconEl = document.getElementById("successIcon");
+  const titleEl = document.getElementById("successTitle");
+  const subtitleEl = document.getElementById("successSubtitle");
+
+  if (orderIdEl) orderIdEl.textContent = order.id;
+
+  const isPaid = order.paymentStatus === 'PAID';
+  if (badgeEl) {
+    badgeEl.textContent = order.paymentStatus;
+    badgeEl.className = `receipt-status-pill ${isPaid ? 'paid' : 'cod'}`;
+  }
+
+  if (iconEl) iconEl.textContent = isPaid ? "✓" : "📦";
+  if (titleEl) titleEl.textContent = isPaid ? "Payment Verified & Order Confirmed!" : "Order Placed Successfully!";
+  if (subtitleEl) {
+    subtitleEl.textContent = isPaid
+      ? "Thank you! Your handcrafted folk-art diaries are being prepared for dispatch."
+      : "Cash on Delivery confirmed! Please keep exact cash or UPI ready at doorstep.";
+  }
+
+  if (itemsEl) {
+    itemsEl.innerHTML = (order.items || []).map(i => `
+      <div class="receipt-item">
+        <span>${escapeHTML(i.name)} (${i.size}, ${i.pages} pgs) × ${i.quantity}</span>
+        <strong>₹${i.itemTotal.toLocaleString('en-IN')}</strong>
+      </div>
+    `).join("");
+  }
+
+  if (totalEl) totalEl.textContent = `₹${(order.pricing?.total || 0).toLocaleString('en-IN')}`;
+  
+  if (addrEl && order.customer?.address) {
+    const a = order.customer.address;
+    addrEl.textContent = `${order.customer.name} • ${order.customer.phone} • ${a.house}, ${a.street}, ${a.city}, ${a.state} - ${a.pincode}`;
+  }
+
+  modal.style.display = "flex";
+}
+
+function closeCheckoutSuccessModal() {
+  const modal = document.getElementById("checkoutSuccessModalBackdrop");
+  if (modal) modal.style.display = "none";
+}
+
+function copyReceiptDetails() {
+  if (!lastConfirmedOrder) return;
+  const text = `Rupantar Order Receipt\nOrder ID: ${lastConfirmedOrder.id}\nStatus: ${lastConfirmedOrder.paymentStatus}\nTotal: ₹${lastConfirmedOrder.pricing?.total}\nCustomer: ${lastConfirmedOrder.customer?.name} (${lastConfirmedOrder.customer?.phone})`;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast("Order receipt copied to clipboard! 📋");
+  });
+}
+
+function shareConfirmedOrderToWhatsApp() {
+  if (!lastConfirmedOrder) return;
+  const cfg = getStoreConfig();
+  const num = (cfg.whatsappNumber || "919876543210").replace(/\D/g, "");
+  
+  const isPaid = lastConfirmedOrder.paymentStatus === 'PAID';
+  let msg = `🌿 *RUPANTAR ORDER CONFIRMATION* 🌿\n\n`;
+  msg += `*Order ID:* ${lastConfirmedOrder.id}\n`;
+  msg += `*Payment:* ${lastConfirmedOrder.paymentStatus} (${lastConfirmedOrder.paymentMethod})\n`;
+  msg += `*Customer:* ${lastConfirmedOrder.customer?.name} (${lastConfirmedOrder.customer?.phone})\n\n`;
+  msg += `*Items Ordered:*\n`;
+  (lastConfirmedOrder.items || []).forEach((it, idx) => {
+    msg += `${idx + 1}. ${it.name} [${it.size}, ${it.pages} pgs] × ${it.quantity} = ₹${it.itemTotal}\n`;
+  });
+  msg += `\n*Total Payable:* ₹${lastConfirmedOrder.pricing?.total}\n`;
+  const a = lastConfirmedOrder.customer?.address;
+  if (a) {
+    msg += `*Delivery Address:* ${a.house}, ${a.street}, ${a.city}, ${a.state} - ${a.pincode}\n`;
+  }
+  msg += `\nThank you for supporting traditional Indian artisans and sustainable rice husk paper!`;
+
+  window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`, "_blank");
+}
+
+// ==========================================================================
+// ADMIN DASHBOARD & ORDER MANAGEMENT
+// ==========================================================================
+
+function openAdminModal() {
+  const backdrop = document.getElementById("adminDashboardModalBackdrop");
+  if (!backdrop) return;
+  backdrop.style.display = "flex";
+
+  const token = sessionStorage.getItem("rupantar_admin_token");
+  if (token) {
+    document.getElementById("adminLoginView").style.display = "none";
+    document.getElementById("adminOrdersView").style.display = "block";
+    loadAdminOrders();
+  } else {
+    document.getElementById("adminLoginView").style.display = "block";
+    document.getElementById("adminOrdersView").style.display = "none";
+    const passInput = document.getElementById("adminPasscodeInput");
+    if (passInput) {
+      passInput.value = "";
+      passInput.focus();
+    }
+  }
+}
+
+function closeAdminModal() {
+  const backdrop = document.getElementById("adminDashboardModalBackdrop");
+  if (backdrop) backdrop.style.display = "none";
+}
+
+async function handleAdminLogin(e) {
+  if (e) e.preventDefault();
+  const pass = document.getElementById("adminPasscodeInput")?.value;
+  const errorEl = document.getElementById("adminLoginError");
+
+  try {
+    const res = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ passcode: pass })
+    });
+
+    const data = await res.json();
+    if (res.ok && data.success) {
+      sessionStorage.setItem("rupantar_admin_token", data.token);
+      if (errorEl) errorEl.style.display = "none";
+      document.getElementById("adminLoginView").style.display = "none";
+      document.getElementById("adminOrdersView").style.display = "block";
+      loadAdminOrders();
+    } else {
+      if (errorEl) errorEl.style.display = "block";
+    }
+  } catch (err) {
+    if (errorEl) errorEl.style.display = "block";
+  }
+}
+
+async function loadAdminOrders() {
+  const token = sessionStorage.getItem("rupantar_admin_token");
+  if (!token) return;
+
+  try {
+    const res = await fetch("/api/admin/orders", {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+
+    const data = await res.json();
+    if (res.ok && data.success) {
+      currentAdminOrders = data.orders || [];
+      renderAdminStats(data.stats || {});
+      renderAdminOrdersList();
+    }
+  } catch (err) {
+    console.error("Admin load error:", err);
+  }
+}
+
+function renderAdminStats(stats) {
+  const totOrders = document.getElementById("metricTotalOrders");
+  const totRev = document.getElementById("metricTotalRevenue");
+  const paidCount = document.getElementById("metricPaidCount");
+  const codCount = document.getElementById("metricCodCount");
+  const dispCount = document.getElementById("metricDispatchedCount");
+  const delivCount = document.getElementById("metricDeliveredCount");
+
+  if (totOrders) totOrders.textContent = stats.totalOrders || 0;
+  if (totRev) totRev.textContent = `₹${(stats.totalRevenue || 0).toLocaleString('en-IN')}`;
+  if (paidCount) paidCount.textContent = stats.paidCount || 0;
+  if (codCount) codCount.textContent = stats.codPendingCount || 0;
+  if (dispCount) dispCount.textContent = stats.dispatchedCount || 0;
+  if (delivCount) delivCount.textContent = stats.deliveredCount || 0;
+}
+
+function setAdminFilter(filter, btn) {
+  currentAdminFilter = filter;
+  const buttons = document.querySelectorAll(".admin-filter-btn");
+  buttons.forEach(b => b.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+  renderAdminOrdersList();
+}
+
+function handleAdminSearch(query) {
+  renderAdminOrdersList(query);
+}
+
+function renderAdminOrdersList(searchQuery = "") {
+  const container = document.getElementById("adminOrdersContainer");
+  if (!container) return;
+
+  let orders = [...currentAdminOrders];
+
+  if (currentAdminFilter === "paid") {
+    orders = orders.filter(o => o.paymentStatus === 'PAID' || o.paymentStatus.includes('PAID'));
+  } else if (currentAdminFilter === "cod") {
+    orders = orders.filter(o => o.paymentMethod === 'COD');
+  } else if (currentAdminFilter === "processing") {
+    orders = orders.filter(o => o.orderStatus === 'PROCESSING');
+  } else if (currentAdminFilter === "dispatched") {
+    orders = orders.filter(o => o.orderStatus === 'DISPATCHED');
+  } else if (currentAdminFilter === "delivered") {
+    orders = orders.filter(o => o.orderStatus === 'DELIVERED');
+  }
+
+  if (searchQuery.trim().length > 0) {
+    const q = searchQuery.toLowerCase();
+    orders = orders.filter(o => 
+      o.id.toLowerCase().includes(q) ||
+      (o.customer?.name && o.customer.name.toLowerCase().includes(q)) ||
+      (o.customer?.phone && o.customer.phone.includes(q)) ||
+      (o.customer?.address?.city && o.customer.address.city.toLowerCase().includes(q))
+    );
+  }
+
+  if (orders.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding:2.5rem; color:var(--color-muted);">No orders match the current filter.</div>`;
+    return;
+  }
+
+  container.innerHTML = orders.map(o => {
+    const isPaid = o.paymentStatus.includes("PAID");
+    const a = o.customer?.address || {};
+
+    return `
+      <div class="admin-order-card">
+        <div class="admin-order-top">
+          <div class="admin-order-meta">
+            <strong>${o.id}</strong> • <span style="color:var(--color-muted);">${new Date(o.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' })}</span>
+          </div>
+          <div class="admin-badge-row">
+            <span class="receipt-status-pill ${isPaid ? 'paid' : 'cod'}">${o.paymentStatus}</span>
+            <span class="receipt-status-pill" style="background:#e0f2fe; color:#0369a1; border:1px solid #bae6fd;">${o.orderStatus}</span>
+          </div>
+        </div>
+
+        <div style="font-size:0.85rem; margin:0.4rem 0;">
+          <strong>👤 ${escapeHTML(o.customer?.name)}</strong> • 📞 <a href="tel:${o.customer?.phone}" style="color:#17350a; text-decoration:underline;">${o.customer?.phone}</a> ${o.customer?.email ? `• ✉️ ${o.customer.email}` : ''}
+          <div style="color:var(--color-muted); font-size:0.8rem; margin-top:0.2rem;">
+            📍 ${escapeHTML(a.house || "")}, ${escapeHTML(a.street || "")}, ${escapeHTML(a.city || "")}, ${escapeHTML(a.state || "")} - ${a.pincode || ""}
+            ${a.landmark ? `(Landmark: ${escapeHTML(a.landmark)})` : ''}
+          </div>
+          ${o.customer?.deliveryInstructions ? `<div style="color:#b45309; font-size:0.78rem; margin-top:0.15rem;">💬 Note: ${escapeHTML(o.customer.deliveryInstructions)}</div>` : ''}
+        </div>
+
+        <div style="background:var(--bg-parchment); padding:0.5rem 0.75rem; border-radius:var(--radius-sm); font-size:0.82rem; margin:0.5rem 0;">
+          <div style="font-weight:600; margin-bottom:0.25rem;">Items (${o.items?.length || 0}):</div>
+          ${(o.items || []).map(it => `
+            <div style="display:flex; justify-content:space-between; color:var(--color-charcoal);">
+              <span>• ${escapeHTML(it.name)} (${it.size}, ${it.pages} pgs) × ${it.quantity}${it.customization ? ` [${escapeHTML(it.customization)}]` : ''}</span>
+              <strong>₹${it.itemTotal}</strong>
+            </div>
+          `).join("")}
+          <div style="display:flex; justify-content:space-between; border-top:1px dashed var(--border-color); margin-top:0.35rem; padding-top:0.25rem; font-weight:700; color:#17350a;">
+            <span>Total (${o.paymentMethod}):</span>
+            <span>₹${o.pricing?.total}</span>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-top:0.6rem; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:0.4rem;">
+            <label style="font-size:0.78rem; font-weight:600; color:var(--color-muted);">Status:</label>
+            <select class="admin-status-select" onchange="updateAdminOrderStatus('${o.id}', this.value)">
+              <option value="PLACED" ${o.orderStatus === 'PLACED' ? 'selected' : ''}>PLACED</option>
+              <option value="PROCESSING" ${o.orderStatus === 'PROCESSING' ? 'selected' : ''}>PROCESSING</option>
+              <option value="DISPATCHED" ${o.orderStatus === 'DISPATCHED' ? 'selected' : ''}>DISPATCHED</option>
+              <option value="DELIVERED" ${o.orderStatus === 'DELIVERED' ? 'selected' : ''}>DELIVERED</option>
+              <option value="CANCELLED" ${o.orderStatus === 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>
+            </select>
+          </div>
+
+          ${o.paymentMethod === 'COD' && o.paymentStatus !== 'PAID (COD Collected)' ? `
+            <button type="button" onclick="markCodCollected('${o.id}')" style="background:#166534; color:#FFFFFF; border:none; padding:0.35rem 0.65rem; border-radius:var(--radius-sm); font-size:0.78rem; font-weight:700; cursor:pointer;">
+              ✓ Mark COD Collected
+            </button>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+async function updateAdminOrderStatus(orderId, newStatus) {
+  const token = sessionStorage.getItem("rupantar_admin_token");
+  if (!token) return;
+
+  try {
+    const res = await fetch(`/api/admin/orders/${orderId}/status`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ orderStatus: newStatus })
+    });
+
+    if (res.ok) {
+      showToast(`Order ${orderId} status set to ${newStatus}`);
+      loadAdminOrders();
+    }
+  } catch (err) {
+    showToast("Error updating order status");
+  }
+}
+
+async function markCodCollected(orderId) {
+  const token = sessionStorage.getItem("rupantar_admin_token");
+  if (!token) return;
+
+  try {
+    const res = await fetch(`/api/admin/orders/${orderId}/status`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        paymentStatus: "PAID (COD Collected)",
+        note: "Cash collected at doorstep upon delivery"
+      })
+    });
+
+    if (res.ok) {
+      showToast(`Payment collected for order ${orderId} ✓`);
+      loadAdminOrders();
+    }
+  } catch (err) {
+    showToast("Error updating COD payment");
+  }
+}
+

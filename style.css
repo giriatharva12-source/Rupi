@@ -5128,17 +5128,17 @@ body {
    USER SPECIFIED REFINEMENTS: MINIMAL STEP BAR, INCREASED IMAGE, SINGLE LINE SPECS & QTY
    ========================================================================== */
 
-/* 1. Thin, sleek 2-step indicator (just 1 and 2, no step names) */
+/* 1. Thin, sleek 3-step indicator (steps 1, 2, and 3) */
 .mini-progress-bar {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 0.45rem !important;
-  padding: 3px 8px !important;
-  background: rgba(244, 240, 234, 0.75) !important;
+  gap: 0.4rem !important;
+  padding: 4px 10px !important;
+  background: rgba(244, 240, 234, 0.9) !important;
   border: 1px solid var(--border-color) !important;
   border-radius: var(--radius-full) !important;
-  max-width: 105px !important;
+  max-width: 165px !important;
   width: fit-content !important;
   margin: 0 auto 0.85rem auto !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
@@ -5154,8 +5154,8 @@ body {
 }
 
 .mini-progress-bar .step-badge {
-  width: 22px !important;
-  height: 22px !important;
+  width: 24px !important;
+  height: 24px !important;
   border-radius: 50% !important;
   display: flex !important;
   align-items: center !important;
@@ -5180,7 +5180,7 @@ body {
 }
 
 .mini-progress-bar .step-progress-divider {
-  width: 26px !important;
+  width: 18px !important;
   height: 2px !important;
   background: #dcd5c7 !important;
   border-radius: 1px !important;
@@ -5855,3 +5855,516 @@ body {
 #qbSizeSelector .chip-sub {
   font-size: 0.82rem !important;
 }
+
+/* ==========================================================================
+   3-STEP CHECKOUT & PAYMENT SYSTEM (UPI/QR, CARDS, NETBANKING, COD, ADMIN)
+   ========================================================================== */
+
+/* Validation error highlighting */
+.form-input.is-invalid,
+.form-select.is-invalid,
+textarea.form-input.is-invalid {
+  border-color: #dc2626 !important;
+  background-color: #fef2f2 !important;
+}
+
+.field-error-message {
+  display: block;
+  font-size: 0.76rem;
+  color: #dc2626;
+  font-weight: 500;
+  margin-top: 0.25rem;
+}
+
+/* Indian State Select Dropdown */
+.form-select {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-family: inherit;
+  background-color: #FFFFFF;
+  color: var(--color-charcoal);
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition);
+}
+
+.form-select:focus {
+  border-color: #17350a;
+  box-shadow: 0 0 0 3px rgba(23, 53, 10, 0.1);
+}
+
+/* Step 3: Payment Method Cards */
+.payment-methods-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin: 1rem 0;
+}
+
+.payment-method-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.payment-method-card:hover {
+  border-color: #17350a;
+  background: var(--bg-warm-tint);
+  transform: translateY(-1px);
+}
+
+.payment-method-card.selected {
+  border-color: #17350a;
+  background: #f4f6f1;
+  box-shadow: 0 0 0 1.5px #17350a;
+}
+
+.payment-method-radio {
+  accent-color: #17350a;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.payment-method-icon {
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: var(--bg-parchment);
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.payment-method-details {
+  flex: 1;
+}
+
+.payment-method-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--color-charcoal);
+}
+
+.payment-method-desc {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  margin-top: 0.15rem;
+}
+
+.payment-method-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-full);
+  background: #e8f5e9;
+  color: #1b5e20;
+  text-transform: uppercase;
+}
+
+.payment-method-badge.instant {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* Step 3: Order Breakdown Summary Box */
+.step3-order-summary {
+  background: var(--bg-warm-tint);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.15rem;
+  margin-bottom: 1rem;
+}
+
+.step3-items-scroll {
+  max-height: 150px;
+  overflow-y: auto;
+  margin-bottom: 0.75rem;
+  padding-right: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.step3-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.step3-item-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.step3-item-title {
+  font-weight: 600;
+  color: var(--color-charcoal);
+}
+
+.step3-item-spec {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.step3-item-price {
+  font-weight: 700;
+  color: #17350a;
+  white-space: nowrap;
+}
+
+.step3-address-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  margin-bottom: 0.75rem;
+}
+
+.step3-address-chip strong {
+  color: var(--color-charcoal);
+  display: block;
+}
+
+.step3-address-chip span {
+  color: var(--color-muted);
+}
+
+.step3-edit-address-link {
+  color: #17350a;
+  font-weight: 600;
+  font-size: 0.76rem;
+  text-decoration: underline;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* Security Trust Bar */
+.checkout-security-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+/* Payment Failure / Retry Alert */
+.payment-retry-alert {
+  background: #fef2f2;
+  border: 1.5px solid #fca5a5;
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.payment-retry-alert .alert-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.payment-retry-alert .alert-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #991b1b;
+}
+
+.payment-retry-alert .alert-desc {
+  font-size: 0.8rem;
+  color: #7f1d1d;
+  margin-top: 0.2rem;
+}
+
+/* Order Confirmation / Success Modal */
+.order-success-modal {
+  max-width: 540px !important;
+  background: #FFFFFF !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 1.5rem !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2) !important;
+  position: relative;
+}
+
+.order-success-badge-row {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.order-success-check-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #e8f5e9;
+  color: #1b5e20;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 0.65rem;
+}
+
+.order-success-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-charcoal);
+  margin-bottom: 0.25rem;
+}
+
+.order-success-desc {
+  font-size: 0.88rem;
+  color: var(--color-muted);
+}
+
+.order-receipt-box {
+  background: var(--bg-warm-tint);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin: 1.25rem 0;
+}
+
+.receipt-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 0.75rem;
+}
+
+.receipt-order-id {
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-charcoal);
+}
+
+.receipt-status-pill {
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.receipt-status-pill.paid {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.receipt-status-pill.cod {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.receipt-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.receipt-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+.receipt-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.65rem;
+  border-top: 1px dashed var(--border-color);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #17350a;
+}
+
+.receipt-address-preview {
+  font-size: 0.82rem;
+  color: var(--color-charcoal);
+  margin-top: 0.75rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.receipt-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* ==========================================================================
+   ADMIN ORDER MANAGEMENT DASHBOARD MODAL
+   ========================================================================== */
+.admin-dashboard-modal {
+  max-width: 900px !important;
+  width: 95vw !important;
+  max-height: 90vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-radius: var(--radius-lg) !important;
+}
+
+.admin-header {
+  padding: 1.25rem 1.5rem;
+  background: #17350a;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-header h3 {
+  color: #FFFFFF;
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.admin-body {
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+  background: var(--bg-parchment);
+}
+
+.admin-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.admin-metric-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  text-align: center;
+}
+
+.admin-metric-value {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #17350a;
+}
+
+.admin-metric-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-top: 0.2rem;
+}
+
+.admin-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin-filter-btn {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  background: #FFFFFF;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--color-muted);
+}
+
+.admin-filter-btn.active {
+  background: #17350a;
+  color: #FFFFFF;
+  border-color: #17350a;
+}
+
+.admin-order-card {
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 0.85rem;
+  transition: var(--transition);
+}
+
+.admin-order-card:hover {
+  border-color: #17350a;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.admin-order-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.admin-order-meta {
+  font-size: 0.85rem;
+}
+
+.admin-badge-row {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.admin-status-select {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  background: #FFFFFF;
+}
+
+.admin-login-box {
+  max-width: 380px;
+  margin: 3rem auto;
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  text-align: center;
+}
+

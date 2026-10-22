@@ -18,6 +18,9 @@
 
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- Razorpay Hosted & Standard Checkout Engine -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
 
@@ -52,6 +55,18 @@
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
           </svg>
           <span class="btn-caption">Config</span>
+        </button>
+
+        <!-- Admin Order Management -->
+        <button class="icon-btn admin-btn" id="openAdminBtn" onclick="openAdminModal()" title="Staff Order Management">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span class="btn-caption">Orders</span>
         </button>
 
         <!-- Cart Trigger Button -->
@@ -242,14 +257,18 @@
     <div class="modal-dialog quick-buy-modal" id="quickBuyModal">
       <button class="modal-close-btn" id="closeQuickBuyModalBtn" onclick="closeQuickBuyModal()" title="Close modal">&times;</button>
       
-      <!-- Step Indicator Bar -->
+      <!-- Step Indicator Bar: 1 — 2 — 3 -->
       <div class="step-progress-bar mini-progress-bar">
-        <div class="step-progress-item active" id="qbStep1Pill" onclick="goToQuickBuyStep(1)" title="Step 1">
+        <div class="step-progress-item active" id="qbStep1Pill" onclick="goToQuickBuyStep(1)" title="Step 1: Choose Specs">
           <span class="step-badge">1</span>
         </div>
         <div class="step-progress-divider"></div>
-        <div class="step-progress-item" id="qbStep2Pill" onclick="goToQuickBuyStep(2)" title="Step 2">
+        <div class="step-progress-item" id="qbStep2Pill" onclick="goToQuickBuyStep(2)" title="Step 2: Delivery Details">
           <span class="step-badge">2</span>
+        </div>
+        <div class="step-progress-divider"></div>
+        <div class="step-progress-item" id="qbStep3Pill" onclick="goToQuickBuyStep(3)" title="Step 3: Payment & Review">
+          <span class="step-badge">3</span>
         </div>
       </div>
 
@@ -306,7 +325,7 @@
             </div>
           </div>
 
-                    <!-- 3. Customisation & Branding (Optional) -->
+          <!-- 3. Customisation & Branding (Optional) -->
           <div class="qb-section">
             <label class="qb-label" for="qbCustCustomization">3. Customisation & Branding (Optional):</label>
             <div class="qb-customisation-group">
@@ -340,13 +359,11 @@
               </div>
             </div>
 
-            <!-- Bulk Discount Nudge / Congratulations Party Popper -->
-            <div class="qb-discount-nudge-container" id="qbDiscountNudge">
-              <!-- Dynamically populated -->
-            </div>
+            <!-- Bulk Discount Nudge -->
+            <div class="qb-discount-nudge-container" id="qbDiscountNudge"></div>
           </div>
 
-          <!-- Step 1 Actions (Item Total removed per user request) -->
+          <!-- Step 1 Actions -->
           <div class="qb-footer-action">
             <span id="qbSummaryQty" style="display:none;">1 diary</span>
             <span id="qbTotalAmountDisplay" style="display:none;">₹199</span>
@@ -371,7 +388,7 @@
         </div>
       </div>
 
-      <!-- STEP 2: ADDRESS & ALL DETAILS (QUICK BUY) -->
+      <!-- STEP 2: ADDRESS & DELIVERY DETAILS (QUICK BUY) -->
       <div class="qb-step-view" id="qbStep2View" style="display:none; padding: 1rem 1.25rem;">
         <div class="step-summary-card">
           <div class="step-summary-content">
@@ -383,68 +400,243 @@
         </div>
 
         <div class="cart-delivery-form-container">
-          <div class="delivery-form" style="display:flex; flex-direction:column; gap:0.85rem;">
-            <p class="form-help-text" style="font-size:0.82rem; color:var(--color-muted); margin-bottom:0.5rem;">Enter your delivery details to pre-fill your order directly into WhatsApp chat.</p>
+          <div class="delivery-form" style="display:flex; flex-direction:column; gap:0.75rem;">
+            <p class="form-help-text" style="font-size:0.82rem; color:var(--color-muted); margin-bottom:0.25rem;">Enter your shipping address for courier dispatch & doorstep tracking.</p>
             
             <div class="form-group">
-              <label for="qbCustName" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.25rem;">Your Full Name <span class="required" style="color:var(--color-terracotta);">*</span></label>
-              <input type="text" id="qbCustName" class="form-input" placeholder="e.g. Priya Sharma" autocomplete="off" required style="width:100%; padding:0.65rem 0.85rem; border:1.5px solid var(--border-color); border-radius:var(--radius-md); font-size:0.9rem;">
-              <span class="field-error-message" id="qbNameError" style="display:none; color:var(--color-terracotta); font-size:0.75rem; margin-top:0.2rem;">Please enter your name.</span>
-            </div>
-
-            <div class="form-group">
-              <label for="qbCustPhone" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.25rem;">WhatsApp Phone Number <span class="required" style="color:var(--color-terracotta);">*</span></label>
-              <div class="phone-input-group">
-                <select id="qbCountryCode" class="country-code-dropdown" aria-label="Country Code">
-                  <option value="+91" selected>🇮🇳 +91</option>
-                  <option value="+1">🇺🇸 +1</option>
-                  <option value="+44">🇬🇧 +44</option>
-                  <option value="+971">🇦🇪 +971</option>
-                  <option value="+65">🇸🇬 +65</option>
-                  <option value="+61">🇦🇺 +61</option>
-                  <option value="+49">🇩🇪 +49</option>
-                  <option value="+966">🇸🇦 +966</option>
-                </select>
-                <input 
-                  type="tel" 
-                  id="qbCustPhone" 
-                  placeholder="10-digit mobile number" 
-                  class="phone-number-input" 
-                  autocomplete="off" 
-                  maxlength="10" 
-                  inputmode="numeric" 
-                  oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10);"
-                  required
-                >
-              </div>
-              <span class="field-error-message" id="qbPhoneError" style="display:none; color:var(--color-terracotta); font-size:0.75rem; margin-top:0.2rem;">Please enter a valid 10-digit WhatsApp number.</span>
-            </div>
-
-            <div class="form-group">
-              <label for="qbCustAddress" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.25rem;">Full Delivery Address (Optional - can also share in WhatsApp)</label>
-              <textarea id="qbCustAddress" rows="2" class="form-input" placeholder="House/Flat, Street, Area" autocomplete="off" style="width:100%; padding:0.65rem 0.85rem; border:1.5px solid var(--border-color); border-radius:var(--radius-md); font-size:0.9rem; resize:vertical;"></textarea>
+              <label for="qbCustName" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">Full Name <span class="required" style="color:var(--color-terracotta);">*</span></label>
+              <input type="text" id="qbCustName" class="form-input" placeholder="e.g. Priya Sharma" autocomplete="name" required>
+              <span class="field-error-message" id="qbNameError" style="display:none;">Please enter your full name.</span>
             </div>
 
             <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
               <div class="form-group">
-                <label for="qbCustCity" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.25rem;">City</label>
-                <input type="text" id="qbCustCity" class="form-input" placeholder="e.g. Bengaluru" autocomplete="off" style="width:100%; padding:0.65rem 0.85rem; border:1.5px solid var(--border-color); border-radius:var(--radius-md); font-size:0.9rem;">
+                <label for="qbCustPhone" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">Mobile Number <span class="required" style="color:var(--color-terracotta);">*</span></label>
+                <div class="phone-input-group">
+                  <span style="padding: 0.65rem 0.5rem; background: var(--bg-parchment); border: 1.5px solid var(--border-color); border-right: none; border-radius: var(--radius-md) 0 0 var(--radius-md); font-weight: 600; font-size: 0.85rem; color: var(--color-charcoal);">+91</span>
+                  <input type="tel" id="qbCustPhone" placeholder="10-digit mobile" class="phone-number-input" maxlength="10" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10);" required style="border-radius: 0 var(--radius-md) var(--radius-md) 0;">
+                </div>
+                <span class="field-error-message" id="qbPhoneError" style="display:none;">Enter valid 10-digit Indian mobile.</span>
               </div>
+
               <div class="form-group">
-                <label for="qbCustPincode" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.25rem;">PIN Code</label>
-                <input type="text" id="qbCustPincode" class="form-input" placeholder="6-digit PIN" maxlength="6" autocomplete="off" style="width:100%; padding:0.65rem 0.85rem; border:1.5px solid var(--border-color); border-radius:var(--radius-md); font-size:0.9rem;">
+                <label for="qbCustEmail" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">Email <small style="color:var(--color-muted); font-weight:normal;">(Optional)</small></label>
+                <input type="email" id="qbCustEmail" class="form-input" placeholder="receipt@example.com" autocomplete="email">
+                <span class="field-error-message" id="qbEmailError" style="display:none;">Invalid email format.</span>
               </div>
+            </div>
+
+            <div class="form-group">
+              <label for="qbCustHouse" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">House / Flat / Building No. <span class="required" style="color:var(--color-terracotta);">*</span></label>
+              <input type="text" id="qbCustHouse" class="form-input" placeholder="e.g. Flat 402, Green Meadows" required>
+              <span class="field-error-message" id="qbHouseError" style="display:none;">Please enter house/flat details.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="qbCustStreet" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">Street / Road / Area <span class="required" style="color:var(--color-terracotta);">*</span></label>
+              <input type="text" id="qbCustStreet" class="form-input" placeholder="e.g. 14th Main, 4th Cross, Indiranagar" required>
+              <span class="field-error-message" id="qbStreetError" style="display:none;">Please enter street/area.</span>
+            </div>
+
+            <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+              <div class="form-group">
+                <label for="qbCustCity" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">City <span class="required" style="color:var(--color-terracotta);">*</span></label>
+                <input type="text" id="qbCustCity" class="form-input" placeholder="e.g. Bengaluru" required>
+                <span class="field-error-message" id="qbCityError" style="display:none;">City is required.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="qbCustPincode" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">PIN Code <span class="required" style="color:var(--color-terracotta);">*</span></label>
+                <input type="text" id="qbCustPincode" class="form-input" placeholder="6-digit PIN" maxlength="6" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 6);" required>
+                <span class="field-error-message" id="qbPincodeError" style="display:none;">Enter valid 6-digit PIN.</span>
+              </div>
+            </div>
+
+            <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+              <div class="form-group">
+                <label for="qbCustState" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">State <span class="required" style="color:var(--color-terracotta);">*</span></label>
+                <select id="qbCustState" class="form-select" required>
+                  <option value="">Select State</option>
+                  <option value="Andhra Pradesh">Andhra Pradesh</option>
+                  <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                  <option value="Assam">Assam</option>
+                  <option value="Bihar">Bihar</option>
+                  <option value="Chhattisgarh">Chhattisgarh</option>
+                  <option value="Goa">Goa</option>
+                  <option value="Gujarat">Gujarat</option>
+                  <option value="Haryana">Haryana</option>
+                  <option value="Himachal Pradesh">Himachal Pradesh</option>
+                  <option value="Jharkhand">Jharkhand</option>
+                  <option value="Karnataka" selected>Karnataka</option>
+                  <option value="Kerala">Kerala</option>
+                  <option value="Madhya Pradesh">Madhya Pradesh</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Manipur">Manipur</option>
+                  <option value="Meghalaya">Meghalaya</option>
+                  <option value="Mizoram">Mizoram</option>
+                  <option value="Nagaland">Nagaland</option>
+                  <option value="Odisha">Odisha</option>
+                  <option value="Punjab">Punjab</option>
+                  <option value="Rajasthan">Rajasthan</option>
+                  <option value="Sikkim">Sikkim</option>
+                  <option value="Tamil Nadu">Tamil Nadu</option>
+                  <option value="Telangana">Telangana</option>
+                  <option value="Tripura">Tripura</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  <option value="Uttarakhand">Uttarakhand</option>
+                  <option value="West Bengal">West Bengal</option>
+                  <option value="Delhi">Delhi</option>
+                  <option value="Chandigarh">Chandigarh</option>
+                  <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                  <option value="Puducherry">Puducherry</option>
+                </select>
+                <span class="field-error-message" id="qbStateError" style="display:none;">Please select state.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="qbCustLandmark" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">Landmark <small style="color:var(--color-muted); font-weight:normal;">(Optional)</small></label>
+                <input type="text" id="qbCustLandmark" class="form-input" placeholder="Near Temple / Metro">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="qbCustInstructions" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">Delivery Instructions / Notes <small style="color:var(--color-muted); font-weight:normal;">(Optional)</small></label>
+              <input type="text" id="qbCustInstructions" class="form-input" placeholder="e.g. Leave with security, call before delivery" maxlength="120">
             </div>
           </div>
         </div>
 
-        <div class="cart-step2-actions" style="margin-top:1.25rem;">
+        <div class="cart-step2-actions" style="margin-top:1.25rem; display:flex; gap:0.75rem;">
           <button type="button" class="qb-back-step-btn" onclick="goToQuickBuyStep(1)">
-            <span>← Back</span>
+            <span>← Back: Specs</span>
           </button>
-          <button type="button" class="cart-sticky-checkout-btn" id="qbWhatsAppDirectBtn" onclick="launchQuickBuyWhatsApp()">
-            <span id="qbOrderBtnText">Confirm & Order</span>
+          <button type="button" class="cart-sticky-checkout-btn" onclick="validateAndGoToQuickBuyStep(3)">
+            <span>Next: Payment & Review →</span>
           </button>
+        </div>
+      </div>
+
+      <!-- STEP 3: PAYMENT METHOD & FINAL ORDER REVIEW (QUICK BUY) -->
+      <div class="qb-step-view" id="qbStep3View" style="display:none; padding: 1rem 1.25rem;">
+        <!-- Order Breakdown Summary Box -->
+        <div class="step3-order-summary">
+          <div class="step3-item-row">
+            <div class="step3-item-info">
+              <span class="step3-item-title" id="qbStep3ItemTitle">01. Aaroh Signature</span>
+              <span class="step3-item-spec" id="qbStep3ItemSpec">10x14 cm • 10 pgs • Qty: 1</span>
+            </div>
+            <span class="step3-item-price" id="qbStep3ItemPrice">₹199</span>
+          </div>
+
+          <!-- Address Confirmation Chip -->
+          <div class="step3-address-chip" style="margin-top:0.65rem;">
+            <div>
+              <strong id="qbStep3AddrName">Customer</strong>
+              <span id="qbStep3AddrText">Address details</span>
+            </div>
+            <button type="button" class="step3-edit-address-link" onclick="goToQuickBuyStep(2)">Edit</button>
+          </div>
+
+          <div style="font-size:0.85rem; display:flex; flex-direction:column; gap:0.35rem; margin-top:0.5rem; padding-top:0.5rem; border-top:1px dashed var(--border-color);">
+            <div style="display:flex; justify-content:space-between; color:var(--color-muted);">
+              <span>Subtotal:</span>
+              <span id="qbStep3Subtotal" style="color:var(--color-charcoal); font-weight:600;">₹199</span>
+            </div>
+            <div style="display:none; justify-content:space-between; color:#15803d;" id="qbStep3DiscountRow">
+              <span>Bulk Discount:</span>
+              <span id="qbStep3Discount">-₹0</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; color:var(--color-muted);">
+              <span>Shipping Fee:</span>
+              <span id="qbStep3DeliveryFee" style="font-weight:600; color:#17350a;">₹60</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:1.05rem; font-weight:700; color:#17350a; padding-top:0.4rem; border-top:1px solid var(--border-color);">
+              <span>Final Payable:</span>
+              <span id="qbStep3PayableTotal">₹259</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Failure / Retry Banner (if any) -->
+        <div id="qbPaymentRetryAlert" class="payment-retry-alert" style="display:none;">
+          <div class="alert-icon">⚠️</div>
+          <div>
+            <div class="alert-title">Payment Not Completed</div>
+            <div class="alert-desc" id="qbPaymentRetryMsg">Online payment was cancelled or failed. You can retry or choose Cash on Delivery.</div>
+          </div>
+        </div>
+
+        <label style="font-size:0.88rem; font-weight:700; color:var(--color-charcoal); display:block; margin-bottom:0.5rem;">Select Payment Method:</label>
+
+        <!-- 4 Payment Options -->
+        <div class="payment-methods-container" id="qbPaymentMethods">
+          <!-- Option A: UPI / QR -->
+          <label class="payment-method-card selected" onclick="selectPaymentMethod('UPI', 'qb')">
+            <input type="radio" name="qbPaymentMethod" value="UPI" class="payment-method-radio" checked>
+            <div class="payment-method-icon">📱</div>
+            <div class="payment-method-details">
+              <div class="payment-method-title">
+                <span>UPI / QR</span>
+                <span class="payment-method-badge instant">Fastest</span>
+              </div>
+              <div class="payment-method-desc">GPay, PhonePe, Paytm, BHIM, or Scan QR Code</div>
+            </div>
+          </label>
+
+          <!-- Option B: Cards -->
+          <label class="payment-method-card" onclick="selectPaymentMethod('CARD', 'qb')">
+            <input type="radio" name="qbPaymentMethod" value="CARD" class="payment-method-radio">
+            <div class="payment-method-icon">💳</div>
+            <div class="payment-method-details">
+              <div class="payment-method-title">
+                <span>Credit / Debit Cards</span>
+              </div>
+              <div class="payment-method-desc">RuPay, Visa, Mastercard, Maestro (Encrypted Gateway)</div>
+            </div>
+          </label>
+
+          <!-- Option C: Net Banking -->
+          <label class="payment-method-card" onclick="selectPaymentMethod('NETBANKING', 'qb')">
+            <input type="radio" name="qbPaymentMethod" value="NETBANKING" class="payment-method-radio">
+            <div class="payment-method-icon">🏦</div>
+            <div class="payment-method-details">
+              <div class="payment-method-title">
+                <span>Net Banking</span>
+              </div>
+              <div class="payment-method-desc">SBI, HDFC, ICICI, Axis, and 50+ Indian banks</div>
+            </div>
+          </label>
+
+          <!-- Option D: Cash on Delivery -->
+          <label class="payment-method-card" onclick="selectPaymentMethod('COD', 'qb')">
+            <input type="radio" name="qbPaymentMethod" value="COD" class="payment-method-radio">
+            <div class="payment-method-icon">💵</div>
+            <div class="payment-method-details">
+              <div class="payment-method-title">
+                <span>Cash on Delivery</span>
+                <span class="payment-method-badge">Pay at Door</span>
+              </div>
+              <div class="payment-method-desc">Pay via cash or UPI upon doorstep parcel delivery</div>
+            </div>
+          </label>
+        </div>
+
+        <div class="cart-step2-actions" style="margin-top:1rem; display:flex; flex-direction:column; gap:0.6rem;">
+          <button type="button" class="cart-sticky-checkout-btn" id="qbMainSubmitPayBtn" onclick="submitQuickBuyOrder()">
+            <span id="qbPayBtnText">Pay ₹259 Securely →</span>
+          </button>
+
+          <button type="button" class="btn-whatsapp-again" onclick="launchQuickBuyWhatsApp()" style="background:#e8f5e9; color:#166534; border:1px solid #bbf7d0; font-size:0.85rem; padding:0.6rem; border-radius:var(--radius-full); cursor:pointer;">
+            <span>💬 Or Confirm Order directly via WhatsApp</span>
+          </button>
+
+          <button type="button" class="qb-back-step-btn" onclick="goToQuickBuyStep(2)" style="align-self:center; background:none; border:none; color:var(--color-muted); text-decoration:underline; font-size:0.8rem; cursor:pointer;">
+            <span>← Edit Address Details</span>
+          </button>
+        </div>
+
+        <div class="checkout-security-bar">
+          <span>🔒 256-bit SSL Encrypted • Zero Card Storage • 100% Secure Checkout</span>
         </div>
       </div>
     </div>
@@ -468,7 +660,7 @@
     </div>
 
     <div class="cart-drawer-body" id="cartDrawerBody">
-      <!-- Step Progress Bar (Minimal 1 and 2 pills) -->
+      <!-- Step Progress Bar (1 — 2 — 3) -->
       <div class="drawer-progress-bar mini-progress-bar">
         <div class="step-progress-item active" id="cartStep1Pill" onclick="goToCartStep(1)" title="Step 1: Review Bag">
           <span class="step-badge">1</span>
@@ -476,6 +668,10 @@
         <div class="step-progress-divider"></div>
         <div class="step-progress-item" id="cartStep2Pill" onclick="goToCartStep(2)" title="Step 2: Delivery Details">
           <span class="step-badge">2</span>
+        </div>
+        <div class="step-progress-divider"></div>
+        <div class="step-progress-item" id="cartStep3Pill" onclick="goToCartStep(3)" title="Step 3: Payment & Review">
+          <span class="step-badge">3</span>
         </div>
       </div>
 
@@ -501,7 +697,7 @@
           </div>
           <div class="bill-row" id="billDeliveryRow">
             <span>Delivery Fee</span>
-            <span id="billDeliveryFee" style="color:#17350a; font-weight:600;">Free / WhatsApp direct</span>
+            <span id="billDeliveryFee" style="color:#17350a; font-weight:600;">₹60 (Free above ₹799)</span>
           </div>
           <div class="bill-row bill-total-row">
             <span>Estimated Total</span>
@@ -516,8 +712,8 @@
         </div>
       </div>
 
-      <!-- STEP 2: ADDRESS & ALL DETAILS (CART) -->
-      <div class="cart-step-view" id="cartStep2View" style="display:none;">
+      <!-- STEP 2: ADDRESS & DELIVERY DETAILS (CART) -->
+      <div class="cart-step-view" id="cartStep2View" style="display:none; padding: 1rem 1.25rem;">
         <div class="step-summary-card">
           <div class="step-summary-content">
             <strong id="cartStep2ItemsCount">1 item in Bag</strong>
@@ -527,76 +723,241 @@
         </div>
 
         <div class="cart-delivery-form-container">
-          <div class="delivery-form" id="deliveryForm" style="display:flex;">
-            <p class="form-help-text">Enter your delivery details to pre-fill your order directly into WhatsApp chat.</p>
+          <div class="delivery-form" id="deliveryForm" style="display:flex; flex-direction:column; gap:0.75rem;">
+            <p class="form-help-text" style="font-size:0.82rem; color:var(--color-muted); margin-bottom:0.25rem;">Enter your shipping address for courier dispatch & doorstep delivery.</p>
             
             <div class="form-group">
-              <label for="custName">Your Full Name <span class="required">*</span></label>
-              <input type="text" id="custName" placeholder="" autocomplete="off" required>
+              <label for="custName" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">Full Name <span class="required" style="color:var(--color-terracotta);">*</span></label>
+              <input type="text" id="custName" class="form-input" placeholder="e.g. Priya Sharma" autocomplete="name" required>
+              <span class="field-error-message" id="cartNameError" style="display:none;">Please enter your full name.</span>
+            </div>
+
+            <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+              <div class="form-group">
+                <label for="custPhone" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">Mobile Number <span class="required" style="color:var(--color-terracotta);">*</span></label>
+                <div class="phone-input-group">
+                  <span style="padding: 0.65rem 0.5rem; background: var(--bg-parchment); border: 1.5px solid var(--border-color); border-right: none; border-radius: var(--radius-md) 0 0 var(--radius-md); font-weight: 600; font-size: 0.85rem; color: var(--color-charcoal);">+91</span>
+                  <input type="tel" id="custPhone" placeholder="10-digit mobile" class="phone-number-input" maxlength="10" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10);" required style="border-radius: 0 var(--radius-md) var(--radius-md) 0;">
+                </div>
+                <span class="field-error-message" id="cartPhoneError" style="display:none;">Enter valid 10-digit Indian mobile.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="custEmail" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">Email <small style="color:var(--color-muted); font-weight:normal;">(Optional)</small></label>
+                <input type="email" id="custEmail" class="form-input" placeholder="receipt@example.com" autocomplete="email">
+                <span class="field-error-message" id="cartEmailError" style="display:none;">Invalid email format.</span>
+              </div>
             </div>
 
             <div class="form-group">
-              <label for="custPhone">WhatsApp Phone Number <span class="required">*</span></label>
-              <div class="phone-input-group">
-                <select id="custCountryCode" class="country-code-dropdown" aria-label="Country Code">
-                  <option value="+91" selected>🇮🇳 +91</option>
-                  <option value="+1">🇺🇸 +1</option>
-                  <option value="+44">🇬🇧 +44</option>
-                  <option value="+971">🇦🇪 +971</option>
-                  <option value="+65">🇸🇬 +65</option>
-                  <option value="+61">🇦🇺 +61</option>
-                  <option value="+49">🇩🇪 +49</option>
-                  <option value="+966">🇸🇦 +966</option>
+              <label for="custHouse" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">House / Flat / Building No. <span class="required" style="color:var(--color-terracotta);">*</span></label>
+              <input type="text" id="custHouse" class="form-input" placeholder="e.g. Flat 402, Green Meadows" required>
+              <span class="field-error-message" id="cartHouseError" style="display:none;">Please enter house/flat details.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="custStreet" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">Street / Road / Area <span class="required" style="color:var(--color-terracotta);">*</span></label>
+              <input type="text" id="custStreet" class="form-input" placeholder="e.g. 14th Main, 4th Cross, Indiranagar" required>
+              <span class="field-error-message" id="cartStreetError" style="display:none;">Please enter street/area.</span>
+            </div>
+
+            <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+              <div class="form-group">
+                <label for="custCity" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">City <span class="required" style="color:var(--color-terracotta);">*</span></label>
+                <input type="text" id="custCity" class="form-input" placeholder="e.g. Bengaluru" required>
+                <span class="field-error-message" id="cartCityError" style="display:none;">City is required.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="custPincode" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">PIN Code <span class="required" style="color:var(--color-terracotta);">*</span></label>
+                <input type="text" id="custPincode" class="form-input" placeholder="6-digit PIN" maxlength="6" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 6);" required>
+                <span class="field-error-message" id="cartPincodeError" style="display:none;">Enter valid 6-digit PIN.</span>
+              </div>
+            </div>
+
+            <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+              <div class="form-group">
+                <label for="custState" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">State <span class="required" style="color:var(--color-terracotta);">*</span></label>
+                <select id="custState" class="form-select" required>
+                  <option value="">Select State</option>
+                  <option value="Andhra Pradesh">Andhra Pradesh</option>
+                  <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                  <option value="Assam">Assam</option>
+                  <option value="Bihar">Bihar</option>
+                  <option value="Chhattisgarh">Chhattisgarh</option>
+                  <option value="Goa">Goa</option>
+                  <option value="Gujarat">Gujarat</option>
+                  <option value="Haryana">Haryana</option>
+                  <option value="Himachal Pradesh">Himachal Pradesh</option>
+                  <option value="Jharkhand">Jharkhand</option>
+                  <option value="Karnataka" selected>Karnataka</option>
+                  <option value="Kerala">Kerala</option>
+                  <option value="Madhya Pradesh">Madhya Pradesh</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Manipur">Manipur</option>
+                  <option value="Meghalaya">Meghalaya</option>
+                  <option value="Mizoram">Mizoram</option>
+                  <option value="Nagaland">Nagaland</option>
+                  <option value="Odisha">Odisha</option>
+                  <option value="Punjab">Punjab</option>
+                  <option value="Rajasthan">Rajasthan</option>
+                  <option value="Sikkim">Sikkim</option>
+                  <option value="Tamil Nadu">Tamil Nadu</option>
+                  <option value="Telangana">Telangana</option>
+                  <option value="Tripura">Tripura</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  <option value="Uttarakhand">Uttarakhand</option>
+                  <option value="West Bengal">West Bengal</option>
+                  <option value="Delhi">Delhi</option>
+                  <option value="Chandigarh">Chandigarh</option>
+                  <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                  <option value="Puducherry">Puducherry</option>
                 </select>
-                <input 
-                  type="tel" 
-                  id="custPhone" 
-                  placeholder="10-digit mobile number" 
-                  class="phone-number-input" 
-                  autocomplete="off" 
-                  maxlength="10" 
-                  inputmode="numeric" 
-                  oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10);"
-                  required
-                >
+                <span class="field-error-message" id="cartStateError" style="display:none;">Please select state.</span>
               </div>
-              <span class="field-error-message" id="cartPhoneError" style="display:none;">Please enter a valid 10-digit WhatsApp number.</span>
-            </div>
 
-            <div class="form-group">
-              <label for="custAddress">Full Delivery Address (Optional - can also share in WhatsApp)</label>
-              <textarea id="custAddress" rows="2" placeholder="" autocomplete="off"></textarea>
-            </div>
-
-            <div class="form-row">
               <div class="form-group">
-                <label for="custCity">City</label>
-                <input type="text" id="custCity" placeholder="" autocomplete="off">
-              </div>
-              <div class="form-group">
-                <label for="custPincode">PIN Code</label>
-                <input type="text" id="custPincode" placeholder="" maxlength="6" autocomplete="off">
+                <label for="custLandmark" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">Landmark <small style="color:var(--color-muted); font-weight:normal;">(Optional)</small></label>
+                <input type="text" id="custLandmark" class="form-input" placeholder="Near Temple / Metro">
               </div>
             </div>
 
             <div class="form-group">
-              <label for="custNotes">Gifting Note / Custom Instructions (Optional)</label>
-              <input type="text" id="custNotes" placeholder="" autocomplete="off">
+              <label for="custNotes" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">Delivery Instructions / Gifting Note <small style="color:var(--color-muted); font-weight:normal;">(Optional)</small></label>
+              <input type="text" id="custNotes" class="form-input" placeholder="e.g. Leave with security, call before delivery" maxlength="120">
             </div>
           </div>
         </div>
 
-        <div class="cart-step2-actions">
+        <div class="cart-step2-actions" style="margin-top:1.25rem; display:flex; gap:0.75rem;">
           <button type="button" class="cart-back-btn" onclick="goToCartStep(1)">
-            <span>← Back</span>
+            <span>← Back: Bag</span>
           </button>
-          <button class="cart-sticky-checkout-btn" id="proceedWhatsAppOrderBtn" onclick="proceedToWhatsAppCheckout()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-            </svg>
-            <span id="proceedBtnLabel">Confirm & Order</span>
+          <button type="button" class="cart-sticky-checkout-btn" onclick="validateAndGoToCartStep(3)">
+            <span>Next: Payment & Review →</span>
           </button>
         </div>
+      </div>
+
+      <!-- STEP 3: PAYMENT METHOD & FINAL ORDER REVIEW (CART) -->
+      <div class="cart-step-view" id="cartStep3View" style="display:none; padding: 1rem 1.25rem;">
+        <!-- Order Breakdown Summary Box -->
+        <div class="step3-order-summary">
+          <div class="step3-items-scroll" id="cartStep3ItemsList">
+            <!-- Populated dynamically -->
+          </div>
+
+          <!-- Address Confirmation Chip -->
+          <div class="step3-address-chip">
+            <div>
+              <strong id="cartStep3AddrName">Customer</strong>
+              <span id="cartStep3AddrText">Address details</span>
+            </div>
+            <button type="button" class="step3-edit-address-link" onclick="goToCartStep(2)">Edit</button>
+          </div>
+
+          <div style="font-size:0.85rem; display:flex; flex-direction:column; gap:0.35rem; margin-top:0.5rem; padding-top:0.5rem; border-top:1px dashed var(--border-color);">
+            <div style="display:flex; justify-content:space-between; color:var(--color-muted);">
+              <span>Subtotal:</span>
+              <span id="cartStep3Subtotal" style="color:var(--color-charcoal); font-weight:600;">₹0</span>
+            </div>
+            <div style="display:none; justify-content:space-between; color:#15803d;" id="cartStep3DiscountRow">
+              <span>Bulk Discount (5% Off 10+):</span>
+              <span id="cartStep3Discount">-₹0</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; color:var(--color-muted);">
+              <span>Shipping Fee:</span>
+              <span id="cartStep3DeliveryFee" style="font-weight:600; color:#17350a;">₹60</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:1.05rem; font-weight:700; color:#17350a; padding-top:0.4rem; border-top:1px solid var(--border-color);">
+              <span>Final Payable:</span>
+              <span id="cartStep3PayableTotal">₹0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Failure / Retry Banner (if any) -->
+        <div id="cartPaymentRetryAlert" class="payment-retry-alert" style="display:none;">
+          <div class="alert-icon">⚠️</div>
+          <div>
+            <div class="alert-title">Payment Not Completed</div>
+            <div class="alert-desc" id="cartPaymentRetryMsg">Online payment was cancelled or failed. You can retry or choose Cash on Delivery.</div>
+          </div>
+        </div>
+
+        <label style="font-size:0.88rem; font-weight:700; color:var(--color-charcoal); display:block; margin-bottom:0.5rem;">Select Payment Method:</label>
+
+        <!-- 4 Payment Options -->
+        <div class="payment-methods-container" id="cartPaymentMethods">
+          <!-- Option A: UPI / QR -->
+          <label class="payment-method-card selected" onclick="selectPaymentMethod('UPI', 'cart')">
+            <input type="radio" name="cartPaymentMethod" value="UPI" class="payment-method-radio" checked>
+            <div class="payment-method-icon">📱</div>
+            <div class="payment-method-details">
+              <div class="payment-method-title">
+                <span>UPI / QR</span>
+                <span class="payment-method-badge instant">Fastest</span>
+              </div>
+              <div class="payment-method-desc">GPay, PhonePe, Paytm, BHIM, or Scan QR Code</div>
+            </div>
+          </label>
+
+          <!-- Option B: Cards -->
+          <label class="payment-method-card" onclick="selectPaymentMethod('CARD', 'cart')">
+            <input type="radio" name="cartPaymentMethod" value="CARD" class="payment-method-radio">
+            <div class="payment-method-icon">💳</div>
+            <div class="payment-method-details">
+              <div class="payment-method-title">
+                <span>Credit / Debit Cards</span>
+              </div>
+              <div class="payment-method-desc">RuPay, Visa, Mastercard, Maestro (Encrypted Gateway)</div>
+            </div>
+          </label>
+
+          <!-- Option C: Net Banking -->
+          <label class="payment-method-card" onclick="selectPaymentMethod('NETBANKING', 'cart')">
+            <input type="radio" name="cartPaymentMethod" value="NETBANKING" class="payment-method-radio">
+            <div class="payment-method-icon">🏦</div>
+            <div class="payment-method-details">
+              <div class="payment-method-title">
+                <span>Net Banking</span>
+              </div>
+              <div class="payment-method-desc">SBI, HDFC, ICICI, Axis, and 50+ Indian banks</div>
+            </div>
+          </label>
+
+          <!-- Option D: Cash on Delivery -->
+          <label class="payment-method-card" onclick="selectPaymentMethod('COD', 'cart')">
+            <input type="radio" name="cartPaymentMethod" value="COD" class="payment-method-radio">
+            <div class="payment-method-icon">💵</div>
+            <div class="payment-method-details">
+              <div class="payment-method-title">
+                <span>Cash on Delivery</span>
+                <span class="payment-method-badge">Pay at Door</span>
+              </div>
+              <div class="payment-method-desc">Pay via cash or UPI upon doorstep parcel delivery</div>
+            </div>
+          </label>
+        </div>
+
+        <div class="cart-step2-actions" style="margin-top:1rem; display:flex; flex-direction:column; gap:0.6rem;">
+          <button type="button" class="cart-sticky-checkout-btn" id="cartMainSubmitPayBtn" onclick="submitCartOrder()">
+            <span id="cartPayBtnText">Pay ₹0 Securely →</span>
+          </button>
+
+          <button type="button" class="btn-whatsapp-again" onclick="proceedToWhatsAppCheckout()" style="background:#e8f5e9; color:#166534; border:1px solid #bbf7d0; font-size:0.85rem; padding:0.6rem; border-radius:var(--radius-full); cursor:pointer;">
+            <span>💬 Or Complete Order directly via WhatsApp</span>
+          </button>
+
+          <button type="button" class="cart-back-btn" onclick="goToCartStep(2)" style="align-self:center; background:none; border:none; color:var(--color-muted); text-decoration:underline; font-size:0.8rem; cursor:pointer;">
+            <span>← Edit Address Details</span>
+          </button>
+        </div>
+
+        <div class="checkout-security-bar">
+          <span>🔒 256-bit SSL Encrypted • Zero Card Storage • 100% Secure Checkout</span>
+        </div>
+      </div>
       </div>
 
     </div>
@@ -824,6 +1185,142 @@
         <button type="button" class="btn-secondary-link" onclick="closeOrderConfirmationModal()">
           ✓ Done / Back to Website
         </button>
+      </div>
+    </div>
+  <!-- ==========================================================================
+       VERIFIED ORDER CONFIRMATION / SUCCESS MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="checkoutSuccessModalBackdrop" style="display:none;">
+    <div class="modal-dialog order-success-modal" id="checkoutSuccessModal">
+      <button class="modal-close-btn" onclick="closeCheckoutSuccessModal()" title="Close">&times;</button>
+      
+      <div class="order-success-badge-row">
+        <div class="order-success-check-icon" id="successIcon">✓</div>
+        <h3 class="order-success-title" id="successTitle">Order Confirmed!</h3>
+        <p class="order-success-desc" id="successSubtitle">Your handcrafted diary order has been registered.</p>
+      </div>
+
+      <div class="order-receipt-box">
+        <div class="receipt-header-row">
+          <div>
+            <span style="font-size:0.75rem; color:var(--color-muted); display:block;">ORDER ID</span>
+            <span class="receipt-order-id" id="receiptOrderId">RUP-20261022-0000</span>
+          </div>
+          <span class="receipt-status-pill" id="receiptPaymentBadge">PAID</span>
+        </div>
+
+        <div class="receipt-items-list" id="receiptItemsList">
+          <!-- Populated dynamically -->
+        </div>
+
+        <div class="receipt-total-row">
+          <span>Amount Paid / Due:</span>
+          <span id="receiptTotalAmount">₹0</span>
+        </div>
+
+        <div class="receipt-address-preview">
+          <strong>📦 Dispatching To:</strong>
+          <div id="receiptShippingAddress" style="color:var(--color-muted); margin-top:0.2rem;">Address details here...</div>
+          <div style="margin-top:0.35rem; font-size:0.78rem; color:#17350a;">
+            ⏳ Estimated Delivery: <strong>3 - 5 Business Days</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="receipt-actions">
+        <button type="button" class="btn btn-primary" id="successWhatsAppShareBtn" onclick="shareConfirmedOrderToWhatsApp()" style="background:#166534; display:flex; align-items:center; justify-content:center; gap:0.5rem; width:100%; padding:0.75rem; border-radius:var(--radius-full); font-weight:700; color:#FFFFFF; border:none; cursor:pointer;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+          </svg>
+          <span>Share Order Summary to WhatsApp</span>
+        </button>
+
+        <button type="button" class="btn btn-outline" onclick="copyReceiptDetails()" style="padding:0.6rem; border-radius:var(--radius-full); font-size:0.85rem; font-weight:600; cursor:pointer;">
+          📋 Copy Order ID & Details
+        </button>
+
+        <button type="button" class="btn-secondary-link" onclick="closeCheckoutSuccessModal()" style="align-self:center; font-size:0.85rem; margin-top:0.25rem;">
+          ✓ Done / Continue Shopping
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       STAFF ADMIN ORDER MANAGEMENT DASHBOARD MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="adminDashboardModalBackdrop" style="display:none;">
+    <div class="modal-dialog admin-dashboard-modal" id="adminDashboardModal">
+      <div class="admin-header">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.3rem;">📋</span>
+          <h3>Rupantar — Staff Orders Dashboard</h3>
+        </div>
+        <button class="modal-close-btn" onclick="closeAdminModal()" style="color:#FFFFFF; font-size:1.5rem; background:none; border:none; cursor:pointer;">&times;</button>
+      </div>
+
+      <!-- Admin Login View -->
+      <div class="admin-body" id="adminLoginView">
+        <div class="admin-login-box">
+          <span style="font-size:2rem; display:block; margin-bottom:0.5rem;">🔐</span>
+          <h4 style="font-size:1.15rem; margin-bottom:0.35rem;">Staff Passcode Required</h4>
+          <p style="font-size:0.82rem; color:var(--color-muted); margin-bottom:1.25rem;">Authorized staff can view, dispatch, and track customer diary orders.</p>
+          
+          <form onsubmit="handleAdminLogin(event)" style="display:flex; flex-direction:column; gap:0.75rem;">
+            <input type="password" id="adminPasscodeInput" class="form-input" placeholder="Enter Admin Passcode" required style="text-align:center; font-size:1rem; padding:0.75rem;">
+            <button type="submit" class="btn btn-primary" style="padding:0.75rem; border-radius:var(--radius-full); font-weight:700;">Unlock Dashboard</button>
+            <span id="adminLoginError" style="display:none; color:#dc2626; font-size:0.8rem; margin-top:0.2rem;">Invalid passcode. Try again.</span>
+          </form>
+        </div>
+      </div>
+
+      <!-- Admin Orders Management View -->
+      <div class="admin-body" id="adminOrdersView" style="display:none;">
+        <!-- Metrics Grid -->
+        <div class="admin-metrics-grid" id="adminMetricsGrid">
+          <div class="admin-metric-card">
+            <div class="admin-metric-value" id="metricTotalOrders">0</div>
+            <div class="admin-metric-label">Total Orders</div>
+          </div>
+          <div class="admin-metric-card">
+            <div class="admin-metric-value" id="metricTotalRevenue">₹0</div>
+            <div class="admin-metric-label">Revenue (Paid)</div>
+          </div>
+          <div class="admin-metric-card">
+            <div class="admin-metric-value" id="metricPaidCount">0</div>
+            <div class="admin-metric-label">Paid Online</div>
+          </div>
+          <div class="admin-metric-card">
+            <div class="admin-metric-value" id="metricCodCount">0</div>
+            <div class="admin-metric-label">COD Pending</div>
+          </div>
+          <div class="admin-metric-card">
+            <div class="admin-metric-value" id="metricDispatchedCount">0</div>
+            <div class="admin-metric-label">Dispatched</div>
+          </div>
+          <div class="admin-metric-card">
+            <div class="admin-metric-value" id="metricDeliveredCount">0</div>
+            <div class="admin-metric-label">Delivered</div>
+          </div>
+        </div>
+
+        <!-- Filter & Search Bar -->
+        <div class="admin-filter-bar">
+          <button type="button" class="admin-filter-btn active" onclick="setAdminFilter('all', this)">All Orders</button>
+          <button type="button" class="admin-filter-btn" onclick="setAdminFilter('paid', this)">Paid Online</button>
+          <button type="button" class="admin-filter-btn" onclick="setAdminFilter('cod', this)">Cash on Delivery</button>
+          <button type="button" class="admin-filter-btn" onclick="setAdminFilter('processing', this)">Processing</button>
+          <button type="button" class="admin-filter-btn" onclick="setAdminFilter('dispatched', this)">Dispatched</button>
+          <button type="button" class="admin-filter-btn" onclick="setAdminFilter('delivered', this)">Delivered</button>
+          
+          <input type="text" id="adminSearchInput" oninput="handleAdminSearch(this.value)" placeholder="Search order ID, phone, name..." style="margin-left:auto; padding:0.35rem 0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-full); font-size:0.8rem; width:220px;">
+          <button type="button" onclick="loadAdminOrders()" title="Refresh Orders" style="padding:0.35rem 0.65rem; border:1px solid var(--border-color); border-radius:var(--radius-full); background:#FFFFFF; cursor:pointer;">🔄</button>
+        </div>
+
+        <!-- Orders List Container -->
+        <div id="adminOrdersContainer">
+          <!-- Populated dynamically -->
+        </div>
       </div>
     </div>
   </div>

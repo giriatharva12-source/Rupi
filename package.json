@@ -19,5 +19,9 @@
   "license": "UNLICENSED",
   "devDependencies": {
     "puppeteer-core": "^25.15.0"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.8",
+    "razorpay": "^2.9.8"
   }
 }
