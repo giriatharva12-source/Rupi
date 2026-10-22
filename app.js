@@ -954,7 +954,6 @@ function updateCartUI() {
   if (bTot) bTot.textContent = `₹${finalTotal.toLocaleString("en-IN")}`;
   const sTot = document.getElementById("stickyBillTotal");
   if (sTot) sTot.textContent = `₹${finalTotal.toLocaleString("en-IN")}`;
-  const stickyFooter = document.getElementById("cartDrawerStickyFooter");
   if (stickyFooter) stickyFooter.style.display = cart.length === 0 ? "none" : "flex";
 }
 

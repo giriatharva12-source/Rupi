@@ -8,15 +8,12 @@ const html = fs.readFileSync('index.html', 'utf8');
 const js = fs.readFileSync('app.js', 'utf8');
 const css = fs.readFileSync('style.css', 'utf8');
 
-// 1. Verify HTML Markup for Complete 8-Book Set Banner
-console.log("--- 1. BUNDLE BANNER & BUTTONS IN INDEX.HTML ---");
-assert(html.includes('id="allBooksBundleCard"'), "Missing #allBooksBundleCard in index.html");
-assert(html.includes('id="addAllBooksToCartBtn"'), "Missing #addAllBooksToCartBtn in index.html");
-assert(html.includes('id="buyAllBooksNowBtn"'), "Missing #buyAllBooksNowBtn in index.html");
-assert(html.includes('onclick="addAllBooksToCart()"'), "Missing onclick addAllBooksToCart in index.html");
-assert(html.includes('onclick="buyAllBooksNow()"'), "Missing onclick buyAllBooksNow in index.html");
+// 1. Verify Banner Removed & Quick-Action in Cart
+console.log("--- 1. BUNDLE BANNER REMOVAL & CART QUICK-ACTION ---");
+assert(!html.includes('id="allBooksBundleCard"'), "#allBooksBundleCard should be removed from index.html");
 assert(html.includes('id="emptyStateAddAllBtn"'), "Missing #emptyStateAddAllBtn in index.html");
-console.log("[PASS] Complete Collection banner, Buy All and Add to Cart All buttons found in index.html");
+assert(html.includes('onclick="addAllBooksToCart()"'), "Missing onclick addAllBooksToCart in index.html");
+console.log("[PASS] Bundle banner successfully removed from index.html; cart drawer quick action preserved");
 
 // 2. Verify Product Card Dual Buttons in app.js
 console.log("\n--- 2. DUAL BUTTONS ON EVERY BOOK CARD IN APP.JS ---");

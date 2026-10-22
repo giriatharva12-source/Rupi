@@ -741,6 +741,12 @@ body {
   line-height: 1.2;
 }
 
+.catalogue-titles .section-title {
+  font-size: clamp(1.35rem, 5.5vw, 3rem);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 .section-sub {
   font-size: 0.95rem;
   color: var(--color-muted);

@@ -553,6 +553,9 @@ const server = http.createServer(async (req, res) => {
   // STATIC FILE SERVING
   // =========================================================================
   let filePath = reqPath;
+  try {
+    filePath = decodeURIComponent(reqPath);
+  } catch (e) {}
   if (filePath === "/") filePath = "/index.html";
   if (filePath === "/admin") filePath = "/index.html"; // SPA admin route
 
