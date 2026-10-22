@@ -252,11 +252,11 @@
           <span class="step-badge">1</span>
         </div>
         <div class="step-progress-divider"></div>
-        <div class="step-progress-item" id="qbStep2Pill" onclick="goToQuickBuyStep(2)" title="Step 2: Delivery Details">
+        <div class="step-progress-item" id="qbStep2Pill" onclick="validateAndGoToQuickBuyStep(2)" title="Step 2: Delivery Details">
           <span class="step-badge">2</span>
         </div>
         <div class="step-progress-divider"></div>
-        <div class="step-progress-item" id="qbStep3Pill" onclick="goToQuickBuyStep(3)" title="Step 3: Payment & Review">
+        <div class="step-progress-item" id="qbStep3Pill" onclick="validateAndGoToQuickBuyStep(3)" title="Step 3: Payment & Review">
           <span class="step-badge">3</span>
         </div>
       </div>
@@ -369,7 +369,7 @@
                 <span>Add to Bag</span>
               </button>
 
-              <button type="button" class="qb-next-step-btn" onclick="goToQuickBuyStep(2)">
+              <button type="button" class="qb-next-step-btn" onclick="validateAndGoToQuickBuyStep(2)">
                 <span>Next: Delivery Details →</span>
               </button>
             </div>
@@ -445,7 +445,7 @@
               <div class="form-group">
                 <label for="qbCustState" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">State <span class="required" style="color:var(--color-terracotta);">*</span></label>
                 <select id="qbCustState" class="form-select" required>
-                  <option value="">Select State</option>
+                  <option value="" selected disabled>Select State</option>
                   <option value="Andhra Pradesh">Andhra Pradesh</option>
                   <option value="Arunachal Pradesh">Arunachal Pradesh</option>
                   <option value="Assam">Assam</option>
@@ -456,7 +456,7 @@
                   <option value="Haryana">Haryana</option>
                   <option value="Himachal Pradesh">Himachal Pradesh</option>
                   <option value="Jharkhand">Jharkhand</option>
-                  <option value="Karnataka" selected>Karnataka</option>
+                  <option value="Karnataka">Karnataka</option>
                   <option value="Kerala">Kerala</option>
                   <option value="Madhya Pradesh">Madhya Pradesh</option>
                   <option value="Maharashtra">Maharashtra</option>
@@ -657,11 +657,11 @@
           <span class="step-badge">1</span>
         </div>
         <div class="step-progress-divider"></div>
-        <div class="step-progress-item" id="cartStep2Pill" onclick="goToCartStep(2)" title="Step 2: Delivery Details">
+        <div class="step-progress-item" id="cartStep2Pill" onclick="validateAndGoToCartStep(2)" title="Step 2: Delivery Details">
           <span class="step-badge">2</span>
         </div>
         <div class="step-progress-divider"></div>
-        <div class="step-progress-item" id="cartStep3Pill" onclick="goToCartStep(3)" title="Step 3: Payment & Review">
+        <div class="step-progress-item" id="cartStep3Pill" onclick="validateAndGoToCartStep(3)" title="Step 3: Payment & Review">
           <span class="step-badge">3</span>
         </div>
       </div>
@@ -697,7 +697,7 @@
         </div>
 
         <div class="cart-step-action-bar" style="padding: 1rem 1.25rem;">
-          <button type="button" class="cart-next-btn" onclick="goToCartStep(2)">
+          <button type="button" class="cart-next-btn" onclick="validateAndGoToCartStep(2)">
             <span>Next: Delivery Details →</span>
           </button>
         </div>
@@ -770,7 +770,7 @@
               <div class="form-group">
                 <label for="custState" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.2rem;">State <span class="required" style="color:var(--color-terracotta);">*</span></label>
                 <select id="custState" class="form-select" required>
-                  <option value="">Select State</option>
+                  <option value="" selected disabled>Select State</option>
                   <option value="Andhra Pradesh">Andhra Pradesh</option>
                   <option value="Arunachal Pradesh">Arunachal Pradesh</option>
                   <option value="Assam">Assam</option>
@@ -781,7 +781,7 @@
                   <option value="Haryana">Haryana</option>
                   <option value="Himachal Pradesh">Himachal Pradesh</option>
                   <option value="Jharkhand">Jharkhand</option>
-                  <option value="Karnataka" selected>Karnataka</option>
+                  <option value="Karnataka">Karnataka</option>
                   <option value="Kerala">Kerala</option>
                   <option value="Madhya Pradesh">Madhya Pradesh</option>
                   <option value="Maharashtra">Maharashtra</option>

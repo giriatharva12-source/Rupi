@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   clearCustomerFormInputs();
   initQuickBuyDefaults();
   checkUrlDeepLinks();
+  setupRealtimeValidationClearers();
 });
 
 /* ==========================================================================
@@ -520,32 +521,13 @@ function constructQuickBuyWhatsAppMessage() {
 }
 
 function launchQuickBuyWhatsApp() {
-  hideValidationErrors();
-
-  const nameInput = document.getElementById("qbCustName");
-  const phoneInput = document.getElementById("qbCustPhone");
-  const name = nameInput ? nameInput.value.trim() : "";
-  const phone = phoneInput ? phoneInput.value.trim() : "";
-
-  let hasError = false;
-
-  if (!name || name.length < 2) {
-    const nameErr = document.getElementById("qbNameError");
-    if (nameErr) nameErr.style.display = "block";
-    if (nameInput) nameInput.classList.add("form-input-error");
-    hasError = true;
+  if (!validateQuickBuyStep1()) {
+    goToQuickBuyStep(1);
+    return;
   }
 
-  const phoneDigits = phone.replace(/[^0-9]/g, "");
-  if (!phone || phoneDigits.length !== 10) {
-    const phoneErr = document.getElementById("qbPhoneError");
-    if (phoneErr) phoneErr.style.display = "block";
-    if (phoneInput) phoneInput.classList.add("form-input-error");
-    hasError = true;
-  }
-
-  if (hasError) {
-    showToast("Please enter your name and valid 10-digit WhatsApp number.");
+  if (!validateQuickBuyStep2Fields()) {
+    goToQuickBuyStep(2);
     return;
   }
 
@@ -893,19 +875,24 @@ function validateCustomerDetails() {
 }
 
 function proceedToWhatsAppCheckout() {
-  if (cart.length === 0) {
-    showToast("Your shopping bag is empty! Browse 8 designs to add items.");
+  if (!validateCartStep1()) {
+    goToCartStep(1);
     return;
   }
 
-  const customer = validateCustomerDetails();
-  if (!customer) return;
+  if (!validateCartStep2Fields()) {
+    goToCartStep(2);
+    return;
+  }
 
-  const btn = document.getElementById("proceedWhatsAppOrderBtn");
-  const label = document.getElementById("proceedBtnLabel");
-  const origText = label ? label.textContent : "";
-  if (btn) btn.disabled = true;
-  if (label) label.textContent = "Opening WhatsApp...";
+  const name = (document.getElementById("custName")?.value || "").trim();
+  const phone = (document.getElementById("custPhone")?.value || "").replace(/\D/g, "");
+  const house = (document.getElementById("custHouse")?.value || "").trim();
+  const street = (document.getElementById("custStreet")?.value || "").trim();
+  const city = (document.getElementById("custCity")?.value || "").trim();
+  const state = (document.getElementById("custState")?.value || "").trim();
+  const pincode = (document.getElementById("custPincode")?.value || "").trim();
+  const notes = (document.getElementById("custNotes")?.value || "").trim();
 
   const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
   const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
@@ -919,16 +906,11 @@ function proceedToWhatsAppCheckout() {
   msg += `*Reference:* #${orderRef}\n\n`;
 
   msg += `👤 *CUSTOMER DETAILS:*\n`;
-  msg += `• Name: ${customer.name}\n`;
-  const custCode = document.getElementById("custCountryCode") ? document.getElementById("custCountryCode").value : "+91";
-  msg += `• WhatsApp: ${custCode} ${customer.phone}\n`;
-  if (customer.address || customer.city) {
-    msg += `• Delivery Address: ${[customer.address, customer.city, customer.pincode].filter(Boolean).join(", ")}\n`;
-  } else {
-    msg += `• Delivery Address: (Will share directly in this WhatsApp chat)\n`;
-  }
-  if (customer.notes) {
-    msg += `• Customisation / Gifting Instructions: "${customer.notes}"\n`;
+  msg += `• Name: ${name}\n`;
+  msg += `• WhatsApp: +91 ${phone}\n`;
+  msg += `• Delivery Address: ${house}, ${street}, ${city}, ${state} - ${pincode}\n`;
+  if (notes) {
+    msg += `• Customisation / Gifting Instructions: "${notes}"\n`;
   }
   msg += `\n📦 *DIARIES IN BAG (${totalItems} ${totalItems === 1 ? 'item' : 'items'}):*\n`;
 
@@ -1302,10 +1284,118 @@ let currentAdminOrders = [];
 let currentAdminFilter = "all";
 
 // ==========================================================================
-// QUICK BUY 3-STEP CONTROLLER
+// QUICK BUY 3-STEP CONTROLLER & VALIDATION GUARDS
 // ==========================================================================
 
+function validateQuickBuyStep1() {
+  if (!qbProduct) {
+    showToast("Please choose a diary first.");
+    return false;
+  }
+  const qtyInput = document.getElementById("qbQtyInput");
+  const qtyVal = parseInt(qtyInput ? qtyInput.value : qbQty, 10);
+  if (isNaN(qtyVal) || qtyVal < 1) {
+    if (qtyInput) {
+      qtyInput.classList.add("is-invalid");
+      qtyInput.focus();
+    }
+    showToast("Please enter a valid quantity of at least 1 diary. ⚠️");
+    return false;
+  }
+  if (qtyInput) qtyInput.classList.remove("is-invalid");
+  qbQty = qtyVal;
+  return true;
+}
+
+function validateQuickBuyStep2Fields() {
+  const nameInput = document.getElementById("qbCustName");
+  const phoneInput = document.getElementById("qbCustPhone");
+  const emailInput = document.getElementById("qbCustEmail");
+  const houseInput = document.getElementById("qbCustHouse");
+  const streetInput = document.getElementById("qbCustStreet");
+  const cityInput = document.getElementById("qbCustCity");
+  const stateInput = document.getElementById("qbCustState");
+  const pincodeInput = document.getElementById("qbCustPincode");
+
+  let isValid = true;
+  let firstInvalid = null;
+
+  function markField(input, errorId, condition) {
+    const errorEl = document.getElementById(errorId);
+    if (!condition) {
+      if (input) input.classList.add("is-invalid");
+      if (errorEl) errorEl.style.display = "block";
+      isValid = false;
+      if (!firstInvalid && input) firstInvalid = input;
+    } else {
+      if (input) input.classList.remove("is-invalid");
+      if (errorEl) errorEl.style.display = "none";
+    }
+  }
+
+  // 1. Full Name: min 2 characters
+  const nameVal = nameInput ? nameInput.value.trim() : "";
+  markField(nameInput, "qbNameError", nameVal.length >= 2);
+
+  // 2. Mobile: 10 digits starting with 6, 7, 8, 9
+  const phoneDigits = (phoneInput ? phoneInput.value : "").replace(/\D/g, "");
+  markField(phoneInput, "qbPhoneError", /^[6-9]\d{9}$/.test(phoneDigits));
+
+  // 3. Email (optional, but validate format if entered)
+  const emailVal = emailInput ? emailInput.value.trim() : "";
+  if (emailVal.length > 0) {
+    markField(emailInput, "qbEmailError", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal));
+  } else {
+    markField(emailInput, "qbEmailError", true);
+  }
+
+  // 4. House / Flat / Building No.
+  const houseVal = houseInput ? houseInput.value.trim() : "";
+  markField(houseInput, "qbHouseError", houseVal.length > 0);
+
+  // 5. Street / Road / Area
+  const streetVal = streetInput ? streetInput.value.trim() : "";
+  markField(streetInput, "qbStreetError", streetVal.length > 0);
+
+  // 6. City
+  const cityVal = cityInput ? cityInput.value.trim() : "";
+  markField(cityInput, "qbCityError", cityVal.length > 0);
+
+  // 7. State: dropdown selected
+  const stateVal = stateInput ? stateInput.value.trim() : "";
+  markField(stateInput, "qbStateError", stateVal.length > 0);
+
+  // 8. PIN code: 6-digit Indian PIN code starting with 1-9
+  const pinDigits = (pincodeInput ? pincodeInput.value : "").replace(/\D/g, "");
+  markField(pincodeInput, "qbPincodeError", /^[1-9]\d{5}$/.test(pinDigits));
+
+  if (!isValid) {
+    if (firstInvalid) {
+      firstInvalid.focus();
+      try {
+        firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+      } catch (e) {}
+    }
+    showToast("Please fill all required delivery details before proceeding. ⚠️");
+    return false;
+  }
+  return true;
+}
+
 function goToQuickBuyStep(step) {
+  // Guard moving forward from Step 1
+  if (step > 1 && !validateQuickBuyStep1()) {
+    return;
+  }
+
+  // Guard moving forward to Step 3
+  if (step === 3 && !validateQuickBuyStep2Fields()) {
+    if (currentQuickBuyStep === 1) {
+      goToQuickBuyStep(2);
+    }
+    return;
+  }
+
   currentQuickBuyStep = step;
   const view1 = document.getElementById("qbStep1View");
   const view2 = document.getElementById("qbStep2View");
@@ -1363,73 +1453,28 @@ function goToQuickBuyStep(step) {
   }
 }
 
-// Validate Step 2 inputs before advancing to Step 3 (Quick Buy)
+// Validate Step inputs before advancing to target step (Quick Buy)
 function validateAndGoToQuickBuyStep(targetStep) {
+  if (targetStep === 1) {
+    goToQuickBuyStep(1);
+    return;
+  }
+  if (targetStep === 2) {
+    if (!validateQuickBuyStep1()) return;
+    goToQuickBuyStep(2);
+    return;
+  }
   if (targetStep === 3) {
-    const nameInput = document.getElementById("qbCustName");
-    const phoneInput = document.getElementById("qbCustPhone");
-    const emailInput = document.getElementById("qbCustEmail");
-    const houseInput = document.getElementById("qbCustHouse");
-    const streetInput = document.getElementById("qbCustStreet");
-    const cityInput = document.getElementById("qbCustCity");
-    const stateInput = document.getElementById("qbCustState");
-    const pincodeInput = document.getElementById("qbCustPincode");
-
-    let isValid = true;
-    let firstInvalid = null;
-
-    // Helper for validation
-    function checkField(input, errorId, condition) {
-      const errorEl = document.getElementById(errorId);
-      if (!condition) {
-        if (input) input.classList.add("is-invalid");
-        if (errorEl) errorEl.style.display = "block";
-        isValid = false;
-        if (!firstInvalid && input) firstInvalid = input;
-      } else {
-        if (input) input.classList.remove("is-invalid");
-        if (errorEl) errorEl.style.display = "none";
+    if (!validateQuickBuyStep1()) return;
+    if (!validateQuickBuyStep2Fields()) {
+      if (currentQuickBuyStep === 1) {
+        goToQuickBuyStep(2);
       }
-    }
-
-    // Name
-    checkField(nameInput, "qbNameError", nameInput && nameInput.value.trim().length >= 2);
-
-    // Mobile: 10 digits starting with 6, 7, 8, or 9
-    const phoneClean = (phoneInput ? phoneInput.value : "").replace(/\D/g, "");
-    checkField(phoneInput, "qbPhoneError", /^[6-9]\d{9}$/.test(phoneClean));
-
-    // Email (optional, but validate format if present)
-    if (emailInput && emailInput.value.trim().length > 0) {
-      checkField(emailInput, "qbEmailError", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim()));
-    } else {
-      checkField(emailInput, "qbEmailError", true);
-    }
-
-    // House
-    checkField(houseInput, "qbHouseError", houseInput && houseInput.value.trim().length > 0);
-
-    // Street
-    checkField(streetInput, "qbStreetError", streetInput && streetInput.value.trim().length > 0);
-
-    // City
-    checkField(cityInput, "qbCityError", cityInput && cityInput.value.trim().length > 0);
-
-    // State
-    checkField(stateInput, "qbStateError", stateInput && stateInput.value.trim().length > 0);
-
-    // PIN code: 6 digits
-    const pinClean = (pincodeInput ? pincodeInput.value : "").replace(/\D/g, "");
-    checkField(pincodeInput, "qbPincodeError", /^[1-9]\d{5}$/.test(pinClean));
-
-    if (!isValid) {
-      if (firstInvalid) firstInvalid.focus();
-      showToast("Please complete required address fields correctly. ⚠️");
       return;
     }
+    goToQuickBuyStep(3);
+    return;
   }
-
-  goToQuickBuyStep(targetStep);
 }
 
 // Populate Step 3 details in Quick Buy
@@ -1488,12 +1533,108 @@ function populateQuickBuyStep3Summary() {
 }
 
 // ==========================================================================
-// CART DRAWER 3-STEP CONTROLLER
+// CART DRAWER 3-STEP CONTROLLER & VALIDATION GUARDS
 // ==========================================================================
 
+function validateCartStep1() {
+  if (!Array.isArray(cart) || cart.length === 0) {
+    showToast("Your shopping bag is empty! Add books to proceed. ⚠️");
+    return false;
+  }
+  const hasInvalidQty = cart.some(item => !item.quantity || item.quantity < 1);
+  if (hasInvalidQty) {
+    showToast("Please ensure all items have a valid quantity of at least 1. ⚠️");
+    return false;
+  }
+  return true;
+}
+
+function validateCartStep2Fields() {
+  const nameInput = document.getElementById("custName");
+  const phoneInput = document.getElementById("custPhone");
+  const emailInput = document.getElementById("custEmail");
+  const houseInput = document.getElementById("custHouse");
+  const streetInput = document.getElementById("custStreet");
+  const cityInput = document.getElementById("custCity");
+  const stateInput = document.getElementById("custState");
+  const pincodeInput = document.getElementById("custPincode");
+
+  let isValid = true;
+  let firstInvalid = null;
+
+  function markField(input, errorId, condition) {
+    const errorEl = document.getElementById(errorId);
+    if (!condition) {
+      if (input) input.classList.add("is-invalid");
+      if (errorEl) errorEl.style.display = "block";
+      isValid = false;
+      if (!firstInvalid && input) firstInvalid = input;
+    } else {
+      if (input) input.classList.remove("is-invalid");
+      if (errorEl) errorEl.style.display = "none";
+    }
+  }
+
+  // 1. Full Name: min 2 characters
+  const nameVal = nameInput ? nameInput.value.trim() : "";
+  markField(nameInput, "cartNameError", nameVal.length >= 2);
+
+  // 2. Mobile: 10 digits starting with 6, 7, 8, 9
+  const phoneDigits = (phoneInput ? phoneInput.value : "").replace(/\D/g, "");
+  markField(phoneInput, "cartPhoneError", /^[6-9]\d{9}$/.test(phoneDigits));
+
+  // 3. Email (optional, but validate format if entered)
+  const emailVal = emailInput ? emailInput.value.trim() : "";
+  if (emailVal.length > 0) {
+    markField(emailInput, "cartEmailError", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal));
+  } else {
+    markField(emailInput, "cartEmailError", true);
+  }
+
+  // 4. House / Flat / Building No.
+  const houseVal = houseInput ? houseInput.value.trim() : "";
+  markField(houseInput, "cartHouseError", houseVal.length > 0);
+
+  // 5. Street / Road / Area
+  const streetVal = streetInput ? streetInput.value.trim() : "";
+  markField(streetInput, "cartStreetError", streetVal.length > 0);
+
+  // 6. City
+  const cityVal = cityInput ? cityInput.value.trim() : "";
+  markField(cityInput, "cartCityError", cityVal.length > 0);
+
+  // 7. State: dropdown selected
+  const stateVal = stateInput ? stateInput.value.trim() : "";
+  markField(stateInput, "cartStateError", stateVal.length > 0);
+
+  // 8. PIN code: 6-digit Indian PIN code starting with 1-9
+  const pinDigits = (pincodeInput ? pincodeInput.value : "").replace(/\D/g, "");
+  markField(pincodeInput, "cartPincodeError", /^[1-9]\d{5}$/.test(pinDigits));
+
+  if (!isValid) {
+    if (firstInvalid) {
+      firstInvalid.focus();
+      try {
+        firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+      } catch (e) {}
+    }
+    showToast("Please fill all required delivery details before proceeding. ⚠️");
+    return false;
+  }
+  return true;
+}
+
 function goToCartStep(step) {
-  if (step > 1 && cart.length === 0) {
-    showToast("Your shopping bag is empty! Add books to proceed.");
+  // Guard moving forward from Step 1
+  if (step > 1 && !validateCartStep1()) {
+    return;
+  }
+
+  // Guard moving forward to Step 3
+  if (step === 3 && !validateCartStep2Fields()) {
+    if (currentCartStep === 1) {
+      goToCartStep(2);
+    }
     return;
   }
 
@@ -1548,60 +1689,81 @@ function goToCartStep(step) {
   }
 }
 
-// Validate Step 2 inputs before advancing to Step 3 (Cart)
+// Validate Step inputs before advancing to target step (Cart)
 function validateAndGoToCartStep(targetStep) {
+  if (targetStep === 1) {
+    goToCartStep(1);
+    return;
+  }
+  if (targetStep === 2) {
+    if (!validateCartStep1()) return;
+    goToCartStep(2);
+    return;
+  }
   if (targetStep === 3) {
-    const nameInput = document.getElementById("custName");
-    const phoneInput = document.getElementById("custPhone");
-    const emailInput = document.getElementById("custEmail");
-    const houseInput = document.getElementById("custHouse");
-    const streetInput = document.getElementById("custStreet");
-    const cityInput = document.getElementById("custCity");
-    const stateInput = document.getElementById("custState");
-    const pincodeInput = document.getElementById("custPincode");
-
-    let isValid = true;
-    let firstInvalid = null;
-
-    function checkField(input, errorId, condition) {
-      const errorEl = document.getElementById(errorId);
-      if (!condition) {
-        if (input) input.classList.add("is-invalid");
-        if (errorEl) errorEl.style.display = "block";
-        isValid = false;
-        if (!firstInvalid && input) firstInvalid = input;
-      } else {
-        if (input) input.classList.remove("is-invalid");
-        if (errorEl) errorEl.style.display = "none";
+    if (!validateCartStep1()) return;
+    if (!validateCartStep2Fields()) {
+      if (currentCartStep === 1) {
+        goToCartStep(2);
       }
-    }
-
-    checkField(nameInput, "cartNameError", nameInput && nameInput.value.trim().length >= 2);
-    const phoneClean = (phoneInput ? phoneInput.value : "").replace(/\D/g, "");
-    checkField(phoneInput, "cartPhoneError", /^[6-9]\d{9}$/.test(phoneClean));
-
-    if (emailInput && emailInput.value.trim().length > 0) {
-      checkField(emailInput, "cartEmailError", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim()));
-    } else {
-      checkField(emailInput, "cartEmailError", true);
-    }
-
-    checkField(houseInput, "cartHouseError", houseInput && houseInput.value.trim().length > 0);
-    checkField(streetInput, "cartStreetError", streetInput && streetInput.value.trim().length > 0);
-    checkField(cityInput, "cartCityError", cityInput && cityInput.value.trim().length > 0);
-    checkField(stateInput, "cartStateError", stateInput && stateInput.value.trim().length > 0);
-
-    const pinClean = (pincodeInput ? pincodeInput.value : "").replace(/\D/g, "");
-    checkField(pincodeInput, "cartPincodeError", /^[1-9]\d{5}$/.test(pinClean));
-
-    if (!isValid) {
-      if (firstInvalid) firstInvalid.focus();
-      showToast("Please complete required address fields correctly. ⚠️");
       return;
     }
+    goToCartStep(3);
+    return;
   }
+}
 
-  goToCartStep(targetStep);
+// Real-time clearance of error styling as user types or fixes fields
+function setupRealtimeValidationClearers() {
+  const qbFields = [
+    { inputId: "qbCustName", errorId: "qbNameError", validator: v => v.trim().length >= 2 },
+    { inputId: "qbCustPhone", errorId: "qbPhoneError", validator: v => /^[6-9]\d{9}$/.test(v.replace(/\D/g, "")) },
+    { inputId: "qbCustEmail", errorId: "qbEmailError", validator: v => v.trim().length === 0 || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+    { inputId: "qbCustHouse", errorId: "qbHouseError", validator: v => v.trim().length > 0 },
+    { inputId: "qbCustStreet", errorId: "qbStreetError", validator: v => v.trim().length > 0 },
+    { inputId: "qbCustCity", errorId: "qbCityError", validator: v => v.trim().length > 0 },
+    { inputId: "qbCustState", errorId: "qbStateError", validator: v => v.trim().length > 0 },
+    { inputId: "qbCustPincode", errorId: "qbPincodeError", validator: v => /^[1-9]\d{5}$/.test(v.replace(/\D/g, "")) }
+  ];
+
+  const cartFields = [
+    { inputId: "custName", errorId: "cartNameError", validator: v => v.trim().length >= 2 },
+    { inputId: "custPhone", errorId: "cartPhoneError", validator: v => /^[6-9]\d{9}$/.test(v.replace(/\D/g, "")) },
+    { inputId: "custEmail", errorId: "cartEmailError", validator: v => v.trim().length === 0 || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+    { inputId: "custHouse", errorId: "cartHouseError", validator: v => v.trim().length > 0 },
+    { inputId: "custStreet", errorId: "cartStreetError", validator: v => v.trim().length > 0 },
+    { inputId: "custCity", errorId: "cartCityError", validator: v => v.trim().length > 0 },
+    { inputId: "custState", errorId: "cartStateError", validator: v => v.trim().length > 0 },
+    { inputId: "custPincode", errorId: "cartPincodeError", validator: v => /^[1-9]\d{5}$/.test(v.replace(/\D/g, "")) }
+  ];
+
+  [...qbFields, ...cartFields].forEach(({ inputId, errorId, validator }) => {
+    const el = document.getElementById(inputId);
+    const errEl = document.getElementById(errorId);
+    if (!el) return;
+
+    const handler = () => {
+      if (validator(el.value)) {
+        el.classList.remove("is-invalid");
+        if (errEl) errEl.style.display = "none";
+      }
+    };
+
+    el.addEventListener("input", handler);
+    el.addEventListener("change", handler);
+    el.addEventListener("blur", handler);
+  });
+
+  // Quantity input in Quick Buy Step 1
+  const qbQtyEl = document.getElementById("qbQtyInput");
+  if (qbQtyEl) {
+    qbQtyEl.addEventListener("input", () => {
+      const v = parseInt(qbQtyEl.value, 10);
+      if (!isNaN(v) && v >= 1) {
+        qbQtyEl.classList.remove("is-invalid");
+      }
+    });
+  }
 }
 
 // Populate Step 3 details in Cart Drawer
@@ -1736,7 +1898,14 @@ function updatePaymentSubmitButtonLabel(context, amount) {
 // ==========================================================================
 
 async function submitQuickBuyOrder() {
-  if (!qbProduct) return;
+  if (!validateQuickBuyStep1()) {
+    goToQuickBuyStep(1);
+    return;
+  }
+  if (!validateQuickBuyStep2Fields()) {
+    goToQuickBuyStep(2);
+    return;
+  }
 
   const submitBtn = document.getElementById("qbMainSubmitPayBtn");
   const retryAlert = document.getElementById("qbPaymentRetryAlert");
@@ -1829,8 +1998,12 @@ async function submitQuickBuyOrder() {
 }
 
 async function submitCartOrder() {
-  if (cart.length === 0) {
-    showToast("Shopping bag is empty! ⚠️");
+  if (!validateCartStep1()) {
+    goToCartStep(1);
+    return;
+  }
+  if (!validateCartStep2Fields()) {
+    goToCartStep(2);
     return;
   }
 

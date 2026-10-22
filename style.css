@@ -5863,9 +5863,13 @@ body {
 /* Validation error highlighting */
 .form-input.is-invalid,
 .form-select.is-invalid,
+.phone-number-input.is-invalid,
+.qty-input.is-invalid,
+.is-invalid,
 textarea.form-input.is-invalid {
   border-color: #dc2626 !important;
   background-color: #fef2f2 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12) !important;
 }
 
 .field-error-message {
