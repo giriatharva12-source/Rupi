@@ -33,7 +33,7 @@ const DEFAULT_CONFIG = {
   
   features: [
     { icon: "🌾", title: "Rice Husk Paper", desc: "Sustainable, earthy, natural texture" },
-    { icon: "🎨", title: "8 Folk-Art Covers", desc: "Tradition reimagined by Indian artisans" },
+    { icon: "🎨", title: "Folk-Art Covers", desc: "Tradition reimagined by Indian artisans" },
     { icon: "📖", title: "Spiral Bound", desc: "Lies flat 180°, easy to write and flip" },
     { icon: "✨", title: "Bulk & Custom Editions", desc: "Discounts up to ₹54 off for teams & events" }
   ]

@@ -114,14 +114,14 @@
       <div class="catalogue-header">
         <div class="catalogue-titles">
           <span class="section-label">Folk-Art Collection</span>
-          <h2 class="section-title">The Eight Folk-Art Designs</h2>
-          <p class="section-sub">Eight folk-art covers, priced by size and pages. Lies flat, easy to write and flip.</p>
+          <h2 class="section-title">The Folk-Art Designs</h2>
+          <p class="section-sub">Folk-art covers, priced by size and pages. Lies flat, easy to write and flip.</p>
         </div>
 
 
       </div>
 
-      <!-- Products Grid (8 Signature Designs) -->
+      <!-- Products Grid -->
       <div class="products-grid" id="productsGrid">
         <!-- Rendered dynamically by app.js -->
       </div>
@@ -131,7 +131,7 @@
         <div class="matrix-header">
           <span class="section-label">Pricing Matrix</span>
           <h3>Diaries: Pages & Sizes</h3>
-          <p>Choose your size and page count. Same price across all eight folk-art designs.</p>
+          <p>Choose your size and page count. Same price across all folk-art designs.</p>
         </div>
 
         <div class="matrix-cards-grid">
@@ -621,18 +621,19 @@
           </label>
         </div>
 
-        <!-- Single Line Actions: Pay + Confirm via WhatsApp + Back -->
+        <!-- Single Line Actions: Back + Confirm via WhatsApp + Pay -->
         <div class="step3-single-line-actions">
-          <button type="button" class="step3-btn-pay" id="qbMainSubmitPayBtn" onclick="submitQuickBuyOrder()">
-            <span id="qbPayBtnText">Pay ₹259</span>
+          <button type="button" class="step3-btn-back" onclick="goToQuickBuyStep(2)" title="Back to delivery address">
+            <span>Back</span>
           </button>
 
           <button type="button" class="step3-btn-whatsapp" onclick="launchQuickBuyWhatsApp()" title="Confirm Order directly via WhatsApp">
-            <span>💬 Confirm via WhatsApp</span>
+            <span class="wa-btn-full">💬 Confirm via WhatsApp</span>
+            <span class="wa-btn-short">💬 WhatsApp</span>
           </button>
 
-          <button type="button" class="step3-btn-back" onclick="goToQuickBuyStep(2)" title="Back to delivery address">
-            <span>Back</span>
+          <button type="button" class="step3-btn-pay" id="qbMainSubmitPayBtn" onclick="submitQuickBuyOrder()">
+            <span id="qbPayBtnText">Pay ₹259</span>
           </button>
         </div>
 
@@ -941,18 +942,19 @@
           </label>
         </div>
 
-        <!-- Single Line Actions: Pay + Confirm via WhatsApp + Back -->
+        <!-- Single Line Actions: Back + Confirm via WhatsApp + Pay -->
         <div class="step3-single-line-actions">
-          <button type="button" class="step3-btn-pay" id="cartMainSubmitPayBtn" onclick="submitCartOrder()">
-            <span id="cartPayBtnText">Pay ₹0</span>
+          <button type="button" class="step3-btn-back" onclick="goToCartStep(2)" title="Back to delivery address">
+            <span>Back</span>
           </button>
 
           <button type="button" class="step3-btn-whatsapp" onclick="proceedToWhatsAppCheckout()" title="Complete Order directly via WhatsApp">
-            <span>💬 Confirm via WhatsApp</span>
+            <span class="wa-btn-full">💬 Confirm via WhatsApp</span>
+            <span class="wa-btn-short">💬 WhatsApp</span>
           </button>
 
-          <button type="button" class="step3-btn-back" onclick="goToCartStep(2)" title="Back to delivery address">
-            <span>Back</span>
+          <button type="button" class="step3-btn-pay" id="cartMainSubmitPayBtn" onclick="submitCartOrder()">
+            <span id="cartPayBtnText">Pay ₹0</span>
           </button>
         </div>
 

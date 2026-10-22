@@ -99,7 +99,7 @@ function renderEthosPillars() {
 
   const features = currentConfig.features || [
     { icon: "🌾", title: "Rice Husk Paper", desc: "Sustainable, earthy, natural texture" },
-    { icon: "🎨", title: "8 Folk-Art Covers", desc: "Tradition reimagined by Indian artisans" },
+    { icon: "🎨", title: "Folk-Art Covers", desc: "Tradition reimagined by Indian artisans" },
     { icon: "📖", title: "Spiral Bound", desc: "Lies flat 180°, easy to write and flip" },
     { icon: "✨", title: "Bulk & Custom Editions", desc: "Discounts up to ₹54 off for teams & events" }
   ];
@@ -1017,7 +1017,7 @@ function getStoreBaseUrl() {
 
 function getStoreShareBroadcastMessage() {
   const storeUrl = getStoreBaseUrl();
-  return `🌿 *Discover Rupantar — Handcrafted Folk-Art Diaries* 🌾\n\nMade from sustainable earthy rice husk paper with spiral ring binding that lies 180° flat.\n\n🎨 Browse all 8 Indian folk-art covers:\n👉 ${storeUrl}\n\nTap the link to explore covers, choose your page count, and place orders directly on WhatsApp! ✨`;
+  return `🌿 *Discover Rupantar — Handcrafted Folk-Art Diaries* 🌾\n\nMade from sustainable earthy rice husk paper with spiral ring binding that lies 180° flat.\n\n🎨 Browse Indian folk-art covers:\n👉 ${storeUrl}\n\nTap the link to explore covers, choose your page count, and place orders directly on WhatsApp! ✨`;
 }
 
 function openShareStoreModal() {

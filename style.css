@@ -5988,62 +5988,67 @@ textarea.form-input.is-invalid {
   color: #92400e;
 }
 
-/* Step 3: Single Line Actions (Pay + Confirm via WhatsApp + Back) */
+/* Step 3: Single Line Actions (Back + Confirm via WhatsApp + Pay) */
 .step3-single-line-actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
   margin-top: 1rem;
   width: 100%;
+  box-sizing: border-box;
 }
 
-.step3-btn-pay {
-  flex: 1.35;
-  min-width: 0;
-  background: #17350a;
-  color: #FFFFFF;
-  border: none;
-  padding: 0.75rem 0.85rem;
+.wa-btn-short {
+  display: none;
+}
+.wa-btn-full {
+  display: inline;
+}
+
+.step3-btn-back {
+  flex: 0 0 auto;
+  background: var(--bg-parchment);
+  color: var(--color-charcoal);
+  border: 1.5px solid var(--border-color);
+  padding: 0.72rem 0.95rem;
   border-radius: var(--radius-full);
-  font-weight: 700;
-  font-size: 0.86rem;
+  font-weight: 600;
+  font-size: 0.84rem;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   text-align: center;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-height: 42px;
 }
 
-.step3-btn-pay:hover {
-  background: #234d12;
+.step3-btn-back:hover {
+  background: #FFFFFF;
+  border-color: var(--color-charcoal);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(23, 53, 10, 0.2);
 }
 
 .step3-btn-whatsapp {
-  flex: 1.1;
+  flex: 1;
   min-width: 0;
   background: #25d366;
   color: #FFFFFF;
   border: none;
-  padding: 0.75rem 0.75rem;
+  padding: 0.72rem 0.65rem;
   border-radius: var(--radius-full);
   font-weight: 600;
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   text-align: center;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.3rem;
+  min-height: 42px;
 }
 
 .step3-btn-whatsapp:hover {
@@ -6052,28 +6057,30 @@ textarea.form-input.is-invalid {
   box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
 }
 
-.step3-btn-back {
-  flex: 0 0 auto;
-  background: var(--bg-parchment);
-  color: var(--color-charcoal);
-  border: 1.5px solid var(--border-color);
-  padding: 0.75rem 0.85rem;
+.step3-btn-pay {
+  flex: 1.25;
+  min-width: 0;
+  background: #17350a;
+  color: #FFFFFF;
+  border: none;
+  padding: 0.72rem 0.85rem;
   border-radius: var(--radius-full);
-  font-weight: 600;
-  font-size: 0.82rem;
+  font-weight: 700;
+  font-size: 0.86rem;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
   text-align: center;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-height: 42px;
 }
 
-.step3-btn-back:hover {
-  background: #FFFFFF;
-  border-color: var(--color-charcoal);
+.step3-btn-pay:hover {
+  background: #234d12;
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(23, 53, 10, 0.2);
 }
 
 /* Step 2: Single Line Actions (Back + Payment) */
@@ -6133,7 +6140,13 @@ textarea.form-input.is-invalid {
   box-shadow: 0 4px 12px rgba(23, 53, 10, 0.2);
 }
 
-@media (max-width: 480px) {
+@media (max-width: 540px) {
+  .wa-btn-full {
+    display: none !important;
+  }
+  .wa-btn-short {
+    display: inline !important;
+  }
   .payment-methods-container {
     gap: 0.5rem;
   }
@@ -6150,18 +6163,45 @@ textarea.form-input.is-invalid {
   }
   .step3-single-line-actions {
     gap: 0.35rem;
-  }
-  .step3-btn-pay {
-    font-size: 0.78rem;
-    padding: 0.65rem 0.5rem;
-  }
-  .step3-btn-whatsapp {
-    font-size: 0.76rem;
-    padding: 0.65rem 0.45rem;
+    width: 100%;
   }
   .step3-btn-back {
-    font-size: 0.76rem;
-    padding: 0.65rem 0.55rem;
+    flex: 0 0 auto;
+    font-size: 0.8rem;
+    padding: 0.65rem 0.7rem;
+    min-height: 40px;
+  }
+  .step3-btn-whatsapp {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.8rem;
+    padding: 0.65rem 0.5rem;
+    min-height: 40px;
+  }
+  .step3-btn-pay {
+    flex: 1.25;
+    min-width: 0;
+    font-size: 0.82rem;
+    padding: 0.65rem 0.6rem;
+    min-height: 40px;
+  }
+}
+
+@media (max-width: 360px) {
+  .step3-single-line-actions {
+    gap: 0.25rem;
+  }
+  .step3-btn-back {
+    font-size: 0.75rem;
+    padding: 0.6rem 0.45rem;
+  }
+  .step3-btn-whatsapp {
+    font-size: 0.75rem;
+    padding: 0.6rem 0.35rem;
+  }
+  .step3-btn-pay {
+    font-size: 0.77rem;
+    padding: 0.6rem 0.45rem;
   }
 }
 
