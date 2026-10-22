@@ -1,4 +1,3 @@
-
 function toggleCartDeliveryForm() {
   const form = document.getElementById("deliveryForm");
   const arrow = document.getElementById("accordionArrow");
@@ -15,7 +14,7 @@ function toggleCartDeliveryForm() {
 
 /**
  * Rupantar Store Application Logic
- * 
+ *
  * Manages catalogue rendering of the 8 folk-art covers,
  * Size & Page pricing matrix, bulk discounts,
  * customer customisation options, and WhatsApp order routing.
@@ -55,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
    ========================================================================== */
 function initStoreInfo() {
   currentConfig = getStoreConfig();
-  
+
   const navStoreName = document.getElementById("navStoreName");
   if (navStoreName) navStoreName.textContent = currentConfig.storeName || "Rupantar";
 
@@ -65,13 +64,22 @@ function initStoreInfo() {
   const footerWa = document.getElementById("footerWhatsAppLink");
   if (footerWa) {
     const cleanNumber = (currentConfig.whatsappNumber || "919876543210").replace(/[^0-9]/g, "");
-    footerWa.textContent = currentConfig.whatsappDisplayNumber || ("+" + cleanNumber);
-    footerWa.href = "https://wa.me/" + cleanNumber + "?text=" + encodeURIComponent("Hi Team " + (currentConfig.storeName || "Rupantar") + "! I have an enquiry about your handcrafted rice husk diaries.");
+    footerWa.textContent = currentConfig.whatsappDisplayNumber || "+" + cleanNumber;
+    footerWa.href =
+      "https://wa.me/" +
+      cleanNumber +
+      "?text=" +
+      encodeURIComponent(
+        "Hi Team " +
+          (currentConfig.storeName || "Rupantar") +
+          "! I have an enquiry about your handcrafted rice husk diaries."
+      );
   }
 
   const footerInsta = document.getElementById("footerInstagramLink");
   if (footerInsta) {
-    footerInsta.href = currentConfig.instagramUrl || "https://www.instagram.com/projectrupaantar?mdxt=MXF5NGM0cGJ6M2p3Nw==";
+    footerInsta.href =
+      currentConfig.instagramUrl || "https://www.instagram.com/projectrupaantar?mdxt=MXF5NGM0cGJ6M2p3Nw==";
     footerInsta.textContent = currentConfig.instagramHandle || "@projectrupaantar";
   }
 
@@ -79,14 +87,23 @@ function initStoreInfo() {
   const headerWa = document.getElementById("headerWhatsAppBtn");
   if (headerWa) {
     const cleanNumber = (currentConfig.whatsappNumber || "919876543210").replace(/[^0-9]/g, "");
-    headerWa.href = "https://wa.me/" + cleanNumber + "?text=" + encodeURIComponent("Hi Team " + (currentConfig.storeName || "Rupantar") + "! I would like to enquire about your folk-art diaries.");
+    headerWa.href =
+      "https://wa.me/" +
+      cleanNumber +
+      "?text=" +
+      encodeURIComponent(
+        "Hi Team " + (currentConfig.storeName || "Rupantar") + "! I would like to enquire about your folk-art diaries."
+      );
   }
 
   // Floating WhatsApp button for general inquiries
   const floatBtn = document.getElementById("floatingWhatsAppBtn");
   if (floatBtn) {
     const cleanNumber = (currentConfig.whatsappNumber || "919876543210").replace(/[^0-9]/g, "");
-    const enquiryMsg = "Hi Team " + (currentConfig.storeName || "Rupantar") + "! I am visiting your website and have an enquiry regarding your handcrafted rice husk paper diaries.";
+    const enquiryMsg =
+      "Hi Team " +
+      (currentConfig.storeName || "Rupantar") +
+      "! I am visiting your website and have an enquiry regarding your handcrafted rice husk paper diaries.";
     floatBtn.href = "https://wa.me/" + cleanNumber + "?text=" + encodeURIComponent(enquiryMsg);
   }
 }
@@ -105,7 +122,9 @@ function renderEthosPillars() {
     { icon: "✨", title: "Bulk & Custom Editions", desc: "Discounts up to ₹54 off for teams & events" }
   ];
 
-  container.innerHTML = features.map(f => `
+  container.innerHTML = features
+    .map(
+      f => `
     <div class="ethos-card">
       <div class="ethos-icon">${f.icon}</div>
       <div class="ethos-text">
@@ -113,7 +132,9 @@ function renderEthosPillars() {
         <p class="ethos-desc">${escapeHTML(f.desc)}</p>
       </div>
     </div>
-  `).join("");
+  `
+    )
+    .join("");
 }
 
 /* ==========================================================================
@@ -130,7 +151,10 @@ function resetCatalogueSearch() {
 
 function openCustomQuoteWhatsApp() {
   const cleanNumber = (currentConfig.whatsappNumber || "919876543210").replace(/[^0-9]/g, "");
-  const msg = "Hi Team " + (currentConfig.storeName || "Rupantar") + "! I would like to request a custom quote for customized / bulk folk-art diaries (@projectrupaantar).";
+  const msg =
+    "Hi Team " +
+    (currentConfig.storeName || "Rupantar") +
+    "! I would like to request a custom quote for customized / bulk folk-art diaries (@projectrupaantar).";
   window.open("https://wa.me/" + cleanNumber + "?text=" + encodeURIComponent(msg), "_blank");
 }
 
@@ -141,9 +165,11 @@ function renderCatalogue() {
   const filtered = currentCatalogue.filter(item => {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
-    return item.name.toLowerCase().includes(q) ||
-           item.shortDescription.toLowerCase().includes(q) ||
-           item.designNumber.includes(q);
+    return (
+      item.name.toLowerCase().includes(q) ||
+      item.shortDescription.toLowerCase().includes(q) ||
+      item.designNumber.includes(q)
+    );
   });
 
   if (filtered.length === 0) {
@@ -158,8 +184,9 @@ function renderCatalogue() {
     return;
   }
 
-  grid.innerHTML = filtered.map(item => {
-    return `
+  grid.innerHTML = filtered
+    .map(item => {
+      return `
       <div class="product-card" id="card-${item.id}">
         <div class="product-card-media" onclick="openQuickBuyModal('${item.id}')" style="cursor: pointer;" title="View details for ${escapeHTML(item.name)}">
           <img src="${item.image}" alt="${escapeHTML(item.name)}" class="product-thumb" loading="lazy" onerror="this.src='assets/images/design-01.png'">
@@ -197,7 +224,8 @@ function renderCatalogue() {
         </div>
       </div>
     `;
-  }).join("");
+    })
+    .join("");
 }
 
 function quickAddToCart(productId, event) {
@@ -208,11 +236,12 @@ function quickAddToCart(productId, event) {
   const sizeObj = PRICING_MATRIX[defaultSize] || PRICING_MATRIX["10x14"];
   const unitPrice = getPriceForSpec(defaultSize, defaultPages);
 
-  const existingItem = cart.find(i => 
-    i.productId === product.id && 
-    (i.sizeKey === defaultSize || i.size === sizeObj.label) && 
-    i.pages === defaultPages && 
-    !i.customisation
+  const existingItem = cart.find(
+    i =>
+      i.productId === product.id &&
+      (i.sizeKey === defaultSize || i.size === sizeObj.label) &&
+      i.pages === defaultPages &&
+      !i.customisation
   );
 
   if (existingItem) {
@@ -260,9 +289,11 @@ function openQuickBuyModal(productId) {
   // Populate Design Variant Selector Dropdown
   const designDropdown = document.getElementById("qbDesignDropdown");
   if (designDropdown) {
-    designDropdown.innerHTML = currentCatalogue.map(p => 
-      `<option value="${p.id}" ${p.id === product.id ? 'selected' : ''}>${p.designNumber} — ${p.name}</option>`
-    ).join("");
+    designDropdown.innerHTML = currentCatalogue
+      .map(
+        p => `<option value="${p.id}" ${p.id === product.id ? "selected" : ""}>${p.designNumber} — ${p.name}</option>`
+      )
+      .join("");
   }
 
   // Update Header Titles
@@ -302,7 +333,11 @@ function updateQuickBuyHeader() {
   const tag = document.getElementById("qbProductTag");
 
   if (title) title.textContent = `${qbProduct.designNumber}. ${qbProduct.name}`;
-  if (sub) sub.textContent = qbProduct.shortDescription || qbProduct.tagline || "Handcrafted folk-art diary made from sustainable rice husk paper.";
+  if (sub)
+    sub.textContent =
+      qbProduct.shortDescription ||
+      qbProduct.tagline ||
+      "Handcrafted folk-art diary made from sustainable rice husk paper.";
   if (img) {
     img.src = qbProduct.image;
     img.alt = `${qbProduct.name} Handcrafted Diary`;
@@ -376,7 +411,7 @@ function addCustomPreset(prefix) {
 
 function updateQuickBuyCalculations() {
   const sizeObj = PRICING_MATRIX[qbSize] || PRICING_MATRIX["10x14"];
-  
+
   // Update chip prices for current size
   const rate10 = document.getElementById("qbRate-10");
   const rate15 = document.getElementById("qbRate-15");
@@ -395,12 +430,12 @@ function updateQuickBuyCalculations() {
   const totalBesideQty = document.getElementById("qbUnitPriceDisplay");
   const origBesideQty = document.getElementById("qbOrigUnitPriceDisplay");
 
-  if (totalBesideQty) totalBesideQty.textContent = `₹${grandTotal.toLocaleString('en-IN')}`;
+  if (totalBesideQty) totalBesideQty.textContent = `₹${grandTotal.toLocaleString("en-IN")}`;
 
   if (hasBulkDiscount) {
     if (origBesideQty) {
       origBesideQty.style.display = "inline";
-      origBesideQty.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+      origBesideQty.textContent = `₹${subtotal.toLocaleString("en-IN")}`;
     }
   } else {
     if (origBesideQty) origBesideQty.style.display = "none";
@@ -414,7 +449,7 @@ function updateQuickBuyCalculations() {
       nudgeContainer.innerHTML = `
         <div class="qb-bulk-nudge">
           <span class="nudge-icon">✨</span>
-          <span class="nudge-text">Add <strong>${needed} more ${needed === 1 ? 'diary' : 'diaries'}</strong> to get <strong>5% discount</strong> on each book!</span>
+          <span class="nudge-text">Add <strong>${needed} more ${needed === 1 ? "diary" : "diaries"}</strong> to get <strong>5% discount</strong> on each book!</span>
         </div>
       `;
     } else {
@@ -422,7 +457,7 @@ function updateQuickBuyCalculations() {
         <div class="qb-congrats-popper" role="status">
           <span class="popper-emoji">🎉</span>
           <div class="popper-msg">
-            <strong>Congratulations!</strong> 5% Bulk Discount Applied (Saved ₹${discountAmount.toLocaleString('en-IN')})
+            <strong>Congratulations!</strong> 5% Bulk Discount Applied (Saved ₹${discountAmount.toLocaleString("en-IN")})
           </div>
           <span class="popper-emoji">🎊</span>
         </div>
@@ -435,9 +470,9 @@ function updateQuickBuyCalculations() {
   const step2TotalDisplay = document.getElementById("qbStep2TotalAmountDisplay");
   const summaryQty = document.getElementById("qbSummaryQty");
 
-  if (totalDisplay) totalDisplay.textContent = `₹${grandTotal.toLocaleString('en-IN')}`;
-  if (step2TotalDisplay) step2TotalDisplay.textContent = `₹${grandTotal.toLocaleString('en-IN')}`;
-  if (summaryQty) summaryQty.textContent = `${qbQty} ${qbQty === 1 ? 'diary' : 'diaries'}`;
+  if (totalDisplay) totalDisplay.textContent = `₹${grandTotal.toLocaleString("en-IN")}`;
+  if (step2TotalDisplay) step2TotalDisplay.textContent = `₹${grandTotal.toLocaleString("en-IN")}`;
+  if (summaryQty) summaryQty.textContent = `${qbQty} ${qbQty === 1 ? "diary" : "diaries"}`;
 }
 
 function hideValidationErrors() {
@@ -476,8 +511,12 @@ function constructQuickBuyWhatsAppMessage() {
   const custPhone = document.getElementById("qbCustPhone") ? document.getElementById("qbCustPhone").value.trim() : "";
   const countryCode = document.getElementById("qbCountryCode") ? document.getElementById("qbCountryCode").value : "+91";
   const custCity = document.getElementById("qbCustCity") ? document.getElementById("qbCustCity").value.trim() : "";
-  const custAddress = document.getElementById("qbCustAddress") ? document.getElementById("qbCustAddress").value.trim() : "";
-  const customNotes = document.getElementById("qbCustCustomization") ? document.getElementById("qbCustCustomization").value.trim() : "";
+  const custAddress = document.getElementById("qbCustAddress")
+    ? document.getElementById("qbCustAddress").value.trim()
+    : "";
+  const customNotes = document.getElementById("qbCustCustomization")
+    ? document.getElementById("qbCustCustomization").value.trim()
+    : "";
 
   // Order Reference Number
   const orderRef = "RUP-" + Math.floor(1000 + Math.random() * 9000);
@@ -491,14 +530,14 @@ function constructQuickBuyWhatsAppMessage() {
   msg += `• Binding: Spiral Bound (Lies completely flat 180°)\n`;
   msg += `• Size: ${sizeObj.label}\n`;
   msg += `• Pages: ${qbPages} Pages\n`;
-  msg += `• Quantity: ${qbQty} ${qbQty === 1 ? 'diary' : 'diaries'}\n\n`;
+  msg += `• Quantity: ${qbQty} ${qbQty === 1 ? "diary" : "diaries"}\n\n`;
 
   msg += `💰 *PRICE BREAKDOWN:*\n`;
   if (hasBulkDiscount) {
-    msg += `• Items Subtotal: ₹${subtotal.toLocaleString('en-IN')}\n`;
-    msg += `• Bulk Discount (5% Off 10+ books): -₹${bulkDiscountAmount.toLocaleString('en-IN')}\n`;
+    msg += `• Items Subtotal: ₹${subtotal.toLocaleString("en-IN")}\n`;
+    msg += `• Bulk Discount (5% Off 10+ books): -₹${bulkDiscountAmount.toLocaleString("en-IN")}\n`;
   }
-  msg += `• *Total Amount: ₹${grandTotal.toLocaleString('en-IN')}*\n`;
+  msg += `• *Total Amount: ₹${grandTotal.toLocaleString("en-IN")}*\n`;
   msg += `• Shipping: Confirmed on WhatsApp\n\n`;
 
   if (customNotes) {
@@ -533,7 +572,9 @@ function launchQuickBuyWhatsApp() {
 
   // Prevent duplicate clicks & show loading state
   const btn = document.getElementById("qbWhatsAppDirectBtn");
-  const originalText = document.getElementById("qbOrderBtnText") ? document.getElementById("qbOrderBtnText").textContent : "";
+  const originalText = document.getElementById("qbOrderBtnText")
+    ? document.getElementById("qbOrderBtnText").textContent
+    : "";
   if (btn) {
     btn.disabled = true;
     if (document.getElementById("qbOrderBtnText")) {
@@ -566,11 +607,14 @@ function launchQuickBuyWhatsApp() {
 function copyQuickBuyWhatsAppLink() {
   const msg = constructQuickBuyWhatsAppMessage();
   if (navigator.clipboard) {
-    navigator.clipboard.writeText(msg).then(() => {
-      showToast("Order message copied to clipboard! 📋");
-    }).catch(() => {
-      fallbackCopyText(msg);
-    });
+    navigator.clipboard
+      .writeText(msg)
+      .then(() => {
+        showToast("Order message copied to clipboard! 📋");
+      })
+      .catch(() => {
+        fallbackCopyText(msg);
+      });
   } else {
     fallbackCopyText(msg);
   }
@@ -579,13 +623,16 @@ function copyQuickBuyWhatsAppLink() {
 function addQuickBuyToCartAndOpen() {
   const sizeObj = PRICING_MATRIX[qbSize] || PRICING_MATRIX["10x14"];
   const baseUnitPrice = getPriceForSpec(qbSize, qbPages);
-  const customNotes = document.getElementById("qbCustCustomization") ? document.getElementById("qbCustCustomization").value.trim() : "";
+  const customNotes = document.getElementById("qbCustCustomization")
+    ? document.getElementById("qbCustCustomization").value.trim()
+    : "";
 
-  const existingItem = cart.find(i => 
-    i.productId === qbProduct.id && 
-    (i.sizeKey === qbSize || i.size === sizeObj.label) && 
-    i.pages === qbPages && 
-    (i.customisation || "") === customNotes
+  const existingItem = cart.find(
+    i =>
+      i.productId === qbProduct.id &&
+      (i.sizeKey === qbSize || i.size === sizeObj.label) &&
+      i.pages === qbPages &&
+      (i.customisation || "") === customNotes
   );
 
   if (existingItem) {
@@ -653,7 +700,7 @@ function loadCart() {
   try {
     const raw = localStorage.getItem("rupaantar_cart");
     return raw ? JSON.parse(raw) : [];
-  } catch(e) {
+  } catch (e) {
     return [];
   }
 }
@@ -662,7 +709,7 @@ function saveCart(newCart) {
   cart = newCart;
   try {
     localStorage.setItem("rupaantar_cart", JSON.stringify(cart));
-  } catch(e) {}
+  } catch (e) {}
 }
 
 function updateCartItemQty(itemId, delta) {
@@ -696,7 +743,7 @@ function updateCartUI() {
   const discountCard = document.getElementById("cartDiscountCard") || document.getElementById("freeShippingCard");
 
   const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
-  const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+  const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
   // 10+ books bulk discount (5% off on each book)
   const hasBulkDiscount = totalItems >= 10;
@@ -704,10 +751,10 @@ function updateCartUI() {
   const finalTotal = subtotal - discountAmount;
 
   if (badge) badge.textContent = totalItems;
-  if (countSpan) countSpan.textContent = `(${totalItems} ${totalItems === 1 ? 'item' : 'items'})`;
+  if (countSpan) countSpan.textContent = `(${totalItems} ${totalItems === 1 ? "item" : "items"})`;
 
   const totalPreview = document.getElementById("cartTotalPreview");
-  if (totalPreview) totalPreview.textContent = `₹${finalTotal.toLocaleString('en-IN')}`;
+  if (totalPreview) totalPreview.textContent = `₹${finalTotal.toLocaleString("en-IN")}`;
 
   const billSummary = document.getElementById("cartStep1BillSummary");
   const actionBar = document.querySelector(".cart-step-action-bar");
@@ -737,7 +784,7 @@ function updateCartUI() {
 
   if (hasBulkDiscount) {
     if (discountText) {
-      discountText.innerHTML = `🎉 <strong>5% Bulk Discount Applied!</strong> Saved ₹${discountAmount.toLocaleString('en-IN')} on ${totalItems} books.`;
+      discountText.innerHTML = `🎉 <strong>5% Bulk Discount Applied!</strong> Saved ₹${discountAmount.toLocaleString("en-IN")} on ${totalItems} books.`;
     }
     if (discountBar) {
       discountBar.style.width = "100%";
@@ -746,7 +793,7 @@ function updateCartUI() {
   } else {
     const needed = 10 - totalItems;
     if (discountText) {
-      discountText.innerHTML = `Add <strong>${needed} more ${needed === 1 ? 'book' : 'books'}</strong> for <strong>5% OFF on each book</strong>!`;
+      discountText.innerHTML = `Add <strong>${needed} more ${needed === 1 ? "book" : "books"}</strong> for <strong>5% OFF on each book</strong>!`;
     }
     if (discountBar) {
       discountBar.style.width = `${Math.min(100, Math.round((totalItems / 10) * 100))}%`;
@@ -756,17 +803,18 @@ function updateCartUI() {
 
   // Populate List
   if (list) {
-    list.innerHTML = cart.map(item => {
-      const lineTotal = item.price * item.quantity;
-      return `
+    list.innerHTML = cart
+      .map(item => {
+        const lineTotal = item.price * item.quantity;
+        return `
         <div class="cart-item-row">
           <img src="${item.image}" alt="${escapeHTML(item.name)}" class="cart-item-thumb" onerror="this.src='assets/images/design-01.png'">
           <div class="cart-item-info">
-            <h4 class="cart-item-title">${item.designNumber ? item.designNumber + '. ' : ''}${escapeHTML(item.name)}</h4>
+            <h4 class="cart-item-title">${item.designNumber ? item.designNumber + ". " : ""}${escapeHTML(item.name)}</h4>
             <div class="cart-item-specs">
-              ${escapeHTML(item.size || '10x14 cm')} • ${item.pages || 10} pgs
+              ${escapeHTML(item.size || "10x14 cm")} • ${item.pages || 10} pgs
             </div>
-            ${item.customisation ? `<div class="cart-item-custom-note">Custom: "${escapeHTML(item.customisation)}"</div>` : ''}
+            ${item.customisation ? `<div class="cart-item-custom-note">Custom: "${escapeHTML(item.customisation)}"</div>` : ""}
             <div class="cart-item-price-unit">₹${item.price} each</div>
           </div>
 
@@ -781,7 +829,8 @@ function updateCartUI() {
           </div>
         </div>
       `;
-    }).join("");
+      })
+      .join("");
   }
 
   // Bill Breakdown
@@ -791,13 +840,13 @@ function updateCartUI() {
   const bDel = document.getElementById("billDeliveryFee");
   const bTot = document.getElementById("billTotal");
 
-  if (bSub) bSub.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+  if (bSub) bSub.textContent = `₹${subtotal.toLocaleString("en-IN")}`;
   if (bDiscRow) bDiscRow.style.display = hasBulkDiscount ? "flex" : "none";
-  if (bDisc) bDisc.textContent = `-₹${discountAmount.toLocaleString('en-IN')}`;
+  if (bDisc) bDisc.textContent = `-₹${discountAmount.toLocaleString("en-IN")}`;
   if (bDel) bDel.textContent = "Confirmed on WhatsApp";
-  if (bTot) bTot.textContent = `₹${finalTotal.toLocaleString('en-IN')}`;
+  if (bTot) bTot.textContent = `₹${finalTotal.toLocaleString("en-IN")}`;
   const sTot = document.getElementById("stickyBillTotal");
-  if (sTot) sTot.textContent = `₹${finalTotal.toLocaleString('en-IN')}`;
+  if (sTot) sTot.textContent = `₹${finalTotal.toLocaleString("en-IN")}`;
   const stickyFooter = document.getElementById("cartDrawerStickyFooter");
   if (stickyFooter) stickyFooter.style.display = cart.length === 0 ? "none" : "flex";
 }
@@ -894,7 +943,7 @@ function proceedToWhatsAppCheckout() {
   const pincode = (document.getElementById("custPincode")?.value || "").trim();
   const notes = (document.getElementById("custNotes")?.value || "").trim();
 
-  const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+  const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
   const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
   const discountAmount = totalItems >= 10 ? Math.round(subtotal * 0.05) : 0;
   const totalPayable = subtotal - discountAmount;
@@ -912,11 +961,11 @@ function proceedToWhatsAppCheckout() {
   if (notes) {
     msg += `• Customisation / Gifting Instructions: "${notes}"\n`;
   }
-  msg += `\n📦 *DIARIES IN BAG (${totalItems} ${totalItems === 1 ? 'item' : 'items'}):*\n`;
+  msg += `\n📦 *DIARIES IN BAG (${totalItems} ${totalItems === 1 ? "item" : "items"}):*\n`;
 
   cart.forEach((item, index) => {
-    msg += `${index + 1}. *${item.designNumber ? item.designNumber + ' — ' : ''}${item.name}*\n`;
-    msg += `   • Spec: ${item.size || '10x14 cm'}, ${item.pages || 10} Pages (Rice Husk)\n`;
+    msg += `${index + 1}. *${item.designNumber ? item.designNumber + " — " : ""}${item.name}*\n`;
+    msg += `   • Spec: ${item.size || "10x14 cm"}, ${item.pages || 10} Pages (Rice Husk)\n`;
     if (item.customisation) {
       msg += `   • Customisation: "${item.customisation}"\n`;
     }
@@ -924,12 +973,12 @@ function proceedToWhatsAppCheckout() {
   });
 
   msg += `💰 *BILL SUMMARY:*\n`;
-  msg += `• Items Subtotal: ₹${subtotal.toLocaleString('en-IN')} (${totalItems} ${totalItems === 1 ? 'diary' : 'diaries'})\n`;
+  msg += `• Items Subtotal: ₹${subtotal.toLocaleString("en-IN")} (${totalItems} ${totalItems === 1 ? "diary" : "diaries"})\n`;
   if (discountAmount > 0) {
-    msg += `• 5% Discount (10+ books): -₹${discountAmount.toLocaleString('en-IN')}\n`;
+    msg += `• 5% Discount (10+ books): -₹${discountAmount.toLocaleString("en-IN")}\n`;
   }
   msg += `• Shipping: Confirmed on WhatsApp based on location\n`;
-  msg += `• *TOTAL PAYABLE: ₹${totalPayable.toLocaleString('en-IN')}*\n\n`;
+  msg += `• *TOTAL PAYABLE: ₹${totalPayable.toLocaleString("en-IN")}*\n\n`;
   msg += `Hi Team Rupantar! I would like to order my shopping bag. Please confirm paper stock availability, delivery timeline, and share payment details (UPI/QR). Thank you! 🙏`;
 
   const cleanNumber = (currentConfig.whatsappNumber || "919876543210").replace(/[^0-9]/g, "");
@@ -960,8 +1009,8 @@ function copyOrderTextToClipboard() {
     city: "",
     pincode: ""
   };
-  const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
-  const deliveryFee = subtotal >= (currentConfig.freeDeliveryThreshold || 799) ? 0 : (currentConfig.deliveryFee || 60);
+  const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const deliveryFee = subtotal >= (currentConfig.freeDeliveryThreshold || 799) ? 0 : currentConfig.deliveryFee || 60;
 
   let msg = `🌿 *BAG ORDER — RUPANTAR* 🌿\n\n`;
   cart.forEach((i, idx) => {
@@ -974,8 +1023,17 @@ function copyOrderTextToClipboard() {
 
 function clearCustomerFormInputs() {
   const fields = [
-    "custName", "custPhone", "custAddress", "custCity", "custPincode", "custNotes",
-    "qbCustName", "qbCustPhone", "qbCustCity", "qbCustAddress", "qbCustCustomization"
+    "custName",
+    "custPhone",
+    "custAddress",
+    "custCity",
+    "custPincode",
+    "custNotes",
+    "qbCustName",
+    "qbCustPhone",
+    "qbCustCity",
+    "qbCustAddress",
+    "qbCustCustomization"
   ];
   fields.forEach(id => {
     const el = document.getElementById(id);
@@ -983,7 +1041,7 @@ function clearCustomerFormInputs() {
   });
   try {
     localStorage.removeItem("rupaantar_customer_info");
-  } catch(e) {}
+  } catch (e) {}
 }
 
 function loadSavedCustomerInfo() {
@@ -1048,14 +1106,16 @@ function checkUrlDeepLinks() {
     const params = new URLSearchParams(window.location.search);
     const design = params.get("design");
     if (design) {
-      const match = currentCatalogue.find(p => p.designNumber === design || p.id === design || p.id === `aaroh-${design}`);
+      const match = currentCatalogue.find(
+        p => p.designNumber === design || p.id === design || p.id === `aaroh-${design}`
+      );
       if (match) {
         setTimeout(() => {
           openQuickBuyModal(match.id);
         }, 300);
       }
     }
-  } catch(e) {}
+  } catch (e) {}
 }
 
 /* ==========================================================================
@@ -1066,7 +1126,7 @@ function initEventListeners() {
   const searchInput = document.getElementById("searchInput") || document.getElementById("searchCatalogInput");
   const clearSearchBtn = document.getElementById("clearSearchBtn");
   if (searchInput) {
-    searchInput.addEventListener("input", (e) => {
+    searchInput.addEventListener("input", e => {
       searchQuery = e.target.value.trim();
       if (clearSearchBtn) {
         clearSearchBtn.style.display = searchQuery.length > 0 ? "block" : "none";
@@ -1095,7 +1155,7 @@ function initEventListeners() {
 
   const settingsBackdrop = document.getElementById("settingsModalBackdrop");
   if (settingsBackdrop) {
-    settingsBackdrop.addEventListener("click", (e) => {
+    settingsBackdrop.addEventListener("click", e => {
       if (e.target === settingsBackdrop) closeSettingsModal();
     });
   }
@@ -1109,7 +1169,7 @@ function initEventListeners() {
   // Share store modal backdrop click
   const shareBackdrop = document.getElementById("shareStoreModalBackdrop");
   if (shareBackdrop) {
-    shareBackdrop.addEventListener("click", (e) => {
+    shareBackdrop.addEventListener("click", e => {
       if (e.target === shareBackdrop) closeShareStoreModal();
     });
   }
@@ -1130,7 +1190,7 @@ function initEventListeners() {
 
   const qbBackdrop = document.getElementById("quickBuyModalBackdrop");
   if (qbBackdrop) {
-    qbBackdrop.addEventListener("click", (e) => {
+    qbBackdrop.addEventListener("click", e => {
       if (e.target === qbBackdrop) closeQuickBuyModal();
     });
   }
@@ -1143,7 +1203,7 @@ function initEventListeners() {
   if (copyBagBtn) copyBagBtn.addEventListener("click", copyOrderTextToClipboard);
 
   // Keyboard escape
-  document.addEventListener("keydown", (e) => {
+  document.addEventListener("keydown", e => {
     if (e.key === "Escape") {
       closeQuickBuyModal();
       closeCart();
@@ -1156,11 +1216,14 @@ function initEventListeners() {
 
 function fallbackCopyText(text) {
   if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(() => {
-      showToast("Copied to clipboard! 📋");
-    }).catch(() => {
-      prompt("Copy to clipboard: Ctrl+C, Enter", text);
-    });
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        showToast("Copied to clipboard! 📋");
+      })
+      .catch(() => {
+        prompt("Copy to clipboard: Ctrl+C, Enter", text);
+      });
   } else {
     prompt("Copy to clipboard: Ctrl+C, Enter", text);
   }
@@ -1202,7 +1265,9 @@ function openSettingsModal() {
   if (nameInput) nameInput.value = currentConfig.storeName || "Rupantar";
   if (phoneInput) phoneInput.value = currentConfig.whatsappNumber || "919876543210";
   if (feeInput) feeInput.value = currentConfig.deliveryFee !== undefined ? currentConfig.deliveryFee : 60;
-  if (thresholdInput) thresholdInput.value = currentConfig.freeDeliveryThreshold !== undefined ? currentConfig.freeDeliveryThreshold : 799;
+  if (thresholdInput)
+    thresholdInput.value =
+      currentConfig.freeDeliveryThreshold !== undefined ? currentConfig.freeDeliveryThreshold : 799;
   backdrop.classList.add("active");
 }
 
@@ -1227,13 +1292,14 @@ function handleSaveSettings(e) {
   }
 
   const updated = saveStoreConfig({
-    storeName: nameInput ? (nameInput.value.trim() || "Rupantar") : "Rupantar",
+    storeName: nameInput ? nameInput.value.trim() || "Rupantar" : "Rupantar",
     whatsappNumber: cleanPhone,
-    whatsappDisplayNumber: cleanPhone.startsWith("91") && cleanPhone.length === 12
-      ? `+91 ${cleanPhone.slice(2, 7)} ${cleanPhone.slice(7)}`
-      : `+${cleanPhone}`,
-    deliveryFee: feeInput ? (parseInt(feeInput.value, 10) || 0) : 60,
-    freeDeliveryThreshold: thresholdInput ? (parseInt(thresholdInput.value, 10) || 799) : 799
+    whatsappDisplayNumber:
+      cleanPhone.startsWith("91") && cleanPhone.length === 12
+        ? `+91 ${cleanPhone.slice(2, 7)} ${cleanPhone.slice(7)}`
+        : `+${cleanPhone}`,
+    deliveryFee: feeInput ? parseInt(feeInput.value, 10) || 0 : 60,
+    freeDeliveryThreshold: thresholdInput ? parseInt(thresholdInput.value, 10) || 799 : 799
   });
 
   currentConfig = updated;
@@ -1244,13 +1310,17 @@ function handleSaveSettings(e) {
 
   const footerLink = document.getElementById("footerWhatsAppLink");
   if (footerLink) {
-    footerLink.href = getWhatsAppUrl("Hi " + currentConfig.storeName + "! I am inquiring about handcrafted folk-art diaries.");
+    footerLink.href = getWhatsAppUrl(
+      "Hi " + currentConfig.storeName + "! I am inquiring about handcrafted folk-art diaries."
+    );
     footerLink.textContent = currentConfig.whatsappDisplayNumber || currentConfig.whatsappNumber;
   }
 
   const floatBtn = document.getElementById("floatingWhatsAppBtn");
   if (floatBtn) {
-    floatBtn.href = getWhatsAppUrl("Hi " + currentConfig.storeName + "! I am browsing the folk-art diaries collection.");
+    floatBtn.href = getWhatsAppUrl(
+      "Hi " + currentConfig.storeName + "! I am browsing the folk-art diaries collection."
+    );
   }
 
   updateCartUI();
@@ -1266,7 +1336,6 @@ function handleResetDefaults() {
   showToast("Store settings reset to defaults. 🔄");
   closeSettingsModal();
 }
-
 
 /* ==========================================================================
    3-STEP CHECKOUT & PAYMENT SYSTEM CONTROLLERS (QUICK BUY & CART)
@@ -1438,8 +1507,9 @@ function goToQuickBuyStep(step) {
       const total = subtotal - discountAmount;
 
       if (titleEl) titleEl.textContent = `${qbProduct.designNumber}. ${qbProduct.name}`;
-      if (specsEl) specsEl.textContent = `${sizeObj.dimensions} • ${qbPages} pgs • Qty: ${qbQty}${hasBulkDiscount ? ' (5% Off)' : ''}`;
-      if (totalEl) totalEl.textContent = `₹${total.toLocaleString('en-IN')}`;
+      if (specsEl)
+        specsEl.textContent = `${sizeObj.dimensions} • ${qbPages} pgs • Qty: ${qbQty}${hasBulkDiscount ? " (5% Off)" : ""}`;
+      if (totalEl) totalEl.textContent = `₹${total.toLocaleString("en-IN")}`;
     }
   } else if (step === 3) {
     if (view1) view1.style.display = "none";
@@ -1486,8 +1556,8 @@ function populateQuickBuyStep3Summary() {
   const subtotal = unitPrice * qbQty;
   const hasBulkDiscount = qbQty >= 10;
   const discount = hasBulkDiscount ? Math.round(subtotal * 0.05) : 0;
-  const deliveryFee = (subtotal - discount) >= 799 ? 0 : 60;
-  const finalTotal = (subtotal - discount) + deliveryFee;
+  const deliveryFee = subtotal - discount >= 799 ? 0 : 60;
+  const finalTotal = subtotal - discount + deliveryFee;
 
   // Title & specs
   const titleEl = document.getElementById("qbStep3ItemTitle");
@@ -1495,7 +1565,7 @@ function populateQuickBuyStep3Summary() {
   const priceEl = document.getElementById("qbStep3ItemPrice");
   if (titleEl) titleEl.textContent = `${qbProduct.designNumber}. ${qbProduct.name}`;
   if (specEl) specEl.textContent = `${sizeObj.dimensions} • ${qbPages} pgs • Qty: ${qbQty}`;
-  if (priceEl) priceEl.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+  if (priceEl) priceEl.textContent = `₹${subtotal.toLocaleString("en-IN")}`;
 
   // Address Chip
   const name = (document.getElementById("qbCustName")?.value || "Customer").trim();
@@ -1517,19 +1587,19 @@ function populateQuickBuyStep3Summary() {
   const deliveryEl = document.getElementById("qbStep3DeliveryFee");
   const totalEl = document.getElementById("qbStep3PayableTotal");
 
-  if (subtotalEl) subtotalEl.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+  if (subtotalEl) subtotalEl.textContent = `₹${subtotal.toLocaleString("en-IN")}`;
   if (discountRow) {
     if (discount > 0) {
       discountRow.style.display = "flex";
-      if (discountEl) discountEl.textContent = `-₹${discount.toLocaleString('en-IN')}`;
+      if (discountEl) discountEl.textContent = `-₹${discount.toLocaleString("en-IN")}`;
     } else {
       discountRow.style.display = "none";
     }
   }
   if (deliveryEl) deliveryEl.textContent = deliveryFee === 0 ? "FREE" : `₹${deliveryFee}`;
-  if (totalEl) totalEl.textContent = `₹${finalTotal.toLocaleString('en-IN')}`;
+  if (totalEl) totalEl.textContent = `₹${finalTotal.toLocaleString("en-IN")}`;
 
-  updatePaymentSubmitButtonLabel('qb', finalTotal);
+  updatePaymentSubmitButtonLabel("qb", finalTotal);
 }
 
 // ==========================================================================
@@ -1668,14 +1738,15 @@ function goToCartStep(step) {
 
     // Summary banner in step 2
     const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
-    const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+    const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
     const discount = totalItems >= 10 ? Math.round(subtotal * 0.05) : 0;
     const finalTotal = subtotal - discount;
 
     const countEl = document.getElementById("cartStep2ItemsCount");
     const totalEl = document.getElementById("cartStep2TotalPreview");
-    if (countEl) countEl.textContent = `${totalItems} ${totalItems === 1 ? 'diary' : 'diaries'} in Bag`;
-    if (totalEl) totalEl.textContent = `Total: ₹${finalTotal.toLocaleString('en-IN')}${discount > 0 ? ' (incl. 5% off)' : ''}`;
+    if (countEl) countEl.textContent = `${totalItems} ${totalItems === 1 ? "diary" : "diaries"} in Bag`;
+    if (totalEl)
+      totalEl.textContent = `Total: ₹${finalTotal.toLocaleString("en-IN")}${discount > 0 ? " (incl. 5% off)" : ""}`;
   } else if (step === 3) {
     if (view1) view1.style.display = "none";
     if (view2) view2.style.display = "none";
@@ -1718,7 +1789,11 @@ function setupRealtimeValidationClearers() {
   const qbFields = [
     { inputId: "qbCustName", errorId: "qbNameError", validator: v => v.trim().length >= 2 },
     { inputId: "qbCustPhone", errorId: "qbPhoneError", validator: v => /^[6-9]\d{9}$/.test(v.replace(/\D/g, "")) },
-    { inputId: "qbCustEmail", errorId: "qbEmailError", validator: v => v.trim().length === 0 || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+    {
+      inputId: "qbCustEmail",
+      errorId: "qbEmailError",
+      validator: v => v.trim().length === 0 || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
+    },
     { inputId: "qbCustHouse", errorId: "qbHouseError", validator: v => v.trim().length > 0 },
     { inputId: "qbCustStreet", errorId: "qbStreetError", validator: v => v.trim().length > 0 },
     { inputId: "qbCustCity", errorId: "qbCityError", validator: v => v.trim().length > 0 },
@@ -1729,7 +1804,11 @@ function setupRealtimeValidationClearers() {
   const cartFields = [
     { inputId: "custName", errorId: "cartNameError", validator: v => v.trim().length >= 2 },
     { inputId: "custPhone", errorId: "cartPhoneError", validator: v => /^[6-9]\d{9}$/.test(v.replace(/\D/g, "")) },
-    { inputId: "custEmail", errorId: "cartEmailError", validator: v => v.trim().length === 0 || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+    {
+      inputId: "custEmail",
+      errorId: "cartEmailError",
+      validator: v => v.trim().length === 0 || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
+    },
     { inputId: "custHouse", errorId: "cartHouseError", validator: v => v.trim().length > 0 },
     { inputId: "custStreet", errorId: "cartStreetError", validator: v => v.trim().length > 0 },
     { inputId: "custCity", errorId: "cartCityError", validator: v => v.trim().length > 0 },
@@ -1772,22 +1851,26 @@ function populateCartStep3Summary() {
   if (!itemsContainer) return;
 
   const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
-  const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+  const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
   const discount = totalItems >= 10 ? Math.round(subtotal * 0.05) : 0;
   const net = subtotal - discount;
   const deliveryFee = net >= 799 ? 0 : 60;
   const finalTotal = net + deliveryFee;
 
   // Render items
-  itemsContainer.innerHTML = cart.map(item => `
+  itemsContainer.innerHTML = cart
+    .map(
+      item => `
     <div class="step3-item-row">
       <div class="step3-item-info">
         <span class="step3-item-title">${escapeHTML(item.name)}</span>
         <span class="step3-item-spec">${escapeHTML(item.size)} • ${item.pages} pgs • Qty: ${item.quantity}</span>
       </div>
-      <span class="step3-item-price">₹${(item.price * item.quantity).toLocaleString('en-IN')}</span>
+      <span class="step3-item-price">₹${(item.price * item.quantity).toLocaleString("en-IN")}</span>
     </div>
-  `).join("");
+  `
+    )
+    .join("");
 
   // Address chip
   const name = (document.getElementById("custName")?.value || "Customer").trim();
@@ -1809,19 +1892,19 @@ function populateCartStep3Summary() {
   const deliveryEl = document.getElementById("cartStep3DeliveryFee");
   const totalEl = document.getElementById("cartStep3PayableTotal");
 
-  if (subtotalEl) subtotalEl.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+  if (subtotalEl) subtotalEl.textContent = `₹${subtotal.toLocaleString("en-IN")}`;
   if (discountRow) {
     if (discount > 0) {
       discountRow.style.display = "flex";
-      if (discountEl) discountEl.textContent = `-₹${discount.toLocaleString('en-IN')}`;
+      if (discountEl) discountEl.textContent = `-₹${discount.toLocaleString("en-IN")}`;
     } else {
       discountRow.style.display = "none";
     }
   }
   if (deliveryEl) deliveryEl.textContent = deliveryFee === 0 ? "FREE" : `₹${deliveryFee}`;
-  if (totalEl) totalEl.textContent = `₹${finalTotal.toLocaleString('en-IN')}`;
+  if (totalEl) totalEl.textContent = `₹${finalTotal.toLocaleString("en-IN")}`;
 
-  updatePaymentSubmitButtonLabel('cart', finalTotal);
+  updatePaymentSubmitButtonLabel("cart", finalTotal);
 }
 
 // ==========================================================================
@@ -1829,7 +1912,7 @@ function populateCartStep3Summary() {
 // ==========================================================================
 
 function selectPaymentMethod(method, context) {
-  if (context === 'qb') {
+  if (context === "qb") {
     selectedQbPaymentMethod = method;
     const cards = document.querySelectorAll("#qbPaymentMethods .payment-method-card");
     cards.forEach(c => {
@@ -1846,10 +1929,9 @@ function selectPaymentMethod(method, context) {
     const baseUnitPrice = getPriceForSpec(qbSize, qbPages);
     const subtotal = baseUnitPrice * qbQty;
     const discount = qbQty >= 10 ? Math.round(subtotal * 0.05) : 0;
-    const delivery = (subtotal - discount) >= 799 ? 0 : 60;
-    const total = (subtotal - discount) + delivery;
-    updatePaymentSubmitButtonLabel('qb', total);
-
+    const delivery = subtotal - discount >= 799 ? 0 : 60;
+    const total = subtotal - discount + delivery;
+    updatePaymentSubmitButtonLabel("qb", total);
   } else {
     selectedCartPaymentMethod = method;
     const cards = document.querySelectorAll("#cartPaymentMethods .payment-method-card");
@@ -1864,20 +1946,20 @@ function selectPaymentMethod(method, context) {
     });
 
     const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
-    const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+    const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
     const discount = totalItems >= 10 ? Math.round(subtotal * 0.05) : 0;
-    const delivery = (subtotal - discount) >= 799 ? 0 : 60;
-    const total = (subtotal - discount) + delivery;
-    updatePaymentSubmitButtonLabel('cart', total);
+    const delivery = subtotal - discount >= 799 ? 0 : 60;
+    const total = subtotal - discount + delivery;
+    updatePaymentSubmitButtonLabel("cart", total);
   }
 }
 
 function updatePaymentSubmitButtonLabel(context, amount) {
-  const formatted = `₹${amount.toLocaleString('en-IN')}`;
-  if (context === 'qb') {
+  const formatted = `₹${amount.toLocaleString("en-IN")}`;
+  if (context === "qb") {
     const btnText = document.getElementById("qbPayBtnText");
     if (!btnText) return;
-    if (selectedQbPaymentMethod === 'COD') {
+    if (selectedQbPaymentMethod === "COD") {
       btnText.textContent = `Order COD (${formatted})`;
     } else {
       btnText.textContent = `Pay ${formatted}`;
@@ -1885,7 +1967,7 @@ function updatePaymentSubmitButtonLabel(context, amount) {
   } else {
     const btnText = document.getElementById("cartPayBtnText");
     if (!btnText) return;
-    if (selectedCartPaymentMethod === 'COD') {
+    if (selectedCartPaymentMethod === "COD") {
       btnText.textContent = `Order COD (${formatted})`;
     } else {
       btnText.textContent = `Pay ${formatted}`;
@@ -1926,15 +2008,17 @@ async function submitQuickBuyOrder() {
     deliveryInstructions: document.getElementById("qbCustInstructions")?.value.trim() || ""
   };
 
-  const items = [{
-    id: qbProduct.id,
-    name: `${qbProduct.designNumber}. ${qbProduct.name}`,
-    designNumber: qbProduct.designNumber,
-    size: qbSize,
-    pages: qbPages,
-    quantity: qbQty,
-    customization: document.getElementById("qbCustCustomization")?.value.trim() || ""
-  }];
+  const items = [
+    {
+      id: qbProduct.id,
+      name: `${qbProduct.designNumber}. ${qbProduct.name}`,
+      designNumber: qbProduct.designNumber,
+      size: qbSize,
+      pages: qbPages,
+      quantity: qbQty,
+      customization: document.getElementById("qbCustCustomization")?.value.trim() || ""
+    }
+  ];
 
   if (submitBtn) {
     submitBtn.disabled = true;
@@ -1956,7 +2040,7 @@ async function submitQuickBuyOrder() {
 
     if (!res.ok || !data.success) {
       if (data.code === "GATEWAY_NOT_CONFIGURED") {
-        showRetryAlert('qb', `${data.message} You can select 'Cash on Delivery' below to place your order right now.`);
+        showRetryAlert("qb", `${data.message} You can select 'Cash on Delivery' below to place your order right now.`);
       } else {
         showToast(data.message || "Failed to create order. ⚠️");
       }
@@ -1978,12 +2062,11 @@ async function submitQuickBuyOrder() {
       orderId: data.orderId,
       razorpayOrderId: data.razorpayOrderId,
       customer: data.customer,
-      context: 'qb'
+      context: "qb"
     });
-
   } catch (err) {
     console.error("Order submit error:", err);
-    showRetryAlert('qb', "Could not communicate with checkout server. Please verify your connection.");
+    showRetryAlert("qb", "Could not communicate with checkout server. Please verify your connection.");
   } finally {
     if (submitBtn) {
       submitBtn.disabled = false;
@@ -1991,8 +2074,8 @@ async function submitQuickBuyOrder() {
       const baseUnitPrice = getPriceForSpec(qbSize, qbPages);
       const subtotal = baseUnitPrice * qbQty;
       const discount = qbQty >= 10 ? Math.round(subtotal * 0.05) : 0;
-      const delivery = (subtotal - discount) >= 799 ? 0 : 60;
-      updatePaymentSubmitButtonLabel('qb', (subtotal - discount) + delivery);
+      const delivery = subtotal - discount >= 799 ? 0 : 60;
+      updatePaymentSubmitButtonLabel("qb", subtotal - discount + delivery);
     }
   }
 }
@@ -2056,7 +2139,10 @@ async function submitCartOrder() {
 
     if (!res.ok || !data.success) {
       if (data.code === "GATEWAY_NOT_CONFIGURED") {
-        showRetryAlert('cart', `${data.message} You can select 'Cash on Delivery' below to place your order right now.`);
+        showRetryAlert(
+          "cart",
+          `${data.message} You can select 'Cash on Delivery' below to place your order right now.`
+        );
       } else {
         showToast(data.message || "Failed to create order. ⚠️");
       }
@@ -2081,27 +2167,29 @@ async function submitCartOrder() {
       orderId: data.orderId,
       razorpayOrderId: data.razorpayOrderId,
       customer: data.customer,
-      context: 'cart'
+      context: "cart"
     });
-
   } catch (err) {
     console.error("Cart order submit error:", err);
-    showRetryAlert('cart', "Could not communicate with checkout server. Please verify your connection.");
+    showRetryAlert("cart", "Could not communicate with checkout server. Please verify your connection.");
   } finally {
     if (submitBtn) {
       submitBtn.disabled = false;
       const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
-      const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+      const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
       const discount = totalItems >= 10 ? Math.round(subtotal * 0.05) : 0;
-      const delivery = (subtotal - discount) >= 799 ? 0 : 60;
-      updatePaymentSubmitButtonLabel('cart', (subtotal - discount) + delivery);
+      const delivery = subtotal - discount >= 799 ? 0 : 60;
+      updatePaymentSubmitButtonLabel("cart", subtotal - discount + delivery);
     }
   }
 }
 
 function launchRazorpayCheckout(opts) {
   if (typeof Razorpay === "undefined") {
-    showRetryAlert(opts.context, "Payment gateway script failed to load. Please refresh the page or choose Cash on Delivery.");
+    showRetryAlert(
+      opts.context,
+      "Payment gateway script failed to load. Please refresh the page or choose Cash on Delivery."
+    );
     return;
   }
 
@@ -2132,14 +2220,20 @@ function launchRazorpayCheckout(opts) {
     },
     modal: {
       ondismiss: function () {
-        showRetryAlert(opts.context, "Payment was cancelled. Your order details are saved! You can retry or choose Cash on Delivery.");
+        showRetryAlert(
+          opts.context,
+          "Payment was cancelled. Your order details are saved! You can retry or choose Cash on Delivery."
+        );
       }
     }
   };
 
   const rzp = new Razorpay(rzpOptions);
-  rzp.on('payment.failed', function (res) {
-    showRetryAlert(opts.context, `Payment failed: ${res.error?.description || "Transaction declined"}. You can try another method or choose COD.`);
+  rzp.on("payment.failed", function (res) {
+    showRetryAlert(
+      opts.context,
+      `Payment failed: ${res.error?.description || "Transaction declined"}. You can try another method or choose COD.`
+    );
   });
   rzp.open();
 }
@@ -2161,7 +2255,7 @@ async function verifyPaymentSignature(payload) {
     const data = await res.json();
 
     if (res.ok && data.success) {
-      if (payload.context === 'qb') {
+      if (payload.context === "qb") {
         closeQuickBuyModal();
       } else {
         cart = [];
@@ -2180,8 +2274,8 @@ async function verifyPaymentSignature(payload) {
 }
 
 function showRetryAlert(context, message) {
-  const alertEl = document.getElementById(context === 'qb' ? "qbPaymentRetryAlert" : "cartPaymentRetryAlert");
-  const msgEl = document.getElementById(context === 'qb' ? "qbPaymentRetryMsg" : "cartPaymentRetryMsg");
+  const alertEl = document.getElementById(context === "qb" ? "qbPaymentRetryAlert" : "cartPaymentRetryAlert");
+  const msgEl = document.getElementById(context === "qb" ? "qbPaymentRetryMsg" : "cartPaymentRetryMsg");
   if (alertEl) alertEl.style.display = "flex";
   if (msgEl) msgEl.textContent = message;
 }
@@ -2206,10 +2300,10 @@ function showOrderSuccessModal(order) {
 
   if (orderIdEl) orderIdEl.textContent = order.id;
 
-  const isPaid = order.paymentStatus === 'PAID';
+  const isPaid = order.paymentStatus === "PAID";
   if (badgeEl) {
     badgeEl.textContent = order.paymentStatus;
-    badgeEl.className = `receipt-status-pill ${isPaid ? 'paid' : 'cod'}`;
+    badgeEl.className = `receipt-status-pill ${isPaid ? "paid" : "cod"}`;
   }
 
   if (iconEl) iconEl.textContent = isPaid ? "✓" : "📦";
@@ -2221,16 +2315,20 @@ function showOrderSuccessModal(order) {
   }
 
   if (itemsEl) {
-    itemsEl.innerHTML = (order.items || []).map(i => `
+    itemsEl.innerHTML = (order.items || [])
+      .map(
+        i => `
       <div class="receipt-item">
         <span>${escapeHTML(i.name)} (${i.size}, ${i.pages} pgs) × ${i.quantity}</span>
-        <strong>₹${i.itemTotal.toLocaleString('en-IN')}</strong>
+        <strong>₹${i.itemTotal.toLocaleString("en-IN")}</strong>
       </div>
-    `).join("");
+    `
+      )
+      .join("");
   }
 
-  if (totalEl) totalEl.textContent = `₹${(order.pricing?.total || 0).toLocaleString('en-IN')}`;
-  
+  if (totalEl) totalEl.textContent = `₹${(order.pricing?.total || 0).toLocaleString("en-IN")}`;
+
   if (addrEl && order.customer?.address) {
     const a = order.customer.address;
     addrEl.textContent = `${order.customer.name} • ${order.customer.phone} • ${a.house}, ${a.street}, ${a.city}, ${a.state} - ${a.pincode}`;
@@ -2256,8 +2354,8 @@ function shareConfirmedOrderToWhatsApp() {
   if (!lastConfirmedOrder) return;
   const cfg = getStoreConfig();
   const num = (cfg.whatsappNumber || "919876543210").replace(/\D/g, "");
-  
-  const isPaid = lastConfirmedOrder.paymentStatus === 'PAID';
+
+  const isPaid = lastConfirmedOrder.paymentStatus === "PAID";
   let msg = `🌿 *RUPANTAR ORDER CONFIRMATION* 🌿\n\n`;
   msg += `*Order ID:* ${lastConfirmedOrder.id}\n`;
   msg += `*Payment:* ${lastConfirmedOrder.paymentStatus} (${lastConfirmedOrder.paymentMethod})\n`;
@@ -2339,7 +2437,7 @@ async function loadAdminOrders() {
 
   try {
     const res = await fetch("/api/admin/orders", {
-      headers: { "Authorization": `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` }
     });
 
     const data = await res.json();
@@ -2362,7 +2460,7 @@ function renderAdminStats(stats) {
   const delivCount = document.getElementById("metricDeliveredCount");
 
   if (totOrders) totOrders.textContent = stats.totalOrders || 0;
-  if (totRev) totRev.textContent = `₹${(stats.totalRevenue || 0).toLocaleString('en-IN')}`;
+  if (totRev) totRev.textContent = `₹${(stats.totalRevenue || 0).toLocaleString("en-IN")}`;
   if (paidCount) paidCount.textContent = stats.paidCount || 0;
   if (codCount) codCount.textContent = stats.codPendingCount || 0;
   if (dispCount) dispCount.textContent = stats.dispatchedCount || 0;
@@ -2388,24 +2486,25 @@ function renderAdminOrdersList(searchQuery = "") {
   let orders = [...currentAdminOrders];
 
   if (currentAdminFilter === "paid") {
-    orders = orders.filter(o => o.paymentStatus === 'PAID' || o.paymentStatus.includes('PAID'));
+    orders = orders.filter(o => o.paymentStatus === "PAID" || o.paymentStatus.includes("PAID"));
   } else if (currentAdminFilter === "cod") {
-    orders = orders.filter(o => o.paymentMethod === 'COD');
+    orders = orders.filter(o => o.paymentMethod === "COD");
   } else if (currentAdminFilter === "processing") {
-    orders = orders.filter(o => o.orderStatus === 'PROCESSING');
+    orders = orders.filter(o => o.orderStatus === "PROCESSING");
   } else if (currentAdminFilter === "dispatched") {
-    orders = orders.filter(o => o.orderStatus === 'DISPATCHED');
+    orders = orders.filter(o => o.orderStatus === "DISPATCHED");
   } else if (currentAdminFilter === "delivered") {
-    orders = orders.filter(o => o.orderStatus === 'DELIVERED');
+    orders = orders.filter(o => o.orderStatus === "DELIVERED");
   }
 
   if (searchQuery.trim().length > 0) {
     const q = searchQuery.toLowerCase();
-    orders = orders.filter(o => 
-      o.id.toLowerCase().includes(q) ||
-      (o.customer?.name && o.customer.name.toLowerCase().includes(q)) ||
-      (o.customer?.phone && o.customer.phone.includes(q)) ||
-      (o.customer?.address?.city && o.customer.address.city.toLowerCase().includes(q))
+    orders = orders.filter(
+      o =>
+        o.id.toLowerCase().includes(q) ||
+        (o.customer?.name && o.customer.name.toLowerCase().includes(q)) ||
+        (o.customer?.phone && o.customer.phone.includes(q)) ||
+        (o.customer?.address?.city && o.customer.address.city.toLowerCase().includes(q))
     );
   }
 
@@ -2414,39 +2513,44 @@ function renderAdminOrdersList(searchQuery = "") {
     return;
   }
 
-  container.innerHTML = orders.map(o => {
-    const isPaid = o.paymentStatus.includes("PAID");
-    const a = o.customer?.address || {};
+  container.innerHTML = orders
+    .map(o => {
+      const isPaid = o.paymentStatus.includes("PAID");
+      const a = o.customer?.address || {};
 
-    return `
+      return `
       <div class="admin-order-card">
         <div class="admin-order-top">
           <div class="admin-order-meta">
-            <strong>${o.id}</strong> • <span style="color:var(--color-muted);">${new Date(o.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' })}</span>
+            <strong>${o.id}</strong> • <span style="color:var(--color-muted);">${new Date(o.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</span>
           </div>
           <div class="admin-badge-row">
-            <span class="receipt-status-pill ${isPaid ? 'paid' : 'cod'}">${o.paymentStatus}</span>
+            <span class="receipt-status-pill ${isPaid ? "paid" : "cod"}">${o.paymentStatus}</span>
             <span class="receipt-status-pill" style="background:#e0f2fe; color:#0369a1; border:1px solid #bae6fd;">${o.orderStatus}</span>
           </div>
         </div>
 
         <div style="font-size:0.85rem; margin:0.4rem 0;">
-          <strong>👤 ${escapeHTML(o.customer?.name)}</strong> • 📞 <a href="tel:${o.customer?.phone}" style="color:#17350a; text-decoration:underline;">${o.customer?.phone}</a> ${o.customer?.email ? `• ✉️ ${o.customer.email}` : ''}
+          <strong>👤 ${escapeHTML(o.customer?.name)}</strong> • 📞 <a href="tel:${o.customer?.phone}" style="color:#17350a; text-decoration:underline;">${o.customer?.phone}</a> ${o.customer?.email ? `• ✉️ ${o.customer.email}` : ""}
           <div style="color:var(--color-muted); font-size:0.8rem; margin-top:0.2rem;">
             📍 ${escapeHTML(a.house || "")}, ${escapeHTML(a.street || "")}, ${escapeHTML(a.city || "")}, ${escapeHTML(a.state || "")} - ${a.pincode || ""}
-            ${a.landmark ? `(Landmark: ${escapeHTML(a.landmark)})` : ''}
+            ${a.landmark ? `(Landmark: ${escapeHTML(a.landmark)})` : ""}
           </div>
-          ${o.customer?.deliveryInstructions ? `<div style="color:#b45309; font-size:0.78rem; margin-top:0.15rem;">💬 Note: ${escapeHTML(o.customer.deliveryInstructions)}</div>` : ''}
+          ${o.customer?.deliveryInstructions ? `<div style="color:#b45309; font-size:0.78rem; margin-top:0.15rem;">💬 Note: ${escapeHTML(o.customer.deliveryInstructions)}</div>` : ""}
         </div>
 
         <div style="background:var(--bg-parchment); padding:0.5rem 0.75rem; border-radius:var(--radius-sm); font-size:0.82rem; margin:0.5rem 0;">
           <div style="font-weight:600; margin-bottom:0.25rem;">Items (${o.items?.length || 0}):</div>
-          ${(o.items || []).map(it => `
+          ${(o.items || [])
+            .map(
+              it => `
             <div style="display:flex; justify-content:space-between; color:var(--color-charcoal);">
-              <span>• ${escapeHTML(it.name)} (${it.size}, ${it.pages} pgs) × ${it.quantity}${it.customization ? ` [${escapeHTML(it.customization)}]` : ''}</span>
+              <span>• ${escapeHTML(it.name)} (${it.size}, ${it.pages} pgs) × ${it.quantity}${it.customization ? ` [${escapeHTML(it.customization)}]` : ""}</span>
               <strong>₹${it.itemTotal}</strong>
             </div>
-          `).join("")}
+          `
+            )
+            .join("")}
           <div style="display:flex; justify-content:space-between; border-top:1px dashed var(--border-color); margin-top:0.35rem; padding-top:0.25rem; font-weight:700; color:#17350a;">
             <span>Total (${o.paymentMethod}):</span>
             <span>₹${o.pricing?.total}</span>
@@ -2457,23 +2561,28 @@ function renderAdminOrdersList(searchQuery = "") {
           <div style="display:flex; align-items:center; gap:0.4rem;">
             <label style="font-size:0.78rem; font-weight:600; color:var(--color-muted);">Status:</label>
             <select class="admin-status-select" onchange="updateAdminOrderStatus('${o.id}', this.value)">
-              <option value="PLACED" ${o.orderStatus === 'PLACED' ? 'selected' : ''}>PLACED</option>
-              <option value="PROCESSING" ${o.orderStatus === 'PROCESSING' ? 'selected' : ''}>PROCESSING</option>
-              <option value="DISPATCHED" ${o.orderStatus === 'DISPATCHED' ? 'selected' : ''}>DISPATCHED</option>
-              <option value="DELIVERED" ${o.orderStatus === 'DELIVERED' ? 'selected' : ''}>DELIVERED</option>
-              <option value="CANCELLED" ${o.orderStatus === 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>
+              <option value="PLACED" ${o.orderStatus === "PLACED" ? "selected" : ""}>PLACED</option>
+              <option value="PROCESSING" ${o.orderStatus === "PROCESSING" ? "selected" : ""}>PROCESSING</option>
+              <option value="DISPATCHED" ${o.orderStatus === "DISPATCHED" ? "selected" : ""}>DISPATCHED</option>
+              <option value="DELIVERED" ${o.orderStatus === "DELIVERED" ? "selected" : ""}>DELIVERED</option>
+              <option value="CANCELLED" ${o.orderStatus === "CANCELLED" ? "selected" : ""}>CANCELLED</option>
             </select>
           </div>
 
-          ${o.paymentMethod === 'COD' && o.paymentStatus !== 'PAID (COD Collected)' ? `
+          ${
+            o.paymentMethod === "COD" && o.paymentStatus !== "PAID (COD Collected)"
+              ? `
             <button type="button" onclick="markCodCollected('${o.id}')" style="background:#166534; color:#FFFFFF; border:none; padding:0.35rem 0.65rem; border-radius:var(--radius-sm); font-size:0.78rem; font-weight:700; cursor:pointer;">
               ✓ Mark COD Collected
             </button>
-          ` : ''}
+          `
+              : ""
+          }
         </div>
       </div>
     `;
-  }).join("");
+    })
+    .join("");
 }
 
 async function updateAdminOrderStatus(orderId, newStatus) {
@@ -2485,7 +2594,7 @@ async function updateAdminOrderStatus(orderId, newStatus) {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({ orderStatus: newStatus })
     });
@@ -2508,7 +2617,7 @@ async function markCodCollected(orderId) {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
         paymentStatus: "PAID (COD Collected)",
@@ -2524,4 +2633,3 @@ async function markCodCollected(orderId) {
     showToast("Error updating COD payment");
   }
 }
-

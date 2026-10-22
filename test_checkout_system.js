@@ -1,6 +1,6 @@
 /**
  * Rupantar Store — Complete Checkout & Payment System Automated Test Suite
- * 
+ *
  * Tests:
  * 1. Customer Details & Address Validation (Indian 10-digit mobile, 6-digit PIN)
  * 2. Server-Side Tamper-Proof Pricing & Bulk Discounts
@@ -11,10 +11,10 @@
  * 7. Admin Authentication & Status Management
  */
 
-const assert = require('assert');
-const crypto = require('crypto');
-const db = require('./db');
-const catalogue = require('./catalogue');
+const assert = require("assert");
+const crypto = require("crypto");
+const db = require("./db");
+const catalogue = require("./catalogue");
 
 console.log("=== RUPANTAR CHECKOUT & PAYMENT SYSTEM TEST SUITE ===\n");
 
@@ -38,7 +38,7 @@ function it(title, fn) {
 // --------------------------------------------------------------------------
 console.log("--- 1. ADDRESS & CONTACT VALIDATION ---");
 
-const validateMobile = (mobile) => {
+const validateMobile = mobile => {
   let clean = String(mobile || "").replace(/\D/g, "");
   if (clean.length === 12 && clean.startsWith("91")) {
     clean = clean.slice(2);
@@ -48,7 +48,7 @@ const validateMobile = (mobile) => {
   return /^[6-9]\d{9}$/.test(clean);
 };
 
-const validatePincode = (pin) => {
+const validatePincode = pin => {
   const clean = String(pin || "").replace(/\D/g, "");
   return /^[1-9]\d{5}$/.test(clean);
 };
@@ -102,7 +102,7 @@ it("Calculates correct specs price from catalogue strictly on server", () => {
 });
 
 it("Applies free shipping threshold (>= ₹799) correctly", () => {
-  const calcShipping = (subtotal) => subtotal >= 799 ? 0 : 60;
+  const calcShipping = subtotal => (subtotal >= 799 ? 0 : 60);
   assert.strictEqual(calcShipping(199), 60);
   assert.strictEqual(calcShipping(458), 60);
   assert.strictEqual(calcShipping(798), 60);
@@ -182,16 +182,13 @@ const testRzpPaymentId = "pay_29QQoUBi66xm2f";
 
 // Generate genuine signature
 const genuineSignature = crypto
-  .createHmac('sha256', testSecret)
+  .createHmac("sha256", testSecret)
   .update(`${testRzpOrderId}|${testRzpPaymentId}`)
-  .digest('hex');
+  .digest("hex");
 
 it("Verifies genuine Razorpay HMAC-SHA256 payment signature", () => {
   const verifyHMAC = (orderId, paymentId, sig, secret) => {
-    const expected = crypto
-      .createHmac('sha256', secret)
-      .update(`${orderId}|${paymentId}`)
-      .digest('hex');
+    const expected = crypto.createHmac("sha256", secret).update(`${orderId}|${paymentId}`).digest("hex");
     return expected === sig;
   };
 
@@ -201,10 +198,7 @@ it("Verifies genuine Razorpay HMAC-SHA256 payment signature", () => {
 
 it("Rejects tampered or counterfeit payment signatures", () => {
   const verifyHMAC = (orderId, paymentId, sig, secret) => {
-    const expected = crypto
-      .createHmac('sha256', secret)
-      .update(`${orderId}|${paymentId}`)
-      .digest('hex');
+    const expected = crypto.createHmac("sha256", secret).update(`${orderId}|${paymentId}`).digest("hex");
     return expected === sig;
   };
 

@@ -5,39 +5,39 @@
 
 :root {
   /* Warm Earthy & Artisanal Palette */
-  --bg-primary: #FAF7F2;
-  --bg-surface: #FFFFFF;
-  --bg-parchment: #F4EFE6;
-  --bg-warm-tint: #F8F3EA;
-  --bg-card: #FFFFFF;
-  
-  --color-forest: #1A382B;
-  --color-forest-light: #2D5A47;
-  --color-forest-dark: #12281E;
-  
-  --color-terracotta: #C85A32;
-  --color-terracotta-hover: #B24E2A;
-  
-  --color-gold: #C59B27;
-  --color-gold-light: #F3E5AB;
-  --color-gold-muted: #E6D5AC;
-  
+  --bg-primary: #faf7f2;
+  --bg-surface: #ffffff;
+  --bg-parchment: #f4efe6;
+  --bg-warm-tint: #f8f3ea;
+  --bg-card: #ffffff;
+
+  --color-forest: #1a382b;
+  --color-forest-light: #2d5a47;
+  --color-forest-dark: #12281e;
+
+  --color-terracotta: #c85a32;
+  --color-terracotta-hover: #b24e2a;
+
+  --color-gold: #c59b27;
+  --color-gold-light: #f3e5ab;
+  --color-gold-muted: #e6d5ac;
+
   --color-charcoal: #252220;
-  --color-espresso: #1A1615;
-  --color-muted: #6B635B;
-  --color-subtle: #998E84;
-  --border-color: #E6DED3;
-  --border-light: #F0EAE1;
-  
+  --color-espresso: #1a1615;
+  --color-muted: #6b635b;
+  --color-subtle: #998e84;
+  --border-color: #e6ded3;
+  --border-light: #f0eae1;
+
   /* WhatsApp Brand Green */
-  --color-whatsapp: #25D366;
-  --color-whatsapp-dark: #128C7E;
-  --color-whatsapp-hover: #20BD5A;
+  --color-whatsapp: #25d366;
+  --color-whatsapp-dark: #128c7e;
+  --color-whatsapp-hover: #20bd5a;
 
   /* Typography */
-  --font-serif: 'Playfair Display', Georgia, serif;
-  --font-display: 'Cinzel', serif;
-  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-display: "Cinzel", serif;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   /* Elevations & Shadows */
   --shadow-sm: 0 2px 8px rgba(37, 34, 32, 0.04);
@@ -57,7 +57,9 @@
 }
 
 /* Base Resets */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -111,7 +113,7 @@ body {
    ========================================================================== */
 .announcement-bar {
   background: var(--color-forest-dark);
-  color: #EDE8DE;
+  color: #ede8de;
   font-size: 0.85rem;
   padding: 0.6rem 1rem;
   text-align: center;
@@ -146,7 +148,7 @@ body {
   transition: var(--transition);
 }
 .announcement-link:hover {
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 /* ==========================================================================
@@ -190,7 +192,9 @@ body {
   border: none;
   box-shadow: none;
   filter: drop-shadow(0 2px 4px rgba(30, 58, 43, 0.12));
-  transition: transform 0.25s ease, filter 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    filter 0.25s ease;
 }
 
 .brand-logo:hover .brand-logo-img {
@@ -272,7 +276,7 @@ body {
 .header-search input:focus {
   border-color: var(--color-forest);
   box-shadow: 0 0 0 3px rgba(26, 56, 43, 0.1);
-  background: #FFFFFF;
+  background: #ffffff;
 }
 
 .clear-search-btn {
@@ -317,7 +321,7 @@ body {
   align-items: center;
   gap: 0.75rem;
   background: var(--color-forest);
-  color: #FFFFFF;
+  color: #ffffff;
   border: none;
   padding: 0.55rem 1.1rem;
   border-radius: var(--radius-full);
@@ -343,7 +347,7 @@ body {
   top: -8px;
   right: -10px;
   background: var(--color-terracotta);
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 0.7rem;
   font-weight: 700;
   min-width: 18px;
@@ -410,7 +414,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid var(--border-color);
   padding: 0.35rem 0.9rem;
   border-radius: var(--radius-full);
@@ -474,7 +478,7 @@ body {
 
 .btn-primary {
   background: var(--color-forest);
-  color: #FFFFFF;
+  color: #ffffff;
   border: none;
   box-shadow: 0 4px 14px rgba(26, 56, 43, 0.25);
 }
@@ -485,13 +489,13 @@ body {
 }
 
 .btn-secondary {
-  background: #FFFFFF;
+  background: #ffffff;
   color: var(--color-whatsapp-dark);
-  border: 1px solid #C4E5D4;
+  border: 1px solid #c4e5d4;
   box-shadow: var(--shadow-sm);
 }
 .btn-secondary:hover {
-  background: #F0F9F4;
+  background: #f0f9f4;
   border-color: var(--color-whatsapp);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
@@ -541,7 +545,7 @@ body {
 
 .hero-main-card {
   position: relative;
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: var(--radius-xl);
   overflow: hidden;
   box-shadow: var(--shadow-float);
@@ -567,7 +571,7 @@ body {
   right: 0;
   background: linear-gradient(180deg, transparent 0%, rgba(18, 40, 30, 0.95) 45%);
   padding: 2rem 1.5rem 1.5rem;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .overlay-tag {
@@ -587,7 +591,7 @@ body {
   font-family: var(--font-serif);
   font-size: 1.35rem;
   margin-bottom: 0.3rem;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .overlay-meta {
@@ -598,7 +602,7 @@ body {
 
 .quick-add-btn {
   width: 100%;
-  background: #FFFFFF;
+  background: #ffffff;
   color: var(--color-forest);
   border: none;
   padding: 0.65rem 1rem;
@@ -618,7 +622,7 @@ body {
   position: absolute;
   top: -20px;
   left: -25px;
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: 0.85rem 1.15rem;
@@ -645,8 +649,13 @@ body {
 }
 
 @keyframes floatSlow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 /* ==========================================================================
@@ -654,7 +663,7 @@ body {
    ========================================================================== */
 .ethos-section {
   padding: 2rem 0;
-  background: #FFFFFF;
+  background: #ffffff;
   border-top: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
 }
@@ -749,7 +758,7 @@ body {
 
 .sort-select {
   padding: 0.55rem 1.8rem 0.55rem 1rem;
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-full);
   font-family: var(--font-sans);
@@ -779,7 +788,7 @@ body {
 }
 
 .cat-tab {
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid var(--border-color);
   color: var(--color-muted);
   font-family: var(--font-sans);
@@ -799,7 +808,7 @@ body {
 
 .cat-tab.active {
   background: var(--color-forest);
-  color: #FFFFFF;
+  color: #ffffff;
   border-color: var(--color-forest);
   box-shadow: 0 2px 8px rgba(26, 56, 43, 0.2);
 }
@@ -836,7 +845,7 @@ body {
 
 /* Product Card */
 .product-card {
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -877,7 +886,7 @@ body {
   top: 1rem;
   left: 1rem;
   background: rgba(26, 56, 43, 0.9);
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 0.72rem;
   font-weight: 700;
   padding: 0.25rem 0.65rem;
@@ -887,7 +896,7 @@ body {
 }
 
 .product-tag-badge.badge-plantable {
-  background: #2E7D32;
+  background: #2e7d32;
 }
 .product-tag-badge.badge-bestseller {
   background: var(--color-terracotta);
@@ -1036,7 +1045,7 @@ body {
 
 .card-btn-cart:hover {
   background: var(--color-forest);
-  color: #FFFFFF;
+  color: #ffffff;
   border-color: var(--color-forest);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(26, 56, 43, 0.15);
@@ -1044,7 +1053,7 @@ body {
 
 .card-btn-buy {
   background: var(--color-whatsapp-dark);
-  color: #FFFFFF;
+  color: #ffffff;
   border: 1.5px solid var(--color-whatsapp-dark);
   padding: 0.55rem 0.6rem;
   border-radius: var(--radius-full);
@@ -1083,7 +1092,7 @@ body {
 
 .add-cart-mini-btn:hover {
   background: var(--color-forest);
-  color: #FFFFFF;
+  color: #ffffff;
   border-color: var(--color-forest);
 }
 
@@ -1112,7 +1121,7 @@ body {
 
 .qb-add-cart-cta-btn:hover {
   background: var(--color-forest);
-  color: #FFFFFF;
+  color: #ffffff;
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
@@ -1128,7 +1137,7 @@ body {
 .empty-search-state {
   text-align: center;
   padding: 4rem 1rem;
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: var(--radius-xl);
   border: 1px dashed var(--border-color);
   max-width: 500px;
@@ -1158,7 +1167,7 @@ body {
    ========================================================================== */
 .story-section {
   padding: 5rem 0;
-  background: #FFFFFF;
+  background: #ffffff;
   border-top: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
 }
@@ -1188,7 +1197,7 @@ body {
   bottom: -25px;
   right: -25px;
   background: var(--color-forest-dark);
-  color: #FFFFFF;
+  color: #ffffff;
   padding: 1.5rem 1.75rem;
   border-radius: var(--radius-lg);
   max-width: 340px;
@@ -1271,7 +1280,7 @@ body {
 }
 
 .modal-dialog {
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: var(--radius-xl);
   max-width: 780px;
   width: 100%;
@@ -1310,7 +1319,7 @@ body {
 
 .modal-close-btn:hover {
   background: var(--color-forest);
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 /* Product Modal Layout */
@@ -1375,8 +1384,8 @@ body {
 }
 
 .modal-discount-tag {
-  background: #E8F5E9;
-  color: #2E7D32;
+  background: #e8f5e9;
+  color: #2e7d32;
   font-size: 0.78rem;
   font-weight: 700;
   padding: 0.2rem 0.6rem;
@@ -1440,7 +1449,7 @@ body {
 }
 
 .ruling-chip {
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid var(--border-color);
   padding: 0.45rem 0.85rem;
   border-radius: var(--radius-md);
@@ -1456,7 +1465,7 @@ body {
 
 .ruling-chip.active {
   background: var(--color-forest);
-  color: #FFFFFF;
+  color: #ffffff;
   border-color: var(--color-forest);
 }
 
@@ -1483,7 +1492,7 @@ body {
   color: var(--color-terracotta);
   font-size: 0.72rem;
   font-weight: 700;
-  background: #FFF;
+  background: #fff;
   padding: 0.1rem 0.4rem;
   border-radius: var(--radius-full);
 }
@@ -1495,7 +1504,7 @@ body {
   font-size: 0.85rem;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  background: #FFFFFF;
+  background: #ffffff;
 }
 
 /* Quantity and Modal CTAs */
@@ -1511,7 +1520,7 @@ body {
   align-items: center;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-full);
-  background: #FFFFFF;
+  background: #ffffff;
   padding: 0.2rem;
 }
 
@@ -1532,7 +1541,7 @@ body {
 }
 .qty-step-btn:hover {
   background: var(--color-forest);
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .qty-input {
@@ -1576,7 +1585,7 @@ body {
   bottom: 0;
   width: 100%;
   max-width: 460px;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: -10px 0 40px rgba(18, 40, 30, 0.25);
   z-index: 1060;
   display: flex;
@@ -1645,7 +1654,7 @@ body {
 .free-shipping-bar-bg {
   width: 100%;
   height: 6px;
-  background: #E0D7C8;
+  background: #e0d7c8;
   border-radius: var(--radius-full);
   overflow: hidden;
 }
@@ -1765,7 +1774,7 @@ body {
   height: 20px !important;
   border-radius: 50% !important;
   border: none !important;
-  background: #FFFFFF !important;
+  background: #ffffff !important;
   color: var(--color-forest) !important;
   font-size: 0.8rem !important;
   font-weight: 800 !important;
@@ -1781,7 +1790,7 @@ body {
 
 .cart-step-btn:hover {
   background: var(--color-forest) !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 
 .cart-qty-val {
@@ -1851,7 +1860,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
-  background: #FFFFFF;
+  background: #ffffff;
 }
 
 .form-help-text {
@@ -1942,7 +1951,7 @@ body {
 .whatsapp-checkout-btn {
   width: 100%;
   background: var(--color-whatsapp-dark);
-  color: #FFFFFF;
+  color: #ffffff;
   border: none;
   padding: 0.95rem 1.25rem;
   border-radius: var(--radius-full);
@@ -1976,7 +1985,7 @@ body {
   transition: var(--transition);
 }
 .copy-order-btn:hover {
-  background: #FFFFFF;
+  background: #ffffff;
   color: var(--color-forest);
 }
 
@@ -2021,15 +2030,15 @@ body {
 .success-icon-badge {
   width: 64px;
   height: 64px;
-  background: #E8F5E9;
-  color: #2E7D32;
+  background: #e8f5e9;
+  color: #2e7d32;
   border-radius: 50%;
   font-size: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1.25rem;
-  border: 2px solid #C8E6C9;
+  border: 2px solid #c8e6c9;
 }
 
 .success-modal h2 {
@@ -2137,7 +2146,7 @@ body {
 
 .toast {
   background: var(--color-forest-dark);
-  color: #FFFFFF;
+  color: #ffffff;
   padding: 0.85rem 1.25rem;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
@@ -2212,7 +2221,7 @@ body {
    ========================================================================== */
 .site-footer {
   background: var(--color-espresso);
-  color: #EDE8DE;
+  color: #ede8de;
   padding: 4.5rem 0 0;
   border-top: 1px solid rgba(212, 175, 55, 0.2);
 }
@@ -2236,7 +2245,7 @@ body {
   height: 52px;
   object-fit: contain;
   border-radius: var(--radius-md);
-  background: #FFFFFF;
+  background: #ffffff;
   padding: 3px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -2260,14 +2269,14 @@ body {
 
 .footer-about {
   font-size: 0.88rem;
-  color: #B5ACA3;
+  color: #b5aca3;
   line-height: 1.6;
   margin: 1rem 0 1.25rem;
 }
 
 .footer-contact-item {
   font-size: 0.85rem;
-  color: #D6CEC5;
+  color: #d6cec5;
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
@@ -2283,7 +2292,7 @@ body {
 .footer-column h4 {
   font-family: var(--font-serif);
   font-size: 1.1rem;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-bottom: 1.2rem;
   letter-spacing: 0.02em;
 }
@@ -2296,7 +2305,7 @@ body {
 }
 
 .footer-links a {
-  color: #B5ACA3;
+  color: #b5aca3;
   text-decoration: none;
   font-size: 0.88rem;
   transition: var(--transition);
@@ -2343,7 +2352,7 @@ body {
 
 .promise-row p {
   font-size: 0.76rem;
-  color: #A39B92;
+  color: #a39b92;
   line-height: 1.35;
 }
 
@@ -2456,7 +2465,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  background: #E8F5E9;
+  background: #e8f5e9;
   color: var(--color-whatsapp-dark);
   font-size: 0.75rem;
   font-weight: 700;
@@ -2517,7 +2526,7 @@ body {
 .qb-chip.active {
   background: var(--color-forest);
   border-color: var(--color-forest);
-  color: #FFFFFF;
+  color: #ffffff;
   box-shadow: 0 4px 12px rgba(26, 56, 43, 0.2);
 }
 
@@ -2578,7 +2587,7 @@ body {
 .qb-bulk-alert {
   display: block;
   font-size: 0.72rem;
-  color: #2E7D32;
+  color: #2e7d32;
   font-weight: 700;
   margin-top: 0.15rem;
 }
@@ -2659,7 +2668,7 @@ body {
 .pricing-matrix-banner {
   margin-top: 4rem;
   padding: 2.5rem;
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: var(--radius-xl);
   border: 1px solid var(--border-color);
   box-shadow: var(--shadow-md);
@@ -2707,7 +2716,7 @@ body {
 
 .highlighted-card {
   border-color: var(--color-forest);
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: var(--shadow-lg);
 }
 
@@ -2717,7 +2726,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   background: var(--color-forest);
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 0.72rem;
   font-weight: 700;
   padding: 0.2rem 0.8rem;
@@ -2801,7 +2810,7 @@ body {
 }
 
 .bulk-tier {
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 1rem;
@@ -2813,8 +2822,8 @@ body {
   border-color: var(--color-gold);
 }
 .value-tier {
-  border-color: #2E7D32;
-  background: #F1F8F3;
+  border-color: #2e7d32;
+  background: #f1f8f3;
 }
 
 .tier-badge {
@@ -2830,8 +2839,8 @@ body {
   border-radius: var(--radius-full);
 }
 .value-tier .tier-badge {
-  background: #2E7D32;
-  color: #FFFFFF;
+  background: #2e7d32;
+  color: #ffffff;
 }
 
 .tier-qty {
@@ -2857,18 +2866,18 @@ body {
 }
 
 .whatsapp-header-btn {
-  background: #E8F5E9;
+  background: #e8f5e9;
   color: var(--color-whatsapp-dark);
-  border-color: #C8E6C9;
+  border-color: #c8e6c9;
 }
 .whatsapp-header-btn:hover {
   background: var(--color-whatsapp-dark);
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .quick-buy-card-btn {
   background: var(--color-whatsapp-dark);
-  color: #FFFFFF;
+  color: #ffffff;
   border: none;
   padding: 0.55rem 0.95rem;
   border-radius: var(--radius-full);
@@ -2886,7 +2895,7 @@ body {
 }
 
 .pricing-pill-badge {
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid var(--border-color);
   padding: 0.5rem 1rem;
   border-radius: var(--radius-full);
@@ -2908,7 +2917,7 @@ body {
    WhatsApp Customer Journey Bar & Share Modal
    ========================================================================== */
 .whatsapp-journey-bar {
-  background: #FFFFFF;
+  background: #ffffff;
   border-top: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
   padding: 1.25rem 0;
@@ -2983,7 +2992,7 @@ body {
 }
 
 .share-preview-card {
-  background: #EFEAE2;
+  background: #efeae2;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 1rem 1.15rem;
@@ -3030,7 +3039,6 @@ body {
   }
 }
 
-
 /* ==========================================================================
    ENHANCED WHATSAPP ORDERING SYSTEM & FLOATING BUTTON
    ========================================================================== */
@@ -3044,12 +3052,14 @@ body {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  background: #25D366;
-  color: #FFFFFF !important;
+  background: #25d366;
+  color: #ffffff !important;
   text-decoration: none;
   padding: 0.75rem 1.15rem;
   border-radius: var(--radius-full);
-  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4), 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow:
+    0 6px 20px rgba(37, 211, 102, 0.4),
+    0 2px 6px rgba(0, 0, 0, 0.15);
   font-family: var(--font-body);
   font-size: 0.88rem;
   font-weight: 700;
@@ -3066,10 +3076,12 @@ body {
 }
 
 .floating-whatsapp-btn:hover {
-  background: #20BA5A;
+  background: #20ba5a;
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 8px 26px rgba(37, 211, 102, 0.5), 0 3px 8px rgba(0, 0, 0, 0.2);
-  color: #FFFFFF !important;
+  box-shadow:
+    0 8px 26px rgba(37, 211, 102, 0.5),
+    0 3px 8px rgba(0, 0, 0, 0.2);
+  color: #ffffff !important;
 }
 
 .floating-whatsapp-btn:active {
@@ -3106,9 +3118,11 @@ body {
   font-size: 0.92rem;
   font-weight: 600;
   color: var(--color-ink);
-  background: #FFFFFF;
+  background: #ffffff;
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%232C241E%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
   background-repeat: no-repeat;
@@ -3139,7 +3153,7 @@ body {
 }
 
 .qb-custom-chip-btn {
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px dashed var(--border-color);
   border-radius: var(--radius-full);
   font-size: 0.72rem;
@@ -3158,13 +3172,13 @@ body {
 
 /* Validation Error Styles */
 .form-input-error {
-  border-color: #D32F2F !important;
-  background-color: #FFEBEE !important;
+  border-color: #d32f2f !important;
+  background-color: #ffebee !important;
 }
 
 .field-error-message {
   font-size: 0.75rem;
-  color: #D32F2F;
+  color: #d32f2f;
   margin-top: 0.25rem;
   display: block;
   font-weight: 600;
@@ -3173,7 +3187,7 @@ body {
 /* Next Step WhatsApp Confirmation Dialog */
 .next-step-modal {
   max-width: 520px;
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: var(--radius-lg);
   padding: 2rem;
   text-align: center;
@@ -3185,8 +3199,8 @@ body {
 .next-step-icon {
   width: 64px;
   height: 64px;
-  background: #E8F5E9;
-  color: #2E7D32;
+  background: #e8f5e9;
+  color: #2e7d32;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -3237,8 +3251,8 @@ body {
 }
 
 .btn-whatsapp-again {
-  background: #25D366;
-  color: #FFFFFF;
+  background: #25d366;
+  color: #ffffff;
   border: none;
   border-radius: var(--radius-md);
   padding: 0.85rem 1.2rem;
@@ -3253,7 +3267,7 @@ body {
 }
 
 .btn-whatsapp-again:hover {
-  background: #20BA5A;
+  background: #20ba5a;
 }
 
 .btn-secondary-link {
@@ -3298,14 +3312,14 @@ body {
   gap: 0.45rem;
   font-size: 0.82rem;
   font-weight: 700;
-  color: #128C7E;
+  color: #128c7e;
   letter-spacing: 0.02em;
 }
 
 .whatsapp-dot {
   width: 9px;
   height: 9px;
-  background: #25D366;
+  background: #25d366;
   border-radius: 50%;
   display: inline-block;
   box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.25);
@@ -3313,9 +3327,18 @@ body {
 }
 
 @keyframes pulseDot {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
-  70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(37, 211, 102, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 6px rgba(37, 211, 102, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
 }
 
 .direction-steps-list {
@@ -3336,8 +3359,8 @@ body {
 .step-circle {
   width: 20px;
   height: 20px;
-  background: #128C7E;
-  color: #FFFFFF;
+  background: #128c7e;
+  color: #ffffff;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -3356,7 +3379,6 @@ body {
   line-height: 1.35;
 }
 
-
 /* ==========================================================================
    CART DRAWER FULL SCROLL & PINNED WHATSAPP CHECKOUT FIX
    ========================================================================== */
@@ -3370,7 +3392,7 @@ body {
   max-width: 460px;
   height: 100vh;
   height: 100dvh;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: -10px 0 40px rgba(18, 40, 30, 0.25);
   z-index: 1060;
   display: flex !important;
@@ -3459,7 +3481,7 @@ body {
 /* Sticky Bottom WhatsApp Action Bar - ALWAYS VISIBLE */
 .cart-drawer-sticky-footer {
   flex-shrink: 0 !important;
-  background: #FFFFFF !important;
+  background: #ffffff !important;
   border-top: 1.5px solid var(--border-color) !important;
   padding: 0.75rem 1rem 1rem !important;
   box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.09) !important;
@@ -3488,7 +3510,6 @@ body {
   color: var(--color-forest);
   font-weight: 800;
 }
-
 
 /* ==========================================================================
    RUPANTAR RESPONSIVE & MOBILE DESIGN AUDIT FIXES
@@ -3774,7 +3795,6 @@ body {
   }
 }
 
-
 /* ==========================================================================
    2x2 GRID LAYOUT FOR FEATURES / ETHOS SECTION ON PHONES & MOBILE
    ========================================================================== */
@@ -3859,7 +3879,6 @@ body {
   }
 }
 
-
 /* ==========================================================================
    HERO BADGE REMOVED & CLEAN SPACING ADJUSTMENTS
    ========================================================================== */
@@ -3885,7 +3904,6 @@ body {
     margin-top: 0.2rem !important;
   }
 }
-
 
 /* ==========================================================================
    SEARCH BAR REMOVED & STREAMLINED SINGLE-ROW HEADER
@@ -3915,7 +3933,6 @@ body {
     padding: 0.5rem 0.75rem !important;
   }
 }
-
 
 /* ==========================================================================
    2 BOOKS SIDE BY SIDE (2-COLUMN GRID) FOR MOBILE & PHONES
@@ -4056,7 +4073,6 @@ body {
   }
 }
 
-
 /* ==========================================================================
    MINIMALIST CARD UPDATES (COVER BADGE, HOVER OVERLAY, SPECS & RATING REMOVED)
    ========================================================================== */
@@ -4083,7 +4099,6 @@ body {
   display: none !important;
 }
 
-
 /* ==========================================================================
    PRICING ROW CLEANUP (REMOVED 'SET BY SIZE & PGS' AND 'SHARE' OPTION)
    ========================================================================== */
@@ -4101,7 +4116,6 @@ body {
   justify-content: flex-start !important;
   margin-bottom: 0.25rem !important;
 }
-
 
 /* ==========================================================================
    HERO SECTION LAYOUT (SPLIT TWO-COLUMN: TITLE LEFT, TEXT RIGHT)
@@ -4198,7 +4212,6 @@ body {
   }
 }
 
-
 /* ==========================================================================
    UPDATED PRODUCT ACTIONS & PRODUCT DETAILS MODAL (REQUESTED REFINEMENTS)
    ========================================================================== */
@@ -4240,7 +4253,7 @@ body {
 
 .card-btn-cart:hover {
   background: var(--color-espresso) !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
   border-color: var(--color-espresso) !important;
   transform: translateY(-1px) !important;
   box-shadow: 0 4px 12px rgba(26, 22, 21, 0.2) !important;
@@ -4248,11 +4261,11 @@ body {
 
 .card-btn-buy {
   flex: 1 1 auto !important;
-  height:  50px !important;
-  min-height:  50px !important;
+  height: 50px !important;
+  min-height: 50px !important;
   border-radius: var(--radius-full) !important;
   background: #252220 !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
   border: 1.5px solid #252220 !important;
   font-weight: 700 !important;
   font-size: 0.88rem !important;
@@ -4268,7 +4281,7 @@ body {
 .card-btn-buy:hover {
   background: var(--color-terracotta) !important;
   border-color: var(--color-terracotta) !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
   transform: translateY(-1px) !important;
   box-shadow: 0 4px 14px rgba(200, 90, 50, 0.28) !important;
 }
@@ -4321,7 +4334,7 @@ body {
   bottom: 8px !important;
   left: 8px !important;
   background: rgba(30, 20, 28, 0.88) !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
   font-size: 0.68rem !important;
   font-weight: 700 !important;
   padding: 0.2rem 0.55rem !important;
@@ -4408,7 +4421,6 @@ body {
   }
 }
 
-
 /* ==========================================================================
    REFINEMENTS: REMOVED DESIGN DROPDOWN & DIRECT LINK, ADDED 10+ BOOKS DISCOUNT
    ========================================================================== */
@@ -4436,7 +4448,7 @@ body {
 .cart-discount-bar-bg {
   width: 100% !important;
   height: 7px !important;
-  background: #E0D7C8 !important;
+  background: #e0d7c8 !important;
   border-radius: var(--radius-full) !important;
   overflow: hidden !important;
 }
@@ -4444,16 +4456,17 @@ body {
 .cart-discount-bar-fill {
   height: 100% !important;
   border-radius: var(--radius-full) !important;
-  transition: width 0.35s ease, background 0.35s ease !important;
+  transition:
+    width 0.35s ease,
+    background 0.35s ease !important;
 }
-
 
 /* ==========================================================================
    BUY OPTION COLOR UPDATE: #17350a (Deep Forest Artisan Tone)
    ========================================================================== */
 .card-btn-buy {
   background: #17350a !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
   border: 1.5px solid #17350a !important;
   box-shadow: 0 2px 8px rgba(23, 53, 10, 0.25) !important;
 }
@@ -4461,7 +4474,7 @@ body {
 .card-btn-buy:hover {
   background: #234f0f !important;
   border-color: #234f0f !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
   transform: translateY(-1px) !important;
   box-shadow: 0 4px 14px rgba(23, 53, 10, 0.38) !important;
 }
@@ -4472,7 +4485,7 @@ body {
 #qbWhatsAppDirectBtn {
   background: #17350a !important;
   border-color: #17350a !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 
 .whatsapp-checkout-btn:hover,
@@ -4482,7 +4495,6 @@ body {
   border-color: #234f0f !important;
   box-shadow: 0 6px 18px rgba(23, 53, 10, 0.4) !important;
 }
-
 
 /* ==========================================================================
    2-STEP CHECKOUT STYLING (QUANTITY/SPECS FIRST, ADDRESS/DETAILS SECOND)
@@ -4515,7 +4527,7 @@ body {
 }
 
 .step-progress-item.active {
-  color: #FFFFFF !important;
+  color: #ffffff !important;
   background: #17350a !important;
 }
 
@@ -4536,7 +4548,7 @@ body {
 
 .step-progress-item.active .step-badge {
   background: rgba(255, 255, 255, 0.25) !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 
 .step-progress-divider {
@@ -4574,7 +4586,7 @@ body {
 }
 
 .step-edit-btn {
-  background: #FFFFFF !important;
+  background: #ffffff !important;
   border: 1px solid var(--border-color) !important;
   color: var(--color-charcoal) !important;
   font-size: 0.75rem !important;
@@ -4587,14 +4599,14 @@ body {
 
 .step-edit-btn:hover {
   background: var(--color-espresso) !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 
 /* Action Buttons in Step 1 & Step 2 */
 .qb-next-step-btn,
 .cart-next-btn {
   background: #17350a !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
   border: 1.5px solid #17350a !important;
   font-weight: 700 !important;
   font-size: 0.9rem !important;
@@ -4636,7 +4648,7 @@ body {
 
 .qb-back-step-btn:hover,
 .cart-back-btn:hover {
-  background: #FFFFFF !important;
+  background: #ffffff !important;
   color: var(--color-espresso) !important;
 }
 
@@ -4655,7 +4667,7 @@ body {
 .cart-step2-actions .cart-sticky-checkout-btn {
   background: #17350a !important;
   border-color: #17350a !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
   border-radius: var(--radius-full) !important;
   height: 48px !important;
   font-weight: 700 !important;
@@ -4679,7 +4691,7 @@ body {
   align-items: stretch !important;
   border: 1.5px solid var(--border-color) !important;
   border-radius: var(--radius-md) !important;
-  background: #FFFFFF !important;
+  background: #ffffff !important;
   overflow: hidden !important;
   transition: var(--transition) !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
@@ -4788,14 +4800,26 @@ body {
 }
 
 @keyframes popperPop {
-  0% { transform: scale(0.9); opacity: 0; }
-  60% { transform: scale(1.03); }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes popperWiggle {
-  0% { transform: rotate(-8deg) scale(1); }
-  100% { transform: rotate(8deg) scale(1.15); }
+  0% {
+    transform: rotate(-8deg) scale(1);
+  }
+  100% {
+    transform: rotate(8deg) scale(1.15);
+  }
 }
 
 /* Ensure Live Price Box Displays Total Price Clearly */
@@ -4874,7 +4898,7 @@ body {
 .mini-progress-bar .step-progress-item.active,
 .mini-progress-bar .step-progress-item.completed {
   background: #17350a !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 
 .mini-progress-bar .step-badge {
@@ -5081,7 +5105,7 @@ body {
     font-size: 0.7rem !important;
     padding: 0.2rem 0.4rem !important;
   }
-  
+
   /* Guarantee single line for Quantity and Total Price on phones */
   .qb-qty-row {
     flex-direction: row !important;
@@ -5160,7 +5184,7 @@ body {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-family: var(--font-sans), 'Plus Jakarta Sans', sans-serif !important;
+  font-family: var(--font-sans), "Plus Jakarta Sans", sans-serif !important;
   font-size: 0.75rem !important;
   font-weight: 700 !important;
   background: #e2dcd1 !important;
@@ -5170,13 +5194,13 @@ body {
 
 .mini-progress-bar .step-progress-item.active .step-badge {
   background: #17350a !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
   box-shadow: 0 2px 5px rgba(23, 53, 10, 0.28) !important;
 }
 
 .mini-progress-bar .step-progress-item.completed .step-badge {
   background: #15803d !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 
 .mini-progress-bar .step-progress-divider {
@@ -5307,7 +5331,7 @@ body {
 }
 
 .qb-qty-left .qb-label {
-  font-family: var(--font-sans), 'Plus Jakarta Sans', sans-serif !important;
+  font-family: var(--font-sans), "Plus Jakarta Sans", sans-serif !important;
   font-size: 0.85rem !important;
   font-weight: 700 !important;
   color: var(--color-ink) !important;
@@ -5318,7 +5342,7 @@ body {
 .qty-stepper {
   display: inline-flex !important;
   align-items: center !important;
-  background: #FFFFFF !important;
+  background: #ffffff !important;
   border: 1.5px solid var(--border-color) !important;
   border-radius: var(--radius-full) !important;
   padding: 2px !important;
@@ -5354,7 +5378,7 @@ body {
   border: none !important;
   background: transparent !important;
   text-align: center !important;
-  font-family: var(--font-sans), 'Plus Jakarta Sans', sans-serif !important;
+  font-family: var(--font-sans), "Plus Jakarta Sans", sans-serif !important;
   font-size: 0.92rem !important;
   font-weight: 700 !important;
   color: var(--color-ink) !important;
@@ -5382,7 +5406,7 @@ body {
 
 /* 4. Highly Readable Font (Matching Item Total's Plus Jakarta Sans) */
 .qb-price-label {
-  font-family: var(--font-sans), 'Plus Jakarta Sans', sans-serif !important;
+  font-family: var(--font-sans), "Plus Jakarta Sans", sans-serif !important;
   font-size: 0.68rem !important;
   font-weight: 600 !important;
   text-transform: uppercase !important;
@@ -5399,7 +5423,12 @@ body {
 }
 
 .qb-discounted-unit {
-  font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+  font-family:
+    var(--font-sans),
+    "Plus Jakarta Sans",
+    system-ui,
+    -apple-system,
+    sans-serif !important;
   font-size: 1.4rem !important;
   font-weight: 700 !important;
   color: #17350a !important;
@@ -5409,7 +5438,12 @@ body {
 }
 
 .qb-original-unit {
-  font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+  font-family:
+    var(--font-sans),
+    "Plus Jakarta Sans",
+    system-ui,
+    -apple-system,
+    sans-serif !important;
   font-size: 0.92rem !important;
   font-weight: 500 !important;
   color: var(--color-subtle) !important;
@@ -5526,7 +5560,7 @@ body {
   .matrix-header p {
     font-size: 0.82rem !important;
   }
-  
+
   /* Place all 3 matrix cards in a single line side-by-side */
   .matrix-cards-grid {
     display: grid !important;
@@ -5535,7 +5569,7 @@ body {
     margin-bottom: 1.5rem !important;
     align-items: stretch !important;
   }
-  
+
   .matrix-card {
     padding: 1.1rem 0.35rem 0.75rem !important;
     border-radius: var(--radius-md) !important;
@@ -5556,19 +5590,19 @@ body {
     background: #17350a !important;
     white-space: nowrap !important;
   }
-  
+
   .matrix-pages-badge {
     font-size: 1.75rem !important;
     line-height: 1 !important;
     color: #17350a !important;
   }
-  
+
   .matrix-card-title {
     font-size: 0.62rem !important;
     letter-spacing: 0.05em !important;
     margin-bottom: 0.15rem !important;
   }
-  
+
   .matrix-tagline {
     font-size: 0.72rem !important;
     line-height: 1.2 !important;
@@ -5576,11 +5610,11 @@ body {
     font-weight: 700 !important;
     color: var(--color-espresso) !important;
   }
-  
+
   .matrix-sub {
     display: none !important; /* Hide long subtext so all 3 cards align perfectly at same height */
   }
-  
+
   .matrix-rates {
     border-top: 1px dashed var(--border-color) !important;
     padding-top: 0.45rem !important;
@@ -5590,11 +5624,11 @@ body {
     flex-direction: column !important;
     gap: 0.15rem !important;
   }
-  
+
   .matrix-rates div {
     white-space: nowrap !important;
   }
-  
+
   .matrix-rates strong {
     color: #17350a !important;
   }
@@ -5727,7 +5761,7 @@ body {
   }
 
   .matrix-start-price {
-    font-family: var(--font-sans), 'Plus Jakarta Sans', sans-serif !important;
+    font-family: var(--font-sans), "Plus Jakarta Sans", sans-serif !important;
     font-size: 1.15rem !important;
     font-weight: 700 !important;
     color: #17350a !important;
@@ -5799,7 +5833,7 @@ body {
 /* Instagram Link Styling */
 .footer-link-highlight:hover {
   text-decoration: underline;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .footer-sub-link {
@@ -5888,7 +5922,7 @@ textarea.form-input.is-invalid {
   border-radius: var(--radius-md);
   font-size: 0.9rem;
   font-family: inherit;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   color: var(--color-charcoal);
   cursor: pointer;
   outline: none;
@@ -5915,7 +5949,7 @@ textarea.form-input.is-invalid {
   padding: 0.75rem 0.8rem;
   border: 1.5px solid var(--border-color);
   border-radius: var(--radius-md);
-  background: #FFFFFF;
+  background: #ffffff;
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
@@ -6029,7 +6063,7 @@ textarea.form-input.is-invalid {
 }
 
 .step3-btn-back:hover {
-  background: #FFFFFF;
+  background: #ffffff;
   border-color: var(--color-charcoal);
   transform: translateY(-1px);
 }
@@ -6038,7 +6072,7 @@ textarea.form-input.is-invalid {
   flex: 1;
   min-width: 0;
   background: #25d366;
-  color: #FFFFFF;
+  color: #ffffff;
   border: none;
   padding: 0.72rem 0.65rem;
   border-radius: var(--radius-full);
@@ -6065,7 +6099,7 @@ textarea.form-input.is-invalid {
   flex: 1.25;
   min-width: 0;
   background: #17350a;
-  color: #FFFFFF;
+  color: #ffffff;
   border: none;
   padding: 0.72rem 0.85rem;
   border-radius: var(--radius-full);
@@ -6115,7 +6149,7 @@ textarea.form-input.is-invalid {
 }
 
 .step2-btn-back:hover {
-  background: #FFFFFF;
+  background: #ffffff;
   border-color: var(--color-charcoal);
   transform: translateY(-1px);
 }
@@ -6123,7 +6157,7 @@ textarea.form-input.is-invalid {
 .step2-btn-next {
   flex: 1;
   background: #17350a;
-  color: #FFFFFF;
+  color: #ffffff;
   border: none;
   padding: 0.75rem 1.25rem;
   border-radius: var(--radius-full);
@@ -6263,7 +6297,7 @@ textarea.form-input.is-invalid {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   padding: 0.5rem 0.75rem;
@@ -6334,7 +6368,7 @@ textarea.form-input.is-invalid {
 /* Order Confirmation / Success Modal */
 .order-success-modal {
   max-width: 540px !important;
-  background: #FFFFFF !important;
+  background: #ffffff !important;
   border-radius: var(--radius-lg) !important;
   padding: 1.5rem !important;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2) !important;
@@ -6470,14 +6504,14 @@ textarea.form-input.is-invalid {
 .admin-header {
   padding: 1.25rem 1.5rem;
   background: #17350a;
-  color: #FFFFFF;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 .admin-header h3 {
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0;
   font-size: 1.2rem;
 }
@@ -6497,7 +6531,7 @@ textarea.form-input.is-invalid {
 }
 
 .admin-metric-card {
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 0.75rem 1rem;
@@ -6530,7 +6564,7 @@ textarea.form-input.is-invalid {
   padding: 0.35rem 0.75rem;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-full);
-  background: #FFFFFF;
+  background: #ffffff;
   font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
@@ -6539,12 +6573,12 @@ textarea.form-input.is-invalid {
 
 .admin-filter-btn.active {
   background: #17350a;
-  color: #FFFFFF;
+  color: #ffffff;
   border-color: #17350a;
 }
 
 .admin-order-card {
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1.5px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 1rem;
@@ -6582,16 +6616,15 @@ textarea.form-input.is-invalid {
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-color);
   cursor: pointer;
-  background: #FFFFFF;
+  background: #ffffff;
 }
 
 .admin-login-box {
   max-width: 380px;
   margin: 3rem auto;
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 2rem;
   text-align: center;
 }
-

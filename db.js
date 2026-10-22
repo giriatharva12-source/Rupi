@@ -1,16 +1,16 @@
 /**
  * Rupantar Store — Persistent Database Storage
- * 
+ *
  * Safe, atomic file-backed JSON store for orders, addresses, payment status,
  * and fulfilment tracking. Zero external database daemon needed.
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
-const DATA_DIR = path.join(__dirname, 'data');
-const DB_FILE = path.join(DATA_DIR, 'orders.json');
-const TMP_FILE = path.join(DATA_DIR, 'orders.tmp.json');
+const DATA_DIR = path.join(__dirname, "data");
+const DB_FILE = path.join(DATA_DIR, "orders.json");
+const TMP_FILE = path.join(DATA_DIR, "orders.tmp.json");
 
 // Ensure data directory and file exist
 function initDB() {
@@ -25,7 +25,7 @@ function initDB() {
         version: "1.0.0"
       }
     };
-    fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2), 'utf8');
+    fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2), "utf8");
   }
 }
 
@@ -33,10 +33,10 @@ function initDB() {
 function readData() {
   initDB();
   try {
-    const raw = fs.readFileSync(DB_FILE, 'utf8');
+    const raw = fs.readFileSync(DB_FILE, "utf8");
     return JSON.parse(raw);
   } catch (err) {
-    console.error('Error reading database file:', err);
+    console.error("Error reading database file:", err);
     return { orders: [], meta: {} };
   }
 }
@@ -45,11 +45,11 @@ function readData() {
 function writeData(data) {
   initDB();
   try {
-    fs.writeFileSync(TMP_FILE, JSON.stringify(data, null, 2), 'utf8');
+    fs.writeFileSync(TMP_FILE, JSON.stringify(data, null, 2), "utf8");
     fs.renameSync(TMP_FILE, DB_FILE);
     return true;
   } catch (err) {
-    console.error('Error writing to database:', err);
+    console.error("Error writing to database:", err);
     try {
       if (fs.existsSync(TMP_FILE)) fs.unlinkSync(TMP_FILE);
     } catch (_) {}
@@ -59,7 +59,7 @@ function writeData(data) {
 
 // Generate unique, readable order ID (e.g., RUP-20261022-8391)
 function generateOrderId() {
-  const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
   const randomSuffix = Math.floor(1000 + Math.random() * 9000);
   return `RUP-${dateStr}-${randomSuffix}`;
 }
@@ -68,7 +68,7 @@ function generateOrderId() {
 function createOrder(orderPayload) {
   const data = readData();
   const orderId = orderPayload.id || generateOrderId();
-  
+
   const newOrder = {
     id: orderId,
     createdAt: new Date().toISOString(),
@@ -96,10 +96,10 @@ function createOrder(orderPayload) {
       currency: "INR"
     },
     paymentMethod: orderPayload.paymentMethod, // 'UPI' | 'CARD' | 'NETBANKING' | 'COD' | 'WHATSAPP'
-    paymentStatus: orderPayload.paymentStatus || (orderPayload.paymentMethod === 'COD' ? 'UNPAID / COD' : 'PENDING'),
-    orderStatus: orderPayload.orderStatus || 'PLACED', // 'PLACED' | 'PROCESSING' | 'DISPATCHED' | 'DELIVERED' | 'CANCELLED'
+    paymentStatus: orderPayload.paymentStatus || (orderPayload.paymentMethod === "COD" ? "UNPAID / COD" : "PENDING"),
+    orderStatus: orderPayload.orderStatus || "PLACED", // 'PLACED' | 'PROCESSING' | 'DISPATCHED' | 'DELIVERED' | 'CANCELLED'
     gateway: orderPayload.gateway || {
-      provider: 'razorpay',
+      provider: "razorpay",
       razorpayOrderId: null,
       razorpayPaymentId: null,
       razorpaySignature: null,
@@ -107,11 +107,12 @@ function createOrder(orderPayload) {
     },
     statusHistory: [
       {
-        status: orderPayload.orderStatus || 'PLACED',
+        status: orderPayload.orderStatus || "PLACED",
         timestamp: new Date().toISOString(),
-        note: orderPayload.paymentMethod === 'COD' 
-          ? 'Order placed with Cash on Delivery' 
-          : 'Order initiated awaiting online payment'
+        note:
+          orderPayload.paymentMethod === "COD"
+            ? "Order placed with Cash on Delivery"
+            : "Order initiated awaiting online payment"
       }
     ]
   };
@@ -186,11 +187,12 @@ function listOrders(filter = {}) {
   }
   if (filter.search) {
     const q = filter.search.toLowerCase();
-    result = result.filter(o => 
-      o.id.toLowerCase().includes(q) || 
-      (o.customer.name && o.customer.name.toLowerCase().includes(q)) ||
-      (o.customer.phone && o.customer.phone.includes(q)) ||
-      (o.customer.address.city && o.customer.address.city.toLowerCase().includes(q))
+    result = result.filter(
+      o =>
+        o.id.toLowerCase().includes(q) ||
+        (o.customer.name && o.customer.name.toLowerCase().includes(q)) ||
+        (o.customer.phone && o.customer.phone.includes(q)) ||
+        (o.customer.address.city && o.customer.address.city.toLowerCase().includes(q))
     );
   }
 
@@ -209,16 +211,16 @@ function getStats() {
   let deliveredCount = 0;
 
   for (const o of data.orders) {
-    if (o.paymentStatus === 'PAID' || o.paymentStatus === 'PAID (COD Collected)') {
-      totalRevenue += (o.pricing.total || 0);
+    if (o.paymentStatus === "PAID" || o.paymentStatus === "PAID (COD Collected)") {
+      totalRevenue += o.pricing.total || 0;
       paidCount++;
-    } else if (o.paymentMethod === 'COD' && o.orderStatus !== 'CANCELLED') {
+    } else if (o.paymentMethod === "COD" && o.orderStatus !== "CANCELLED") {
       codPendingCount++;
     }
 
-    if (o.orderStatus === 'PROCESSING') processingCount++;
-    if (o.orderStatus === 'DISPATCHED') dispatchedCount++;
-    if (o.orderStatus === 'DELIVERED') deliveredCount++;
+    if (o.orderStatus === "PROCESSING") processingCount++;
+    if (o.orderStatus === "DISPATCHED") dispatchedCount++;
+    if (o.orderStatus === "DELIVERED") deliveredCount++;
   }
 
   return {
