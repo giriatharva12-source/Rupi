@@ -207,21 +207,17 @@ function renderCatalogue() {
             </div>
 
             <div class="product-card-actions">
-              <button class="card-btn-cart" onclick="quickAddToCart('${item.id}', event)" title="Add ${escapeHTML(item.name)} to cart" aria-label="Add ${escapeHTML(item.name)} to cart">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="9" cy="20" r="1"></circle>
-                  <circle cx="18" cy="20" r="1"></circle>
-                  <path d="M1 1h4l2.6 12a2 2 0 0 0 2 1.6h9a2 2 0 0 0 2-1.5L22 5H6"></path>
-                  <line x1="11" y1="8" x2="17" y2="8"></line>
-                  <line x1="14" y1="5" x2="14" y2="11"></line>
+              <button class="card-btn-cart" onclick="quickAddToCart('${item.id}', event)" title="Add to bag" aria-label="Add to bag">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="8" cy="21" r="1.3"></circle>
+                  <circle cx="17" cy="21" r="1.3"></circle>
+                  <path d="M1 4.5h3.2l2.2 9.5a1.5 1.5 0 0 0 1.5 1.2h8.5a1.5 1.5 0 0 0 1.5-1.1L19.5 10.5H5.2"></path>
+                  <line x1="16" y1="1.5" x2="16" y2="6.5"></line>
+                  <line x1="13.5" y1="4" x2="18.5" y2="4"></line>
                 </svg>
-                <span class="card-btn-text">Add to Cart</span>
               </button>
-              <button class="card-btn-buy" onclick="openQuickBuyModal('${item.id}')" title="Buy ${escapeHTML(item.name)} Now">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
-                </svg>
-                <span class="card-btn-text">Buy Now</span>
+              <button class="card-btn-buy" onclick="openQuickBuyModal('${item.id}')" title="Buy Now">
+                <span>Buy Now</span>
               </button>
             </div>
           </div>
