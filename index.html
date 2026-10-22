@@ -396,7 +396,7 @@
             <span id="qbStep2SummarySpecs">10x14 cm • 10 pgs • Qty: 1</span>
           </div>
           <div class="step-summary-price" id="qbStep2TotalAmountDisplay" style="font-size:1.15rem; font-weight:700; color:#17350a;">₹199</div>
-          <button type="button" class="step-edit-btn" onclick="goToQuickBuyStep(1)">← Edit Specs</button>
+          <button type="button" class="step-edit-btn" onclick="goToQuickBuyStep(1)">Edit Specs</button>
         </div>
 
         <div class="cart-delivery-form-container">
@@ -506,12 +506,12 @@
           </div>
         </div>
 
-        <div class="cart-step2-actions" style="margin-top:1.25rem; display:flex; gap:0.75rem;">
-          <button type="button" class="qb-back-step-btn" onclick="goToQuickBuyStep(1)">
-            <span>← Back: Specs</span>
+        <div class="step2-single-line-actions">
+          <button type="button" class="step2-btn-back" onclick="goToQuickBuyStep(1)">
+            <span>Back</span>
           </button>
-          <button type="button" class="cart-sticky-checkout-btn" onclick="validateAndGoToQuickBuyStep(3)">
-            <span>Next: Payment & Review →</span>
+          <button type="button" class="step2-btn-next" onclick="validateAndGoToQuickBuyStep(3)">
+            <span>Payment</span>
           </button>
         </div>
       </div>
@@ -624,7 +624,7 @@
         <!-- Single Line Actions: Pay + Confirm via WhatsApp + Back -->
         <div class="step3-single-line-actions">
           <button type="button" class="step3-btn-pay" id="qbMainSubmitPayBtn" onclick="submitQuickBuyOrder()">
-            <span id="qbPayBtnText">Pay ₹259 Securely →</span>
+            <span id="qbPayBtnText">Pay ₹259</span>
           </button>
 
           <button type="button" class="step3-btn-whatsapp" onclick="launchQuickBuyWhatsApp()" title="Confirm Order directly via WhatsApp">
@@ -632,7 +632,7 @@
           </button>
 
           <button type="button" class="step3-btn-back" onclick="goToQuickBuyStep(2)" title="Back to delivery address">
-            <span>← Back</span>
+            <span>Back</span>
           </button>
         </div>
 
@@ -720,7 +720,7 @@
             <strong id="cartStep2ItemsCount">1 item in Bag</strong>
             <span id="cartStep2TotalPreview">Total: ₹199</span>
           </div>
-          <button type="button" class="step-edit-btn" onclick="goToCartStep(1)">← Edit Bag</button>
+          <button type="button" class="step-edit-btn" onclick="goToCartStep(1)">Edit Bag</button>
         </div>
 
         <div class="cart-delivery-form-container">
@@ -830,12 +830,12 @@
           </div>
         </div>
 
-        <div class="cart-step2-actions" style="margin-top:1.25rem; display:flex; gap:0.75rem;">
-          <button type="button" class="cart-back-btn" onclick="goToCartStep(1)">
-            <span>← Back: Bag</span>
+        <div class="step2-single-line-actions">
+          <button type="button" class="step2-btn-back" onclick="goToCartStep(1)">
+            <span>Back</span>
           </button>
-          <button type="button" class="cart-sticky-checkout-btn" onclick="validateAndGoToCartStep(3)">
-            <span>Next: Payment & Review →</span>
+          <button type="button" class="step2-btn-next" onclick="validateAndGoToCartStep(3)">
+            <span>Payment</span>
           </button>
         </div>
       </div>
@@ -944,7 +944,7 @@
         <!-- Single Line Actions: Pay + Confirm via WhatsApp + Back -->
         <div class="step3-single-line-actions">
           <button type="button" class="step3-btn-pay" id="cartMainSubmitPayBtn" onclick="submitCartOrder()">
-            <span id="cartPayBtnText">Pay ₹0 Securely →</span>
+            <span id="cartPayBtnText">Pay ₹0</span>
           </button>
 
           <button type="button" class="step3-btn-whatsapp" onclick="proceedToWhatsAppCheckout()" title="Complete Order directly via WhatsApp">
@@ -952,7 +952,7 @@
           </button>
 
           <button type="button" class="step3-btn-back" onclick="goToCartStep(2)" title="Back to delivery address">
-            <span>← Back</span>
+            <span>Back</span>
           </button>
         </div>
 

@@ -6076,6 +6076,63 @@ textarea.form-input.is-invalid {
   transform: translateY(-1px);
 }
 
+/* Step 2: Single Line Actions (Back + Payment) */
+.step2-single-line-actions {
+  margin-top: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.step2-btn-back {
+  flex: 0 0 auto;
+  background: var(--bg-parchment);
+  color: var(--color-charcoal);
+  border: 1.5px solid var(--border-color);
+  padding: 0.75rem 1.15rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step2-btn-back:hover {
+  background: #FFFFFF;
+  border-color: var(--color-charcoal);
+  transform: translateY(-1px);
+}
+
+.step2-btn-next {
+  flex: 1;
+  background: #17350a;
+  color: #FFFFFF;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step2-btn-next:hover {
+  background: #234d12;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(23, 53, 10, 0.2);
+}
+
 @media (max-width: 480px) {
   .payment-methods-container {
     gap: 0.5rem;
