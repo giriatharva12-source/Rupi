@@ -619,8 +619,8 @@ function constructQuickBuyWhatsAppMessage() {
   msg += `• Shipping: Confirmed on WhatsApp\n\n`;
 
   if (customNotes) {
-    msg += `🎨 *CUSTOMISATION / BRANDING:*\n`;
-    msg += `• Instructions: "${customNotes}"\n\n`;
+    msg += `🎨 *BACK COVER CUSTOM TEXT:*\n`;
+    msg += `• Back Text: "${customNotes}"\n\n`;
   }
 
   msg += `👤 *CUSTOMER DETAILS:*\n`;
@@ -921,7 +921,7 @@ function updateCartUI() {
             <div class="cart-item-specs">
               ${escapeHTML(item.size || "10x14 cm")} • ${item.pages || 10} pgs
             </div>
-            ${item.customisation ? `<div class="cart-item-custom-note">Custom: "${escapeHTML(item.customisation)}"</div>` : ""}
+            ${item.customisation ? `<div class="cart-item-custom-note">Back Text: "${escapeHTML(item.customisation)}"</div>` : ""}
             <div class="cart-item-price-unit">₹${item.price} each</div>
           </div>
 
@@ -1076,7 +1076,7 @@ function proceedToWhatsAppCheckout() {
     msg += `${index + 1}. *${item.designNumber ? item.designNumber + " — " : ""}${item.name}*\n`;
     msg += `   • Spec: ${item.size || "10x14 cm"}, ${item.pages || 10} Pages (Rice Husk)\n`;
     if (item.customisation) {
-      msg += `   • Customisation: "${item.customisation}"\n`;
+      msg += `   • Back Text: "${item.customisation}"\n`;
     }
     msg += `   • Qty: ${item.quantity} × ₹${item.price} = ₹${item.price * item.quantity}\n\n`;
   });

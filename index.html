@@ -327,27 +327,31 @@
               </div>
             </div>
 
-            <!-- 3. Customisation & Branding (Optional) -->
+            <!-- 3. Custom Text on Back of Book (Optional) -->
             <div class="qb-section">
-              <label class="qb-label" for="qbCustCustomization">3. Customisation & Branding (Optional):</label>
+              <label class="qb-label" for="qbCustCustomization">3. Custom Text on Back of Book (Optional):</label>
               <div class="qb-customisation-group">
+                <div class="qb-custom-note">
+                  <span class="qb-note-icon">✨</span>
+                  <span>Only the text on the back of the book can be customized.</span>
+                </div>
                 <input
                   type="text"
                   id="qbCustCustomization"
                   class="qb-input"
-                  placeholder="e.g., Name embossing, gift message, company branding"
+                  placeholder="e.g., Name on back cover, personal quote, dedication"
                   maxlength="120"
                   autocomplete="off"
                 />
                 <div class="qb-custom-chips">
-                  <button type="button" class="qb-custom-chip-btn" onclick="addCustomPreset('Name Embossing: ')">
-                    + Name Embossing
+                  <button type="button" class="qb-custom-chip-btn" onclick="addCustomPreset('Name: ')">
+                    + Name on Back
                   </button>
-                  <button type="button" class="qb-custom-chip-btn" onclick="addCustomPreset('Custom Logo Print: ')">
-                    + Custom Logo
+                  <button type="button" class="qb-custom-chip-btn" onclick="addCustomPreset('Quote: ')">
+                    + Personal Quote
                   </button>
-                  <button type="button" class="qb-custom-chip-btn" onclick="addCustomPreset('Bulk Event Order: ')">
-                    + Bulk Event
+                  <button type="button" class="qb-custom-chip-btn" onclick="addCustomPreset('Dedication: ')">
+                    + Gift Dedication
                   </button>
                 </div>
               </div>
