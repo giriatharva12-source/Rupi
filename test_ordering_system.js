@@ -13,7 +13,7 @@ console.log("=== RUPANTAR ORDERING & WHATSAPP INTEGRATION TEST SUITE ===\n");
 
 // 1. WhatsApp Configuration Validation
 console.log("--- 1. CONFIGURATION TESTS ---");
-assert.strictEqual(DEFAULT_CONFIG.storeName, "Rupantar", "Store name should be Rupantar");
+assert.strictEqual(DEFAULT_CONFIG.storeName, "Rupaantar", "Store name should be Rupaantar");
 assert(isValidWhatsAppNumber(DEFAULT_CONFIG.whatsappNumber), "Default WhatsApp number must be valid digits");
 console.log("[PASS] Store Name:", DEFAULT_CONFIG.storeName);
 console.log("[PASS] WhatsApp Business Number (Digits only):", DEFAULT_CONFIG.whatsappNumber);

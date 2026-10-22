@@ -1638,6 +1638,26 @@ body {
   color: var(--color-forest);
 }
 
+.cart-clear-btn {
+  background: var(--bg-parchment);
+  border: 1px solid var(--border-color);
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.28rem 0.65rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.cart-clear-btn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
 /* Free Shipping Progress in Drawer */
 .free-shipping-card {
   background: var(--bg-parchment);

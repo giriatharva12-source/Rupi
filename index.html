@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rupantar — Handcrafted Rice Husk Paper Diaries</title>
+    <title>Rupaantar — Handcrafted Rice Husk Paper Diaries</title>
     <meta
       name="description"
       content="Shop handcrafted spiral-bound folk-art diaries made from sustainable rice husk paper.  Order directly via WhatsApp."
@@ -34,7 +34,7 @@
       <div class="announcement-content">
         <span class="announcement-badge">🌾 Rice Husk Paper</span>
         <span class="announcement-text" id="announcementText"
-          >Rupantar — Handcrafted Folk-Art Collection • Handcrafted Folk Art Diaries From ₹199</span
+          >Rupaantar — Handcrafted Folk-Art Collection • Handcrafted Folk Art Diaries From ₹199</span
         >
         <a href="#catalogue" class="announcement-link">Browse 8 Designs</a>
       </div>
@@ -45,26 +45,15 @@
       <div class="header-container">
         <!-- Brand Logo -->
         <a href="#" class="brand-logo" id="brandLogoBtn">
-          <img src="assets/images/rupaantar-tree.png" alt="Rupantar Brand Logo" class="brand-logo-img" />
+          <img src="assets/images/rupaantar-tree.png" alt="Rupaantar Brand Logo" class="brand-logo-img" />
           <div class="logo-text-group">
-            <span class="logo-title" id="navStoreName">Rupantar</span>
+            <span class="logo-title" id="navStoreName">Rupaantar</span>
             <span class="logo-subtitle">Handcrafted Folk-Art Diaries</span>
           </div>
         </a>
 
         <!-- Action Buttons -->
         <div class="header-actions">
-          <!-- Store Config Settings -->
-          <button class="icon-btn settings-btn" id="openSettingsBtn" title="Store & WhatsApp Settings">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="3"></circle>
-              <path
-                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
-              ></path>
-            </svg>
-            <span class="btn-caption">Config</span>
-          </button>
-
           <!-- Cart Trigger Button -->
           <button class="cart-trigger-btn" id="openCartBtn" title="View Cart">
             <div class="cart-icon-wrapper">
@@ -214,10 +203,10 @@
       <div class="story-container">
         <div class="story-grid">
           <div class="story-visual">
-            <img src="assets/images/design-02.png" alt="Rupantar Rupantar Diary" class="story-img" />
+            <img src="assets/images/design-02.png" alt="Rupaantar Diary" class="story-img" />
             <div class="story-quote-card">
               <p>“From rice husk to paper, with a little story on every page.”</p>
-              <span>— Rupantar | Folk-Art Collection</span>
+              <span>— Rupaantar | Folk-Art Collection</span>
             </div>
           </div>
           <div class="story-text">
@@ -937,6 +926,16 @@
           <span class="cart-items-counter" id="drawerCartCount">(0 items)</span>
         </div>
         <div style="display: flex; align-items: center; gap: 0.75rem">
+          <button
+            type="button"
+            class="cart-clear-btn"
+            id="clearCartBtn"
+            onclick="clearCart()"
+            title="Empty bag and start new order"
+            style="display: none"
+          >
+            Start New
+          </button>
           <span id="cartTotalPreview" style="font-weight: 700; color: #17350a; font-size: 1.05rem">₹0</span>
           <button class="cart-drawer-close" id="closeCartDrawerBtn" onclick="closeCart()" aria-label="Close cart">
             &times;
@@ -973,6 +972,23 @@
           >
             <span class="step-badge">3</span>
           </div>
+        </div>
+
+        <!-- Empty Bag State -->
+        <div class="empty-cart-state" id="emptyCartState" style="display: none">
+          <div class="empty-cart-art">🌾</div>
+          <h4>Your Bag is Empty</h4>
+          <p>Choose any of our handcrafted folk-art diaries to begin, or use the instant WhatsApp buy pop-up.</p>
+          <button
+            type="button"
+            class="btn btn-primary"
+            onclick="
+              closeCart();
+              document.getElementById('catalogue').scrollIntoView({ behavior: 'smooth' });
+            "
+          >
+            Browse Designs
+          </button>
         </div>
 
         <!-- STEP 1: REVIEW BAG & QUANTITY -->
@@ -1027,8 +1043,8 @@
         <div class="cart-step-view" id="cartStep2View" style="display: none; padding: 1rem 1.25rem">
           <div class="step-summary-card">
             <div class="step-summary-content">
-              <strong id="cartStep2ItemsCount">1 item in Bag</strong>
-              <span id="cartStep2TotalPreview">Total: ₹199</span>
+              <strong id="cartStep2ItemsCount">0 items in Bag</strong>
+              <span id="cartStep2TotalPreview">Total: ₹0</span>
             </div>
             <button type="button" class="step-edit-btn" onclick="goToCartStep(1)">Edit Bag</button>
           </div>
@@ -1521,22 +1537,6 @@
           dispatch directly to Rupaantar artisans!
         </p>
       </div>
-
-      <!-- Empty Bag State -->
-      <div class="empty-cart-state" id="emptyCartState" style="display: none">
-        <div class="empty-cart-art">🌾</div>
-        <h4>Your Bag is Empty</h4>
-        <p>Choose any of our 8 handcrafted folk-art diaries to begin, or use the instant WhatsApp buy pop-up.</p>
-        <button
-          class="btn btn-primary"
-          onclick="
-            closeCart();
-            document.getElementById('catalogue').scrollIntoView({ behavior: 'smooth' });
-          "
-        >
-          Browse 8 Designs
-        </button>
-      </div>
     </aside>
 
     <!-- Store Owner Settings Modal -->
@@ -1553,7 +1553,7 @@
           <form id="storeSettingsForm" class="settings-form">
             <div class="form-group">
               <label for="settingStoreName">Store / Collection Name</label>
-              <input type="text" id="settingStoreName" value="Rupantar" />
+              <input type="text" id="settingStoreName" value="Rupaantar" />
             </div>
 
             <div class="form-group">
@@ -1642,7 +1642,7 @@
           <div class="footer-logo-row">
             <img src="assets/images/rupaantar-logo.png" alt="Rupaantar Logo" class="footer-logo-img" />
             <div>
-              <span class="footer-logo-title">Rupantar</span>
+              <span class="footer-logo-title">Rupaantar</span>
               <span class="footer-logo-sub">Handcrafted Diaries</span>
             </div>
           </div>
@@ -1689,7 +1689,7 @@
 
       <div class="footer-bottom">
         <div class="footer-bottom-container">
-          <p>© 2026 Rupantar. All rights reserved.</p>
+          <p>© 2026 Rupaantar. All rights reserved.</p>
           <p class="footer-subtext">
             Order fulfillment via WhatsApp •
             <a
@@ -1857,7 +1857,7 @@
         <div class="admin-header">
           <div style="display: flex; align-items: center; gap: 0.5rem">
             <span style="font-size: 1.3rem">📋</span>
-            <h3>Rupantar — Staff Orders Dashboard</h3>
+            <h3>Rupaantar — Staff Orders Dashboard</h3>
           </div>
           <button
             class="modal-close-btn"

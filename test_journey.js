@@ -45,7 +45,7 @@ const customer = {
 
 // Step 5: WhatsApp order link generation
 console.log("\nStep 5: Generating WhatsApp order link...");
-let orderMsg = `🌿 *RUPANTAR DIARY ORDER* 🌿\n\n`;
+let orderMsg = `🌿 *RUPAANTAR DIARY ORDER* 🌿\n\n`;
 orderMsg += `• Design: ${product.designNumber} — ${product.name}\n`;
 orderMsg += `• Size: ${PRICING_MATRIX[sizeKey].label}\n`;
 orderMsg += `• Pages: ${pages} Pages\n`;

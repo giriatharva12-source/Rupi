@@ -56,10 +56,10 @@ function initStoreInfo() {
   currentConfig = getStoreConfig();
 
   const navStoreName = document.getElementById("navStoreName");
-  if (navStoreName) navStoreName.textContent = currentConfig.storeName || "Rupantar";
+  if (navStoreName) navStoreName.textContent = currentConfig.storeName || "Rupaantar";
 
   const footerStoreName = document.getElementById("footerStoreName");
-  if (footerStoreName) footerStoreName.textContent = currentConfig.storeName || "Rupantar";
+  if (footerStoreName) footerStoreName.textContent = currentConfig.storeName || "Rupaantar";
 
   const footerWa = document.getElementById("footerWhatsAppLink");
   if (footerWa) {
@@ -71,7 +71,7 @@ function initStoreInfo() {
       "?text=" +
       encodeURIComponent(
         "Hi Team " +
-          (currentConfig.storeName || "Rupantar") +
+          (currentConfig.storeName || "Rupaantar") +
           "! I have an enquiry about your handcrafted rice husk diaries."
       );
   }
@@ -92,7 +92,7 @@ function initStoreInfo() {
       cleanNumber +
       "?text=" +
       encodeURIComponent(
-        "Hi Team " + (currentConfig.storeName || "Rupantar") + "! I would like to enquire about your folk-art diaries."
+        "Hi Team " + (currentConfig.storeName || "Rupaantar") + "! I would like to enquire about your folk-art diaries."
       );
   }
 
@@ -102,7 +102,7 @@ function initStoreInfo() {
     const cleanNumber = (currentConfig.whatsappNumber || "919876543210").replace(/[^0-9]/g, "");
     const enquiryMsg =
       "Hi Team " +
-      (currentConfig.storeName || "Rupantar") +
+      (currentConfig.storeName || "Rupaantar") +
       "! I am visiting your website and have an enquiry regarding your handcrafted rice husk paper diaries.";
     floatBtn.href = "https://wa.me/" + cleanNumber + "?text=" + encodeURIComponent(enquiryMsg);
   }
@@ -153,7 +153,7 @@ function openCustomQuoteWhatsApp() {
   const cleanNumber = (currentConfig.whatsappNumber || "919876543210").replace(/[^0-9]/g, "");
   const msg =
     "Hi Team " +
-    (currentConfig.storeName || "Rupantar") +
+    (currentConfig.storeName || "Rupaantar") +
     "! I would like to request a custom quote for customized / bulk folk-art diaries (@projectrupaantar).";
   window.open("https://wa.me/" + cleanNumber + "?text=" + encodeURIComponent(msg), "_blank");
 }
@@ -555,7 +555,7 @@ function constructQuickBuyWhatsAppMessage() {
   if (custAddress) msg += `• Address: ${custAddress}\n`;
   msg += `\n`;
 
-  msg += `Hi Team Rupantar! I would like to confirm and place this order. Please share availability and dispatch timeline!`;
+  msg += `Hi Team Rupaantar! I would like to confirm and place this order. Please share availability and dispatch timeline!`;
   return msg;
 }
 
@@ -674,6 +674,10 @@ function closeOrderConfirmationModal() {
   const backdrop = document.getElementById("orderConfirmationModalBackdrop");
   if (backdrop) backdrop.style.display = "none";
   document.body.style.overflow = "";
+  // Reset cart so user starts fresh
+  cart = [];
+  saveCart(cart);
+  updateCartUI();
 }
 
 function reopenLastWhatsAppOrder() {
@@ -698,7 +702,9 @@ function copyLastOrderText() {
    ========================================================================== */
 function loadCart() {
   try {
-    const raw = localStorage.getItem("rupaantar_cart");
+    // Clear legacy localStorage to ensure starting new for new visitors
+    localStorage.removeItem("rupaantar_cart");
+    const raw = sessionStorage.getItem("rupaantar_cart");
     return raw ? JSON.parse(raw) : [];
   } catch (e) {
     return [];
@@ -706,10 +712,19 @@ function loadCart() {
 }
 
 function saveCart(newCart) {
-  cart = newCart;
+  if (newCart !== undefined) {
+    cart = newCart;
+  }
   try {
-    localStorage.setItem("rupaantar_cart", JSON.stringify(cart));
+    sessionStorage.setItem("rupaantar_cart", JSON.stringify(cart));
   } catch (e) {}
+}
+
+function clearCart() {
+  cart = [];
+  saveCart(cart);
+  updateCartUI();
+  showToast("Shopping bag emptied. Starting fresh! 🌾");
 }
 
 function updateCartItemQty(itemId, delta) {
@@ -742,8 +757,8 @@ function updateCartUI() {
   const checkoutSection = document.getElementById("cartCheckoutSection");
   const discountCard = document.getElementById("cartDiscountCard") || document.getElementById("freeShippingCard");
 
-  const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
-  const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const totalItems = Array.isArray(cart) ? cart.reduce((sum, i) => sum + i.quantity, 0) : 0;
+  const subtotal = Array.isArray(cart) ? cart.reduce((sum, i) => sum + i.price * i.quantity, 0) : 0;
 
   // 10+ books bulk discount (5% off on each book)
   const hasBulkDiscount = totalItems >= 10;
@@ -759,19 +774,33 @@ function updateCartUI() {
   const billSummary = document.getElementById("cartStep1BillSummary");
   const actionBar = document.querySelector(".cart-step-action-bar");
   const cartProgressBar = document.querySelector(".drawer-progress-bar");
+  const stickyFooter = document.getElementById("cartDrawerStickyFooter");
+  const step1View = document.getElementById("cartStep1View");
+  const step2View = document.getElementById("cartStep2View");
+  const step3View = document.getElementById("cartStep3View");
+  const startNewBtn = document.getElementById("clearCartBtn");
 
-  if (cart.length === 0) {
+  if (startNewBtn) {
+    startNewBtn.style.display = (!cart || cart.length === 0) ? "none" : "inline-block";
+  }
+
+  if (!cart || cart.length === 0) {
     if (list) list.innerHTML = "";
-    if (emptyState) emptyState.style.display = "block";
+    if (emptyState) emptyState.style.display = "flex";
+    if (step1View) step1View.style.display = "none";
+    if (step2View) step2View.style.display = "none";
+    if (step3View) step3View.style.display = "none";
     if (checkoutSection) checkoutSection.style.display = "none";
     if (discountCard) discountCard.style.display = "none";
     if (billSummary) billSummary.style.display = "none";
     if (actionBar) actionBar.style.display = "none";
     if (cartProgressBar) cartProgressBar.style.display = "none";
+    if (stickyFooter) stickyFooter.style.display = "none";
     return;
   }
 
   if (emptyState) emptyState.style.display = "none";
+  if (step1View && currentCartStep === 1) step1View.style.display = "block";
   if (checkoutSection) checkoutSection.style.display = "block";
   if (discountCard) discountCard.style.display = "block";
   if (billSummary) billSummary.style.display = "block";
@@ -854,7 +883,10 @@ function updateCartUI() {
 function openCart() {
   const drawer = document.getElementById("cartDrawer");
   const backdrop = document.getElementById("cartBackdrop");
-  goToCartStep(1);
+  if (cart && cart.length > 0) {
+    goToCartStep(1);
+  }
+  updateCartUI();
   if (drawer) drawer.classList.add("active");
   if (backdrop) backdrop.classList.add("active");
   document.body.style.overflow = "hidden";
@@ -951,7 +983,7 @@ function proceedToWhatsAppCheckout() {
   // Order Reference Number
   const orderRef = "RUP-BAG-" + Math.floor(1000 + Math.random() * 9000);
 
-  let msg = `🌿 *FULL BAG ORDER — RUPANTAR* 🌿\n`;
+  let msg = `🌿 *FULL BAG ORDER — RUPAANTAR* 🌿\n`;
   msg += `*Reference:* #${orderRef}\n\n`;
 
   msg += `👤 *CUSTOMER DETAILS:*\n`;
@@ -979,7 +1011,7 @@ function proceedToWhatsAppCheckout() {
   }
   msg += `• Shipping: Confirmed on WhatsApp based on location\n`;
   msg += `• *TOTAL PAYABLE: ₹${totalPayable.toLocaleString("en-IN")}*\n\n`;
-  msg += `Hi Team Rupantar! I would like to order my shopping bag. Please confirm paper stock availability, delivery timeline, and share payment details (UPI/QR). Thank you! 🙏`;
+  msg += `Hi Team Rupaantar! I would like to order my shopping bag. Please confirm paper stock availability, delivery timeline, and share payment details (UPI/QR). Thank you! 🙏`;
 
   const cleanNumber = (currentConfig.whatsappNumber || "919876543210").replace(/[^0-9]/g, "");
   const url = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(msg)}`;
@@ -988,6 +1020,11 @@ function proceedToWhatsAppCheckout() {
   lastWhatsAppOrderText = msg;
 
   window.open(url, "_blank");
+
+  // Empty cart after transmitting order so customer starts fresh
+  cart = [];
+  saveCart(cart);
+  updateCartUI();
 
   setTimeout(() => {
     if (btn) btn.disabled = false;
@@ -1012,7 +1049,7 @@ function copyOrderTextToClipboard() {
   const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
   const deliveryFee = subtotal >= (currentConfig.freeDeliveryThreshold || 799) ? 0 : currentConfig.deliveryFee || 60;
 
-  let msg = `🌿 *BAG ORDER — RUPANTAR* 🌿\n\n`;
+  let msg = `🌿 *BAG ORDER — RUPAANTAR* 🌿\n\n`;
   cart.forEach((i, idx) => {
     msg += `${idx + 1}. ${i.name} (${i.size}, ${i.pages} pgs) × ${i.quantity} = ₹${i.price * i.quantity}\n`;
   });
@@ -1057,7 +1094,7 @@ function getStoreBaseUrl() {
 
 function getStoreShareBroadcastMessage() {
   const storeUrl = getStoreBaseUrl();
-  return `🌿 *Discover Rupantar — Handcrafted Folk-Art Diaries* 🌾\n\nMade from sustainable earthy rice husk paper with spiral ring binding that lies 180° flat.\n\n🎨 Browse Indian folk-art covers:\n👉 ${storeUrl}\n\nTap the link to explore covers, choose your page count, and place orders directly on WhatsApp! ✨`;
+  return `🌿 *Discover Rupaantar — Handcrafted Folk-Art Diaries* 🌾\n\nMade from sustainable earthy rice husk paper with spiral ring binding that lies 180° flat.\n\n🎨 Browse Indian folk-art covers:\n👉 ${storeUrl}\n\nTap the link to explore covers, choose your page count, and place orders directly on WhatsApp! ✨`;
 }
 
 function openShareStoreModal() {
@@ -1262,7 +1299,7 @@ function openSettingsModal() {
   const phoneInput = document.getElementById("settingWhatsAppNum");
   const feeInput = document.getElementById("settingDeliveryFee");
   const thresholdInput = document.getElementById("settingFreeThreshold");
-  if (nameInput) nameInput.value = currentConfig.storeName || "Rupantar";
+  if (nameInput) nameInput.value = currentConfig.storeName || "Rupaantar";
   if (phoneInput) phoneInput.value = currentConfig.whatsappNumber || "919876543210";
   if (feeInput) feeInput.value = currentConfig.deliveryFee !== undefined ? currentConfig.deliveryFee : 60;
   if (thresholdInput)
@@ -1292,7 +1329,7 @@ function handleSaveSettings(e) {
   }
 
   const updated = saveStoreConfig({
-    storeName: nameInput ? nameInput.value.trim() || "Rupantar" : "Rupantar",
+    storeName: nameInput ? nameInput.value.trim() || "Rupaantar" : "Rupaantar",
     whatsappNumber: cleanPhone,
     whatsappDisplayNumber:
       cleanPhone.startsWith("91") && cleanPhone.length === 12
@@ -1695,6 +1732,11 @@ function validateCartStep2Fields() {
 }
 
 function goToCartStep(step) {
+  if (!cart || cart.length === 0) {
+    updateCartUI();
+    return;
+  }
+
   // Guard moving forward from Step 1
   if (step > 1 && !validateCartStep1()) {
     return;
@@ -2152,7 +2194,7 @@ async function submitCartOrder() {
     // 1. Cash on Delivery
     if (selectedCartPaymentMethod === "COD") {
       cart = [];
-      saveCart();
+      saveCart(cart);
       updateCartUI();
       closeCart();
       showOrderSuccessModal(data.order);
@@ -2197,7 +2239,7 @@ function launchRazorpayCheckout(opts) {
     key: opts.keyId,
     amount: opts.amount,
     currency: opts.currency,
-    name: "Rupantar",
+    name: "Rupaantar",
     description: "Handcrafted Rice Husk Paper Diaries",
     image: "assets/images/rupaantar-logo.png",
     order_id: opts.razorpayOrderId,
@@ -2259,7 +2301,7 @@ async function verifyPaymentSignature(payload) {
         closeQuickBuyModal();
       } else {
         cart = [];
-        saveCart();
+        saveCart(cart);
         updateCartUI();
         closeCart();
       }
@@ -2340,11 +2382,15 @@ function showOrderSuccessModal(order) {
 function closeCheckoutSuccessModal() {
   const modal = document.getElementById("checkoutSuccessModalBackdrop");
   if (modal) modal.style.display = "none";
+  document.body.style.overflow = "";
+  cart = [];
+  saveCart(cart);
+  updateCartUI();
 }
 
 function copyReceiptDetails() {
   if (!lastConfirmedOrder) return;
-  const text = `Rupantar Order Receipt\nOrder ID: ${lastConfirmedOrder.id}\nStatus: ${lastConfirmedOrder.paymentStatus}\nTotal: ₹${lastConfirmedOrder.pricing?.total}\nCustomer: ${lastConfirmedOrder.customer?.name} (${lastConfirmedOrder.customer?.phone})`;
+  const text = `Rupaantar Order Receipt\nOrder ID: ${lastConfirmedOrder.id}\nStatus: ${lastConfirmedOrder.paymentStatus}\nTotal: ₹${lastConfirmedOrder.pricing?.total}\nCustomer: ${lastConfirmedOrder.customer?.name} (${lastConfirmedOrder.customer?.phone})`;
   navigator.clipboard.writeText(text).then(() => {
     showToast("Order receipt copied to clipboard! 📋");
   });
@@ -2356,7 +2402,7 @@ function shareConfirmedOrderToWhatsApp() {
   const num = (cfg.whatsappNumber || "919876543210").replace(/\D/g, "");
 
   const isPaid = lastConfirmedOrder.paymentStatus === "PAID";
-  let msg = `🌿 *RUPANTAR ORDER CONFIRMATION* 🌿\n\n`;
+  let msg = `🌿 *RUPAANTAR ORDER CONFIRMATION* 🌿\n\n`;
   msg += `*Order ID:* ${lastConfirmedOrder.id}\n`;
   msg += `*Payment:* ${lastConfirmedOrder.paymentStatus} (${lastConfirmedOrder.paymentMethod})\n`;
   msg += `*Customer:* ${lastConfirmedOrder.customer?.name} (${lastConfirmedOrder.customer?.phone})\n\n`;

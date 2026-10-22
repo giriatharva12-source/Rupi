@@ -219,7 +219,7 @@ const server = http.createServer(async (req, res) => {
   // 1. GET /api/config — Public store & gateway configuration
   if (req.method === "GET" && reqPath === "/api/config") {
     return sendJSON(res, 200, {
-      storeName: "Rupantar",
+      storeName: "Rupaantar",
       currency: "INR",
       currencySymbol: "₹",
       deliveryFee: 60,

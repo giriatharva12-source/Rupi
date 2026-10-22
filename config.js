@@ -5,7 +5,7 @@
  */
 
 const DEFAULT_CONFIG = {
-  storeName: "Rupantar",
+  storeName: "Rupaantar",
   tagline: "An ode to India, reimagined.",
   subtext: "Handcrafted spiral-bound diaries made from sustainable rice husk paper.",
   instagramHandle: "@projectrupaantar",
@@ -69,7 +69,9 @@ function getStoreConfig() {
     const saved = localStorage.getItem("rupaantar_store_config");
     if (saved) {
       try {
-        return { ...DEFAULT_CONFIG, ...JSON.parse(saved) };
+        const parsed = JSON.parse(saved);
+        if (parsed.storeName === "Rupantar") parsed.storeName = "Rupaantar";
+        return { ...DEFAULT_CONFIG, ...parsed };
       } catch (e) {
         console.warn("Could not parse saved config", e);
       }
