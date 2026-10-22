@@ -1,0 +1,23 @@
+{
+  "name": "rupaantar-store",
+  "version": "1.0.0",
+  "description": "Rupantar — Handcrafted Rice Husk Paper Folk-Art Diaries with Direct WhatsApp Ordering",
+  "main": "serve.js",
+  "scripts": {
+    "start": "node serve.js",
+    "dev": "node serve.js",
+    "test": "node test_ordering_system.js && node test_journey.js"
+  },
+  "keywords": [
+    "rupaantar",
+    "rice-husk-paper",
+    "diaries",
+    "whatsapp-store",
+    "folk-art"
+  ],
+  "author": "Rupantar",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "puppeteer-core": "^25.15.0"
+  }
+}

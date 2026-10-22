@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rupantar — Handcrafted Rice Husk Paper Diaries</title>
+  <meta name="description" content="Shop handcrafted spiral-bound folk-art diaries made from sustainable rice husk paper.  Order directly via WhatsApp.">
+  <meta name="theme-color" content="#FAF7F2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/png" href="assets/images/rupaantar-logo.png">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar" id="announcementBar">
+    <div class="announcement-content">
+      <span class="announcement-badge">🌾 Rice Husk Paper</span>
+      <span class="announcement-text" id="announcementText">Rupantar — Handcrafted Folk-Art Collection • Handcrafted Folk Art Diaries From ₹199</span>
+      <a href="#catalogue" class="announcement-link">Browse 8 Designs</a>
+    </div>
+  </div>
+
+  <!-- Header & Navigation -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-container">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="brand-logo" id="brandLogoBtn">
+        <img src="assets/images/rupaantar-tree.png" alt="Rupantar Brand Logo" class="brand-logo-img">
+        <div class="logo-text-group">
+          <span class="logo-title" id="navStoreName">Rupantar</span>
+          <span class="logo-subtitle">Handcrafted Folk-Art Diaries</span>
+        </div>
+      </a>
+
+      <!-- Action Buttons -->
+      <div class="header-actions">
+        <!-- Store Config Settings -->
+        <button class="icon-btn settings-btn" id="openSettingsBtn" title="Store & WhatsApp Settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span class="btn-caption">Config</span>
+        </button>
+
+        <!-- Cart Trigger Button -->
+        <button class="cart-trigger-btn" id="openCartBtn" title="View Cart">
+          <div class="cart-icon-wrapper">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span class="cart-count-badge" id="cartCountBadge">0</span>
+          </div>
+          <div class="cart-label-group">
+            <span class="cart-label-sub">Bag</span>
+            <span class="cart-total-preview" id="cartTotalPreview">₹0</span>
+          </div>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <div class="hero-left">
+        <h1 class="hero-title">
+          An ode to India,<br>
+          <span class="italic-serif">reimagined.</span>
+        </h1>
+      </div>
+      <div class="hero-right">
+        <p class="hero-description">
+          Where art meets everyday stories. Diaries handcrafted from upcycled rice husk paper.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Catalogue Section (Pages 3 & 4) -->
+  <section class="catalogue-section" id="catalogue">
+    <div class="catalogue-container">
+      
+      <!-- Section Header -->
+      <div class="catalogue-header">
+        <div class="catalogue-titles">
+          <span class="section-label">Folk-Art Collection</span>
+          <h2 class="section-title">The Eight Folk-Art Designs</h2>
+          <p class="section-sub">Eight folk-art covers, priced by size and pages. Lies flat, easy to write and flip.</p>
+        </div>
+
+
+      </div>
+
+      <!-- Products Grid (8 Signature Designs) -->
+      <div class="products-grid" id="productsGrid">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+
+      <!-- Size & Page Matrix Reference (Page 5 of Catalogue) -->
+      <div class="pricing-matrix-banner">
+        <div class="matrix-header">
+          <span class="section-label">Pricing Matrix</span>
+          <h3>Diaries: Pages & Sizes</h3>
+          <p>Choose your size and page count. Same price across all eight folk-art designs.</p>
+        </div>
+
+        <div class="matrix-cards-grid">
+          <div class="matrix-card">
+            <div class="matrix-pages-badge">10</div>
+            <div class="matrix-card-title">PAGES</div>
+            <div class="matrix-tagline">Light & Compact</div>
+            <p class="matrix-sub">Quick notes & daily pocket jotting</p>
+            <div class="matrix-rates matrix-desktop-rates">
+              <div>10 x 14 cm: <strong>Rs. 199</strong></div>
+              <div>14 x 17.5 cm: <strong>Rs. 229</strong></div>
+            </div>
+            <div class="matrix-mobile-rate">
+              <span class="matrix-start-label">From</span>
+              <strong class="matrix-start-price">Rs. 199</strong>
+            </div>
+          </div>
+
+          <div class="matrix-card highlighted-card">
+            <span class="pop-pill">Balanced Pick</span>
+            <div class="matrix-pages-badge">15</div>
+            <div class="matrix-card-title">PAGES</div>
+            <div class="matrix-tagline">Balanced Pick</div>
+            <p class="matrix-sub">Everyday notes & creative sketching</p>
+            <div class="matrix-rates matrix-desktop-rates">
+              <div>10 x 14 cm: <strong>Rs. 229</strong></div>
+              <div>14 x 17.5 cm: <strong>Rs. 249</strong></div>
+            </div>
+            <div class="matrix-mobile-rate">
+              <span class="matrix-start-label">From</span>
+              <strong class="matrix-start-price">Rs. 229</strong>
+            </div>
+          </div>
+
+          <div class="matrix-card">
+            <div class="matrix-pages-badge">20</div>
+            <div class="matrix-card-title">PAGES</div>
+            <div class="matrix-tagline">Max Room</div>
+            <p class="matrix-sub">Ideas, plans, reflections & memories</p>
+            <div class="matrix-rates matrix-desktop-rates">
+              <div>10 x 14 cm: <strong>Rs. 249</strong></div>
+              <div>14 x 17.5 cm: <strong>Rs. 279</strong></div>
+            </div>
+            <div class="matrix-mobile-rate">
+              <span class="matrix-start-label">From</span>
+              <strong class="matrix-start-price">Rs. 249</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bulk Discounts Banner (Page 7) -->
+        <div class="bulk-discount-card">
+          <div class="bulk-header">
+            <h4>📦 Planning Bulk Gifts or Team Orders?</h4>
+            <p>The more you order, the more you save on every diary across all sizes & page counts.</p>
+          </div>
+          <div class="bulk-tiers">
+            <div class="bulk-tier">
+              <span class="tier-qty">1 - 9</span>
+              <span class="tier-discount">Full price</span>
+              <span class="tier-label">Standard</span>
+            </div>
+            <div class="bulk-tier">
+              <span class="tier-qty">10 - 19</span>
+              <span class="tier-discount">Rs. 10 off</span>
+              <span class="tier-label">Rs. 249 → Rs. 239</span>
+            </div>
+            <div class="bulk-tier popular-tier">
+              <span class="tier-badge">Popular</span>
+              <span class="tier-qty">20 - 49</span>
+              <span class="tier-discount">Rs. 40 off</span>
+              <span class="tier-label">Rs. 249 → Rs. 209</span>
+            </div>
+            <div class="bulk-tier value-tier">
+              <span class="tier-badge">Best Value</span>
+              <span class="tier-qty">50+</span>
+              <span class="tier-discount">Rs. 54 off</span>
+              <span class="tier-label">Rs. 249 → Rs. 195</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Custom Editions & Story Section (Pages 2 & 6) -->
+  <section class="story-section">
+    <div class="story-container">
+      <div class="story-grid">
+        <div class="story-visual">
+          <img src="assets/images/design-02.png" alt="Rupantar Rupantar Diary" class="story-img">
+          <div class="story-quote-card">
+            <p>“From rice husk to paper, with a little story on every page.”</p>
+            <span>— Rupantar | Folk-Art Collection</span>
+          </div>
+        </div>
+        <div class="story-text">
+          <span class="section-label">Custom Editions</span>
+          <h2 class="section-title">Make It Truly Yours.</h2>
+          <p>
+            Customisation is available in both sizes and design. Add your team, your college batch, or your own illustration to the cover (just like our Team 25-26 edition).
+          </p>
+          <p>
+            Perfect for teams, student batches, corporate events, weddings, and eco-conscious gifting.
+          </p>
+
+          <div class="hero-actions" style="margin-top: 1.5rem;">
+            <button class="btn btn-secondary" onclick="openCustomQuoteWhatsApp()">
+              <span>💬 Message for Custom Quote (@projectrupaantar)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       ★ DEDICATED WHATSAPP QUICK BUY POP-UP MODAL (THE CORE USER REQUEST)
+       ========================================================================== -->
+    <!-- Quick Buy / Product Order Modal -->
+  <div class="modal-backdrop" id="quickBuyModalBackdrop">
+    <div class="modal-dialog quick-buy-modal" id="quickBuyModal">
+      <button class="modal-close-btn" id="closeQuickBuyModalBtn" onclick="closeQuickBuyModal()" title="Close modal">&times;</button>
+      
+      <!-- Step Indicator Bar -->
+      <div class="step-progress-bar mini-progress-bar">
+        <div class="step-progress-item active" id="qbStep1Pill" onclick="goToQuickBuyStep(1)" title="Step 1">
+          <span class="step-badge">1</span>
+        </div>
+        <div class="step-progress-divider"></div>
+        <div class="step-progress-item" id="qbStep2Pill" onclick="goToQuickBuyStep(2)" title="Step 2">
+          <span class="step-badge">2</span>
+        </div>
+      </div>
+
+      <!-- STEP 1: CONFIRM QUANTITY & TYPE -->
+      <div class="qb-step-view active" id="qbStep1View">
+        <div class="qb-detailed-showcase">
+          <div class="qb-showcase-media">
+            <img id="qbProductImg" src="assets/images/design-01.png" alt="Diary Preview" class="qb-showcase-img" onerror="this.src='assets/images/design-01.png'">
+          </div>
+          <div class="qb-showcase-details">
+            <h3 id="qbDesignTitle" class="qb-showcase-title">01. Aaroh Signature</h3>
+            <p id="qbDesignTagline" class="qb-showcase-desc">A folk-art figure framed in a gilded mandala. The face of the AAROH collection.</p>
+            
+            <div class="qb-specs-single-line">
+              <span class="qb-single-spec-pill">🌾 <strong>Rice Husk Paper</strong></span>
+              <span class="qb-spec-bullet">•</span>
+              <span class="qb-single-spec-pill">📖 <strong>Spiral Bound</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="quick-buy-body">
+          <!-- Size Selector -->
+          <div class="qb-section">
+            <label class="qb-label">1. Choose Size:</label>
+            <div class="qb-options-grid" id="qbSizeSelector">
+              <button type="button" class="qb-chip active" data-size="10x14" onclick="setQuickBuySize('10x14', this)">
+                <span class="chip-main">10 x 14 cm</span>
+                <span class="chip-sub">Compact</span>
+              </button>
+              <button type="button" class="qb-chip" data-size="14x17.5" onclick="setQuickBuySize('14x17.5', this)">
+                <span class="chip-main">14 x 17.5 cm</span>
+                <span class="chip-sub">Large</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Page Count Selector -->
+          <div class="qb-section">
+            <label class="qb-label">2. Choose Page Count (Rice Husk Paper):</label>
+            <div class="qb-options-grid" id="qbPageSelector">
+              <button type="button" class="qb-chip active" data-pages="10" onclick="setQuickBuyPages(10, this)">
+                <span class="chip-main">10 Pages</span>
+                <span class="chip-sub" id="qbRate-10">Rs. 199</span>
+              </button>
+              <button type="button" class="qb-chip" data-pages="15" onclick="setQuickBuyPages(15, this)">
+                <span class="chip-main">15 Pages</span>
+                <span class="chip-sub" id="qbRate-15">Rs. 229</span>
+              </button>
+              <button type="button" class="qb-chip" data-pages="20" onclick="setQuickBuyPages(20, this)">
+                <span class="chip-main">20 Pages</span>
+                <span class="chip-sub" id="qbRate-20">Rs. 249</span>
+              </button>
+            </div>
+          </div>
+
+                    <!-- 3. Customisation & Branding (Optional) -->
+          <div class="qb-section">
+            <label class="qb-label" for="qbCustCustomization">3. Customisation & Branding (Optional):</label>
+            <div class="qb-customisation-group">
+              <input type="text" id="qbCustCustomization" class="qb-input" placeholder="e.g., Name embossing, gift message, company branding" maxlength="120" autocomplete="off">
+              <div class="qb-custom-chips">
+                <button type="button" class="qb-custom-chip-btn" onclick="addCustomPreset('Name Embossing: ')">+ Name Embossing</button>
+                <button type="button" class="qb-custom-chip-btn" onclick="addCustomPreset('Custom Logo Print: ')">+ Custom Logo</button>
+                <button type="button" class="qb-custom-chip-btn" onclick="addCustomPreset('Bulk Event Order: ')">+ Bulk Event</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Quantity & Total Price -->
+          <div class="qb-section qb-qty-section">
+            <div class="qb-qty-row">
+              <div class="qb-qty-left">
+                <label class="qb-label" for="qbQtyInput">4. Quantity:</label>
+                <div class="qty-stepper">
+                  <button type="button" class="qty-step-btn" onclick="stepQuickBuyQty(-1)" aria-label="Decrease quantity">-</button>
+                  <input type="number" id="qbQtyInput" class="qty-input" value="1" min="1" max="5000" oninput="handleQuickBuyQtyChange(this.value)">
+                  <button type="button" class="qty-step-btn" onclick="stepQuickBuyQty(1)" aria-label="Increase quantity">+</button>
+                </div>
+              </div>
+
+              <div class="qb-live-price-box">
+                <span class="qb-price-label">Total Price:</span>
+                <div class="qb-price-row">
+                  <span class="qb-discounted-unit" id="qbUnitPriceDisplay">₹199</span>
+                  <span class="qb-original-unit" id="qbOrigUnitPriceDisplay" style="display:none;"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bulk Discount Nudge / Congratulations Party Popper -->
+            <div class="qb-discount-nudge-container" id="qbDiscountNudge">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Step 1 Actions (Item Total removed per user request) -->
+          <div class="qb-footer-action">
+            <span id="qbSummaryQty" style="display:none;">1 diary</span>
+            <span id="qbTotalAmountDisplay" style="display:none;">₹199</span>
+
+            <div class="qb-modal-cta-grid" style="margin-top: 0.5rem;">
+              <button type="button" class="qb-add-cart-cta-btn" onclick="addQuickBuyToCartAndOpen()" title="Add configured diary to shopping bag">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="9" cy="20" r="1"></circle>
+                  <circle cx="18" cy="20" r="1"></circle>
+                  <path d="M1 1h4l2.6 12a2 2 0 0 0 2 1.6h9a2 2 0 0 0 2-1.5L22 5H6"></path>
+                  <line x1="11" y1="8" x2="17" y2="8"></line>
+                  <line x1="14" y1="5" x2="14" y2="11"></line>
+                </svg>
+                <span>Add to Bag</span>
+              </button>
+
+              <button type="button" class="qb-next-step-btn" onclick="goToQuickBuyStep(2)">
+                <span>Next: Delivery Details →</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: ADDRESS & ALL DETAILS (QUICK BUY) -->
+      <div class="qb-step-view" id="qbStep2View" style="display:none; padding: 1rem 1.25rem;">
+        <div class="step-summary-card">
+          <div class="step-summary-content">
+            <strong id="qbStep2SummaryTitle">01. Aaroh Signature</strong>
+            <span id="qbStep2SummarySpecs">10x14 cm • 10 pgs • Qty: 1</span>
+          </div>
+          <div class="step-summary-price" id="qbStep2TotalAmountDisplay" style="font-size:1.15rem; font-weight:700; color:#17350a;">₹199</div>
+          <button type="button" class="step-edit-btn" onclick="goToQuickBuyStep(1)">← Edit Specs</button>
+        </div>
+
+        <div class="cart-delivery-form-container">
+          <div class="delivery-form" style="display:flex; flex-direction:column; gap:0.85rem;">
+            <p class="form-help-text" style="font-size:0.82rem; color:var(--color-muted); margin-bottom:0.5rem;">Enter your delivery details to pre-fill your order directly into WhatsApp chat.</p>
+            
+            <div class="form-group">
+              <label for="qbCustName" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.25rem;">Your Full Name <span class="required" style="color:var(--color-terracotta);">*</span></label>
+              <input type="text" id="qbCustName" class="form-input" placeholder="e.g. Priya Sharma" autocomplete="off" required style="width:100%; padding:0.65rem 0.85rem; border:1.5px solid var(--border-color); border-radius:var(--radius-md); font-size:0.9rem;">
+              <span class="field-error-message" id="qbNameError" style="display:none; color:var(--color-terracotta); font-size:0.75rem; margin-top:0.2rem;">Please enter your name.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="qbCustPhone" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.25rem;">WhatsApp Phone Number <span class="required" style="color:var(--color-terracotta);">*</span></label>
+              <div class="phone-input-group">
+                <select id="qbCountryCode" class="country-code-dropdown" aria-label="Country Code">
+                  <option value="+91" selected>🇮🇳 +91</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+44">🇬🇧 +44</option>
+                  <option value="+971">🇦🇪 +971</option>
+                  <option value="+65">🇸🇬 +65</option>
+                  <option value="+61">🇦🇺 +61</option>
+                  <option value="+49">🇩🇪 +49</option>
+                  <option value="+966">🇸🇦 +966</option>
+                </select>
+                <input 
+                  type="tel" 
+                  id="qbCustPhone" 
+                  placeholder="10-digit mobile number" 
+                  class="phone-number-input" 
+                  autocomplete="off" 
+                  maxlength="10" 
+                  inputmode="numeric" 
+                  oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10);"
+                  required
+                >
+              </div>
+              <span class="field-error-message" id="qbPhoneError" style="display:none; color:var(--color-terracotta); font-size:0.75rem; margin-top:0.2rem;">Please enter a valid 10-digit WhatsApp number.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="qbCustAddress" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.25rem;">Full Delivery Address (Optional - can also share in WhatsApp)</label>
+              <textarea id="qbCustAddress" rows="2" class="form-input" placeholder="House/Flat, Street, Area" autocomplete="off" style="width:100%; padding:0.65rem 0.85rem; border:1.5px solid var(--border-color); border-radius:var(--radius-md); font-size:0.9rem; resize:vertical;"></textarea>
+            </div>
+
+            <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+              <div class="form-group">
+                <label for="qbCustCity" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.25rem;">City</label>
+                <input type="text" id="qbCustCity" class="form-input" placeholder="e.g. Bengaluru" autocomplete="off" style="width:100%; padding:0.65rem 0.85rem; border:1.5px solid var(--border-color); border-radius:var(--radius-md); font-size:0.9rem;">
+              </div>
+              <div class="form-group">
+                <label for="qbCustPincode" style="font-size:0.85rem; font-weight:600; color:var(--color-charcoal); display:block; margin-bottom:0.25rem;">PIN Code</label>
+                <input type="text" id="qbCustPincode" class="form-input" placeholder="6-digit PIN" maxlength="6" autocomplete="off" style="width:100%; padding:0.65rem 0.85rem; border:1.5px solid var(--border-color); border-radius:var(--radius-md); font-size:0.9rem;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cart-step2-actions" style="margin-top:1.25rem;">
+          <button type="button" class="qb-back-step-btn" onclick="goToQuickBuyStep(1)">
+            <span>← Back</span>
+          </button>
+          <button type="button" class="cart-sticky-checkout-btn" id="qbWhatsAppDirectBtn" onclick="launchQuickBuyWhatsApp()">
+            <span id="qbOrderBtnText">Confirm & Order</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       CART DRAWER (SLIDE-IN) & 2-STEP ORDERING
+       ========================================================================== -->
+  <div class="cart-backdrop" id="cartBackdrop" onclick="closeCart()"></div>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping Bag">
+    <div class="cart-drawer-header">
+      <div class="cart-header-title">
+        <h3>Shopping Bag</h3>
+        <span class="cart-items-counter" id="drawerCartCount">(0 items)</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span id="cartTotalPreview" style="font-weight: 700; color: #17350a; font-size: 1.05rem;">₹0</span>
+        <button class="cart-drawer-close" id="closeCartDrawerBtn" onclick="closeCart()" aria-label="Close cart">&times;</button>
+      </div>
+    </div>
+
+    <div class="cart-drawer-body" id="cartDrawerBody">
+      <!-- Step Progress Bar (Minimal 1 and 2 pills) -->
+      <div class="drawer-progress-bar mini-progress-bar">
+        <div class="step-progress-item active" id="cartStep1Pill" onclick="goToCartStep(1)" title="Step 1: Review Bag">
+          <span class="step-badge">1</span>
+        </div>
+        <div class="step-progress-divider"></div>
+        <div class="step-progress-item" id="cartStep2Pill" onclick="goToCartStep(2)" title="Step 2: Delivery Details">
+          <span class="step-badge">2</span>
+        </div>
+      </div>
+
+      <!-- STEP 1: REVIEW BAG & QUANTITY -->
+      <div class="cart-step-view active" id="cartStep1View">
+        <div class="free-shipping-card" id="cartDiscountCard">
+          <div class="free-shipping-text" id="cartDiscountText">Add <strong>10 books</strong> for <strong>5% OFF on each book</strong>!</div>
+          <div class="free-shipping-bar-bg">
+            <div class="free-shipping-bar-fill" id="cartDiscountBarFill" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <div class="cart-items-list" id="cartItemsList"></div>
+
+        <div class="cart-bill-summary" id="cartStep1BillSummary" style="padding: 1rem 1.25rem; background: var(--bg-parchment); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+          <div class="bill-row">
+            <span>Items Subtotal</span>
+            <span id="billSubtotal">₹0</span>
+          </div>
+          <div class="bill-row" id="billDiscountRow" style="display:none; color:#15803d; font-weight:600;">
+            <span>Bulk Discount (5% Off 10+ books)</span>
+            <span id="billDiscountAmount">-₹0</span>
+          </div>
+          <div class="bill-row" id="billDeliveryRow">
+            <span>Delivery Fee</span>
+            <span id="billDeliveryFee" style="color:#17350a; font-weight:600;">Free / WhatsApp direct</span>
+          </div>
+          <div class="bill-row bill-total-row">
+            <span>Estimated Total</span>
+            <span id="billTotal" class="total-highlight">₹0</span>
+          </div>
+        </div>
+
+        <div class="cart-step-action-bar" style="padding: 1rem 1.25rem;">
+          <button type="button" class="cart-next-btn" onclick="goToCartStep(2)">
+            <span>Next: Delivery Details →</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: ADDRESS & ALL DETAILS (CART) -->
+      <div class="cart-step-view" id="cartStep2View" style="display:none;">
+        <div class="step-summary-card">
+          <div class="step-summary-content">
+            <strong id="cartStep2ItemsCount">1 item in Bag</strong>
+            <span id="cartStep2TotalPreview">Total: ₹199</span>
+          </div>
+          <button type="button" class="step-edit-btn" onclick="goToCartStep(1)">← Edit Bag</button>
+        </div>
+
+        <div class="cart-delivery-form-container">
+          <div class="delivery-form" id="deliveryForm" style="display:flex;">
+            <p class="form-help-text">Enter your delivery details to pre-fill your order directly into WhatsApp chat.</p>
+            
+            <div class="form-group">
+              <label for="custName">Your Full Name <span class="required">*</span></label>
+              <input type="text" id="custName" placeholder="" autocomplete="off" required>
+            </div>
+
+            <div class="form-group">
+              <label for="custPhone">WhatsApp Phone Number <span class="required">*</span></label>
+              <div class="phone-input-group">
+                <select id="custCountryCode" class="country-code-dropdown" aria-label="Country Code">
+                  <option value="+91" selected>🇮🇳 +91</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+44">🇬🇧 +44</option>
+                  <option value="+971">🇦🇪 +971</option>
+                  <option value="+65">🇸🇬 +65</option>
+                  <option value="+61">🇦🇺 +61</option>
+                  <option value="+49">🇩🇪 +49</option>
+                  <option value="+966">🇸🇦 +966</option>
+                </select>
+                <input 
+                  type="tel" 
+                  id="custPhone" 
+                  placeholder="10-digit mobile number" 
+                  class="phone-number-input" 
+                  autocomplete="off" 
+                  maxlength="10" 
+                  inputmode="numeric" 
+                  oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10);"
+                  required
+                >
+              </div>
+              <span class="field-error-message" id="cartPhoneError" style="display:none;">Please enter a valid 10-digit WhatsApp number.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="custAddress">Full Delivery Address (Optional - can also share in WhatsApp)</label>
+              <textarea id="custAddress" rows="2" placeholder="" autocomplete="off"></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="custCity">City</label>
+                <input type="text" id="custCity" placeholder="" autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label for="custPincode">PIN Code</label>
+                <input type="text" id="custPincode" placeholder="" maxlength="6" autocomplete="off">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="custNotes">Gifting Note / Custom Instructions (Optional)</label>
+              <input type="text" id="custNotes" placeholder="" autocomplete="off">
+            </div>
+          </div>
+        </div>
+
+        <div class="cart-step2-actions">
+          <button type="button" class="cart-back-btn" onclick="goToCartStep(1)">
+            <span>← Back</span>
+          </button>
+          <button class="cart-sticky-checkout-btn" id="proceedWhatsAppOrderBtn" onclick="proceedToWhatsAppCheckout()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+            <span id="proceedBtnLabel">Confirm & Order</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Pinned Sticky Bottom WhatsApp Checkout Bar (Always visible on screen!) -->
+    <div class="cart-drawer-sticky-footer" id="cartDrawerStickyFooter">
+      <div class="cart-sticky-total-row">
+        <span>Estimated Total:</span>
+        <strong class="cart-sticky-grand-total" id="stickyBillTotal">₹0</strong>
+      </div>
+
+      <button class="whatsapp-checkout-btn" id="stickyProceedWhatsAppOrderBtn" onclick="proceedToWhatsAppCheckout()">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+        </svg>
+        <span id="stickyProceedBtnLabel">💬 Send Full Bag to WhatsApp →</span>
+      </button>
+
+      <div style="display:flex; gap:0.4rem; justify-content:center; margin-top:0.35rem;">
+        <button type="button" class="copy-order-btn" onclick="copyOrderTextToClipboard()" style="padding:0.35rem 0.75rem; font-size:0.75rem;">
+          📋 Copy Bag Text
+        </button>
+      </div>
+
+      <p class="whatsapp-direction-note">
+        📲 Tapping opens WhatsApp with your prefilled order items. Review and tap <strong>Send</strong> in WhatsApp to dispatch directly to Rupaantar artisans!
+      </p>
+    </div>
+
+    <!-- Empty Bag State -->
+    <div class="empty-cart-state" id="emptyCartState" style="display:none;">
+      <div class="empty-cart-art">🌾</div>
+      <h4>Your Bag is Empty</h4>
+      <p>Choose any of our 8 handcrafted folk-art diaries to begin, or use the instant WhatsApp buy pop-up.</p>
+      <button class="btn btn-primary" onclick="closeCart(); document.getElementById('catalogue').scrollIntoView({behavior:'smooth'});">
+        Browse 8 Designs
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- Store Owner Settings Modal -->
+  <div class="modal-backdrop" id="settingsModalBackdrop">
+    <div class="modal-dialog settings-modal">
+      <button class="modal-close-btn" id="closeSettingsModalBtn">&times;</button>
+      <div class="settings-modal-content">
+        <div class="settings-modal-header">
+          <span class="settings-badge">Admin & Config</span>
+          <h3>Store & WhatsApp Settings</h3>
+          <p>Configure Rupaantar's WhatsApp checkout number and delivery fee.</p>
+        </div>
+
+        <form id="storeSettingsForm" class="settings-form">
+          <div class="form-group">
+            <label for="settingStoreName">Store / Collection Name</label>
+            <input type="text" id="settingStoreName" value="Rupantar">
+          </div>
+
+          <div class="form-group">
+            <label for="settingWhatsAppNum">
+              WhatsApp Business Phone Number <span class="required">*</span>
+              <small>(Digits with country code, e.g. 919876543210)</small>
+            </label>
+            <input type="text" id="settingWhatsAppNum" placeholder="919876543210" required>
+            <span class="input-hint">Customer orders will be routed to this WhatsApp number.</span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="settingDeliveryFee">Delivery Fee (₹)</label>
+              <input type="number" id="settingDeliveryFee" value="60" min="0">
+            </div>
+            <div class="form-group">
+              <label for="settingFreeThreshold">Free Delivery Above (₹)</label>
+              <input type="number" id="settingFreeThreshold" value="799" min="0">
+            </div>
+          </div>
+
+          <div class="settings-actions">
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+            <button type="button" class="btn btn-outline" id="resetDefaultsBtn">Reset to Defaults</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share Store on WhatsApp Modal -->
+  <div class="modal-backdrop" id="shareStoreModalBackdrop">
+    <div class="modal-dialog share-modal">
+      <button class="modal-close-btn" id="closeShareStoreModalBtn" onclick="closeShareStoreModal()">&times;</button>
+      <div class="quick-buy-header">
+        <span class="quick-buy-tag">📲 Send Store Link on WhatsApp</span>
+        <h3>Share Website with Customers</h3>
+        <p class="qb-sub">Copy or send this link to your WhatsApp channel, community, or individual chats. Customers can browse all 8 designs and send orders directly back to you.</p>
+      </div>
+
+      <div class="qb-section">
+        <label class="qb-label">Broadcast Message Preview:</label>
+        <div class="share-preview-card" id="shareWhatsAppMessagePreview"></div>
+      </div>
+
+      <div class="qb-footer-action">
+        <button class="whatsapp-checkout-btn qb-main-cta" onclick="sendStoreOnWhatsApp()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+          </svg>
+          <span>Share Directly to WhatsApp Channel</span>
+        </button>
+
+        <div class="qb-sub-actions">
+          <button type="button" class="copy-order-btn" onclick="copyStoreAnnouncementToClipboard()">
+            📝 Copy Broadcast Message
+          </button>
+          <button type="button" class="copy-order-btn" onclick="copyStoreLinkToClipboard()">
+            📋 Copy Website Link Only
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Ethos / Pillars Bar (Page 2) -->
+  <section class="ethos-section">
+    <div class="ethos-container" id="ethosContainer">
+      <!-- Injected from config -->
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      
+      <div class="footer-column brand-col">
+        <div class="footer-logo-row">
+          <img src="assets/images/rupaantar-logo.png" alt="Rupaantar Logo" class="footer-logo-img">
+          <div>
+            <span class="footer-logo-title">Rupantar</span>
+            <span class="footer-logo-sub">Handcrafted Diaries</span>
+          </div>
+        </div>
+        <p class="footer-about">
+          An ode to India, reimagined. Handcrafted spiral-bound diaries made from sustainable rice husk paper.
+        </p>
+        <div class="footer-contact-item">
+          <span>💬 WhatsApp Orders:</span>
+          <a href="#" id="footerWhatsAppLink" class="footer-link-highlight">+91 98765 43210</a>
+        </div>
+        <div class="footer-contact-item">
+          <span>📷 Instagram:</span>
+          <a href="https://www.instagram.com/projectrupaantar?mdxt=MXF5NGM0cGJ6M2p3Nw==" target="_blank" rel="noopener noreferrer" class="footer-link-highlight" id="footerInstagramLink">@projectrupaantar</a>
+        </div>
+      </div>
+
+
+
+      <div class="footer-column guarantee-col">
+        <h4>Our Promise</h4>
+        <div class="footer-promise-card">
+          <div class="promise-row">
+            <span class="promise-icon">🌾</span>
+            <div>
+              <strong>Rice Husk Paper</strong>
+              <p>Sustainable, earthy, natural feel. Zero forest timber.</p>
+            </div>
+          </div>
+          <div class="promise-row">
+            <span class="promise-icon">🤝</span>
+            <div>
+              <strong>Social Craft Initiative</strong>
+              <p>Directly empowering rural Indian bookmaking craftsmen.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-container">
+        <p>© 2026 Rupantar. All rights reserved.</p>
+        <p class="footer-subtext">Order fulfillment via WhatsApp • <a href="https://www.instagram.com/projectrupaantar?mdxt=MXF5NGM0cGJ6M2p3Nw==" target="_blank" rel="noopener noreferrer" class="footer-sub-link">@projectrupaantar</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="config.js"></script>
+  <script src="catalogue.js"></script>
+  <script src="app.js"></script>
+
+  <!-- Next Step WhatsApp Instruction Modal -->
+  <div class="modal-backdrop" id="orderConfirmationModalBackdrop" style="display:none;">
+    <div class="next-step-modal" id="orderConfirmationModal">
+      <button class="modal-close-btn" onclick="closeOrderConfirmationModal()" title="Close">&times;</button>
+      <div class="next-step-icon">💬</div>
+      <h3 class="next-step-title">Order Transmitted to WhatsApp!</h3>
+      <p class="next-step-desc">
+        We have opened WhatsApp and prefilled your complete diary order details.
+      </p>
+
+      <div class="next-step-box">
+        <strong>⚠️ Crucial Next Step:</strong>
+        <ol>
+          <li>Switch to your WhatsApp window or app.</li>
+          <li>Review the prefilled order summary.</li>
+          <li>Tap <strong>Send</strong> to send the message to Rupaantar.</li>
+          <li>Our artisan team will confirm your order, customization, and share the UPI / payment details!</li>
+        </ol>
+      </div>
+
+      <div class="next-step-actions">
+        <button type="button" class="btn-whatsapp-again" id="reopenWhatsAppOrderBtn" onclick="reopenLastWhatsAppOrder()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+          </svg>
+          Re-open WhatsApp Chat
+        </button>
+        <button type="button" class="btn-secondary-link" onclick="copyLastOrderText()">
+          📋 Copy Order Text to Clipboard
+        </button>
+        <button type="button" class="btn-secondary-link" onclick="closeOrderConfirmationModal()">
+          ✓ Done / Back to Website
+        </button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
