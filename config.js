@@ -21,6 +21,8 @@ const DEFAULT_CONFIG = {
    */
   whatsappNumber: "917972639254",
   whatsappDisplayNumber: "+91 79726 39254",
+  upiId: "7972639254@ybl",
+  payeeName: "Atharva Giri",
 
   currencySymbol: "₹",
   currencyCode: "INR",
@@ -71,6 +73,10 @@ function getStoreConfig() {
       try {
         const parsed = JSON.parse(saved);
         if (parsed.storeName === "Rupantar") parsed.storeName = "Rupaantar";
+        parsed.whatsappNumber = DEFAULT_CONFIG.whatsappNumber;
+        parsed.whatsappDisplayNumber = DEFAULT_CONFIG.whatsappDisplayNumber;
+        parsed.upiId = DEFAULT_CONFIG.upiId;
+        parsed.payeeName = DEFAULT_CONFIG.payeeName;
         return { ...DEFAULT_CONFIG, ...parsed };
       } catch (e) {
         console.warn("Could not parse saved config", e);
