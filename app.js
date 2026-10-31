@@ -2470,10 +2470,7 @@ function showUPIPaymentModal(data, context) {
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 10px;">
-        <a href="${data.upiIntentUrl}" style="background: #17350a; color: #ffffff; text-decoration: none; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; display: block;">
-          📲 Open in GPay / PhonePe / Paytm / CRED
-        </a>
-        <button id="upiConfirmPaidBtn" style="background: #10b981; color: #ffffff; border: none; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer;">
+        <button id="upiConfirmPaidBtn" style="background: #203411; color: #ffffff; border: none; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: background 0.2s ease;">
           ✅ I Have Completed Payment
         </button>
         <button id="upiCancelBtn" style="background: transparent; color: #64748b; border: 1px solid #cbd5e1; padding: 8px; border-radius: 8px; font-size: 13px; cursor: pointer;">

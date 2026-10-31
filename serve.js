@@ -234,8 +234,6 @@ const server = http.createServer(async (req, res) => {
       isGatewayConfigured: true,
       supportedPaymentMethods: [
         { id: "UPI", label: "UPI / QR", desc: "Google Pay, PhonePe, Paytm, BHIM or scan QR" },
-        { id: "CARD", label: "Credit / Debit Cards", desc: "RuPay, Visa, Mastercard, Maestro (Secure gateway)" },
-        { id: "NETBANKING", label: "Net Banking", desc: "All major Indian banks supported" },
         { id: "COD", label: "Cash on Delivery", desc: "Pay with Cash or UPI upon doorstep delivery" }
       ]
     });
@@ -253,7 +251,7 @@ const server = http.createServer(async (req, res) => {
       const { items, pricing } = calculateServerPricing(body.items);
       const paymentMethod = (body.paymentMethod || "COD").toUpperCase();
 
-      const validMethods = ["UPI", "CARD", "NETBANKING", "COD", "WHATSAPP"];
+      const validMethods = ["UPI", "COD", "WHATSAPP"];
       if (!validMethods.includes(paymentMethod)) {
         return sendJSON(res, 400, { success: false, message: "Invalid payment method" });
       }

@@ -15,8 +15,6 @@ module.exports = (req, res) => {
     isGatewayConfigured: true,
     supportedPaymentMethods: [
       { id: "UPI", label: "UPI / QR", desc: "Google Pay, PhonePe, Paytm, BHIM or scan QR" },
-      { id: "CARD", label: "Credit / Debit Cards", desc: "RuPay, Visa, Mastercard, Maestro" },
-      { id: "NETBANKING", label: "Net Banking", desc: "All major Indian banks supported" },
       { id: "COD", label: "Cash on Delivery", desc: "Pay with Cash or UPI upon doorstep delivery" }
     ]
   });
