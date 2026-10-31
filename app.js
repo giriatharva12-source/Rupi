@@ -2386,6 +2386,58 @@ async function submitCartOrder() {
   }
 }
 
+function sendPaymentConfirmedWhatsAppMessage(order) {
+  if (!order) return;
+  const cfg = getStoreConfig();
+  const num = (cfg.whatsappNumber || "917972639254").replace(/\D/g, "");
+
+  let msg = `🌿 *RUPAANTAR — PAYMENT COMPLETED* 🌿\n\n`;
+  msg += `Hi Atharva! I have completed the UPI payment for my order. Please verify and confirm.\n\n`;
+  msg += `📌 *Order ID:* ${order.id}\n`;
+  msg += `💰 *Amount Paid:* ₹${order.pricing?.total}\n`;
+  msg += `💳 *Paid To:* ${cfg.upiId || "7972639254@ybl"} (${cfg.payeeName || "Atharva Giri"})\n`;
+  msg += `📊 *Status:* Payment Done (Awaiting your confirmation)\n\n`;
+
+  msg += `👤 *Customer Details:*\n`;
+  msg += `• Name: ${order.customer?.name || "Customer"}\n`;
+  msg += `• Phone: ${order.customer?.phone || "N/A"}\n`;
+  if (order.customer?.email) {
+    msg += `• Email: ${order.customer.email}\n`;
+  }
+
+  const a = order.customer?.address;
+  if (a) {
+    msg += `\n📍 *Complete Delivery Address:*\n`;
+    if (a.house) msg += `House / Flat / Bldg: ${a.house}\n`;
+    if (a.street) msg += `Street / Area: ${a.street}\n`;
+    if (a.landmark) msg += `Landmark: ${a.landmark}\n`;
+    msg += `City: ${a.city || ""}, State: ${a.state || ""}\n`;
+    msg += `PIN Code: ${a.pincode || ""}\n`;
+  }
+
+  if (order.customer?.deliveryInstructions) {
+    msg += `📝 *Delivery Instructions:* ${order.customer.deliveryInstructions}\n`;
+  }
+
+  msg += `\n📦 *Items Ordered:*\n`;
+  (order.items || []).forEach((it, idx) => {
+    const itemTotal = it.itemTotal || (it.unitPrice ? it.unitPrice * it.quantity : (it.price ? it.price * it.quantity : ""));
+    msg += `${idx + 1}. ${it.name} [${it.size}, ${it.pages} pgs] × ${it.quantity}${itemTotal ? " = ₹" + itemTotal : ""}\n`;
+    if (it.customization) {
+      msg += `   Customization Note: "${it.customization}"\n`;
+    }
+  });
+
+  msg += `\nPlease confirm after checking in your bank and let me know when dispatched. Thank you! 🙏`;
+
+  const waUrl = `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+  try {
+    window.location.href = waUrl;
+  } catch (e) {
+    window.open(waUrl, "_blank");
+  }
+}
+
 function showUPIPaymentModal(data, context) {
   let modal = document.getElementById("directUPIModal");
   if (!modal) {
@@ -2435,25 +2487,27 @@ function showUPIPaymentModal(data, context) {
 
   const confirmBtn = document.getElementById("upiConfirmPaidBtn");
   if (confirmBtn) {
-    confirmBtn.onclick = async () => {
+    confirmBtn.onclick = () => {
       confirmBtn.disabled = true;
-      confirmBtn.textContent = "Confirming payment... ⏳";
-      let resOrder = null;
+      confirmBtn.textContent = "Opening WhatsApp & Confirming... ⏳";
+
+      const finalOrder = data.order || data;
+      if (finalOrder) {
+        finalOrder.paymentStatus = "PAID (UPI Confirmed)";
+        finalOrder.orderStatus = "PROCESSING";
+      }
+
+      // Automatically send message on WhatsApp with payment done & address details to 7972639254
+      sendPaymentConfirmedWhatsAppMessage(finalOrder);
+
+      // Report confirmation to backend in background if available
       try {
-        const res = await fetch("/api/confirm-upi-payment", {
+        fetch("/api/confirm-upi-payment", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ orderId: data.orderId })
-        });
-        if (res.ok) {
-          const resData = await res.json().catch(() => null);
-          if (resData && resData.order) {
-            resOrder = resData.order;
-          }
-        }
-      } catch (e) {
-        console.warn("Server confirmation offline, proceeding with client confirmation:", e);
-      }
+        }).catch(() => {});
+      } catch (e) {}
 
       modal.style.display = "none";
       if (context === "qb") {
@@ -2465,11 +2519,6 @@ function showUPIPaymentModal(data, context) {
         closeCart();
       }
 
-      const finalOrder = resOrder || data.order;
-      if (finalOrder) {
-        finalOrder.paymentStatus = "PAID";
-        finalOrder.orderStatus = "PROCESSING";
-      }
       showOrderSuccessModal(finalOrder);
     };
   }
@@ -2655,26 +2704,7 @@ function copyReceiptDetails() {
 
 function shareConfirmedOrderToWhatsApp() {
   if (!lastConfirmedOrder) return;
-  const cfg = getStoreConfig();
-  const num = (cfg.whatsappNumber || "917972639254").replace(/\D/g, "");
-
-  const isPaid = lastConfirmedOrder.paymentStatus === "PAID";
-  let msg = `🌿 *RUPAANTAR ORDER CONFIRMATION* 🌿\n\n`;
-  msg += `*Order ID:* ${lastConfirmedOrder.id}\n`;
-  msg += `*Payment:* ${lastConfirmedOrder.paymentStatus} (${lastConfirmedOrder.paymentMethod})\n`;
-  msg += `*Customer:* ${lastConfirmedOrder.customer?.name} (${lastConfirmedOrder.customer?.phone})\n\n`;
-  msg += `*Items Ordered:*\n`;
-  (lastConfirmedOrder.items || []).forEach((it, idx) => {
-    msg += `${idx + 1}. ${it.name} [${it.size}, ${it.pages} pgs] × ${it.quantity} = ₹${it.itemTotal}\n`;
-  });
-  msg += `\n*Total Payable:* ₹${lastConfirmedOrder.pricing?.total}\n`;
-  const a = lastConfirmedOrder.customer?.address;
-  if (a) {
-    msg += `*Delivery Address:* ${a.house}, ${a.street}, ${a.city}, ${a.state} - ${a.pincode}\n`;
-  }
-  msg += `\nThank you for supporting traditional Indian artisans and sustainable rice husk paper!`;
-
-  window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`, "_blank");
+  sendPaymentConfirmedWhatsAppMessage(lastConfirmedOrder);
 }
 
 // ==========================================================================
