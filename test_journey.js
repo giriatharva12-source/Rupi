@@ -57,7 +57,7 @@ orderMsg += `• Customer: ${customer.name} (${customer.phone})\n`;
 orderMsg += `• Location: ${customer.address}, ${customer.city}\n`;
 
 const waUrl = getWhatsAppUrl(orderMsg);
-assert(waUrl.includes("wa.me/919876543210"));
+assert(waUrl.includes(`wa.me/${DEFAULT_CONFIG.whatsappNumber}`));
 assert(waUrl.includes("Sen%20Tech"));
 console.log("[PASS] WhatsApp order link ready for transmission");
 

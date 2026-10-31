@@ -85,7 +85,8 @@ const testMessage = `🌿 *RUPANTAR DIARY ORDER* 🌿
 • Customer: Rahul Sharma & Associates (+91 98765 43210)`;
 
 const generatedUrl = getWhatsAppUrl(testMessage);
-assert(generatedUrl.startsWith("https://wa.me/919876543210?text="), "URL must start with https://wa.me/919876543210?text=");
+const expectedWaPrefix = `https://wa.me/${DEFAULT_CONFIG.whatsappNumber}?text=`;
+assert(generatedUrl.startsWith(expectedWaPrefix), `URL must start with ${expectedWaPrefix}`);
 assert(generatedUrl.includes("%20"), "Spaces must be URL encoded");
 assert(generatedUrl.includes("%26"), "Ampersands must be properly URL encoded");
 assert(generatedUrl.includes("%0A"), "Line breaks must be properly URL encoded");

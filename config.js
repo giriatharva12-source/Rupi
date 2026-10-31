@@ -19,8 +19,8 @@ const DEFAULT_CONFIG = {
    * NOTE FOR PRODUCTION DEPLOYMENT:
    * Replace this placeholder with Rupaantar's official registered WhatsApp business number.
    */
-  whatsappNumber: "919876543210",
-  whatsappDisplayNumber: "+91 98765 43210",
+  whatsappNumber: "917972639254",
+  whatsappDisplayNumber: "+91 79726 39254",
 
   currencySymbol: "₹",
   currencyCode: "INR",

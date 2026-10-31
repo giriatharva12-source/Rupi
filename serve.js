@@ -218,14 +218,20 @@ const server = http.createServer(async (req, res) => {
 
   // 1. GET /api/config — Public store & gateway configuration
   if (req.method === "GET" && reqPath === "/api/config") {
+    const upiId = process.env.MERCHANT_UPI_ID || "7972639254@ybl";
+    const payeeName = process.env.MERCHANT_PAYEE_NAME || "Atharva Giri";
+    const whatsappNumber = process.env.WHATSAPP_BUSINESS_NUMBER || "917972639254";
     return sendJSON(res, 200, {
       storeName: "Rupaantar",
       currency: "INR",
       currencySymbol: "₹",
       deliveryFee: 60,
       freeDeliveryThreshold: 799,
+      whatsappNumber,
+      upiId,
+      payeeName,
       razorpayKeyId: RAZORPAY_KEY_ID || null,
-      isGatewayConfigured: Boolean(RAZORPAY_KEY_ID && RAZORPAY_KEY_SECRET),
+      isGatewayConfigured: true,
       supportedPaymentMethods: [
         { id: "UPI", label: "UPI / QR", desc: "Google Pay, PhonePe, Paytm, BHIM or scan QR" },
         { id: "CARD", label: "Credit / Debit Cards", desc: "RuPay, Visa, Mastercard, Maestro (Secure gateway)" },
@@ -276,13 +282,57 @@ const server = http.createServer(async (req, res) => {
         });
       }
 
-      // Handle Online Payment (UPI, Cards, Net Banking)
+      // Handle Direct UPI Payment (Atharva Giri / YouPI)
+      if (paymentMethod === "UPI" && !razorpay) {
+        const localOrderId = db.generateOrderId();
+        const upiId = process.env.MERCHANT_UPI_ID || "7972639254@ybl";
+        const payeeName = process.env.MERCHANT_PAYEE_NAME || "Atharva Giri";
+        const totalAmount = pricing.total;
+        const upiIntentUrl = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(payeeName)}&am=${totalAmount.toFixed(2)}&cu=INR&tn=${encodeURIComponent(`Rupaantar ${localOrderId}`)}&tr=${localOrderId}`;
+
+        const order = db.createOrder({
+          id: localOrderId,
+          customer: body.customer,
+          items,
+          pricing,
+          paymentMethod: "UPI",
+          paymentStatus: "AWAITING_PAYMENT",
+          orderStatus: "PLACED",
+          gateway: {
+            provider: "direct_upi",
+            upiId,
+            payeeName,
+            upiIntentUrl,
+            amount: totalAmount,
+            createdAt: new Date().toISOString()
+          }
+        });
+
+        return sendJSON(res, 201, {
+          success: true,
+          orderId: order.id,
+          paymentMethod: "UPI",
+          paymentStatus: "AWAITING_PAYMENT",
+          upiId,
+          payeeName,
+          amount: totalAmount,
+          upiIntentUrl,
+          customer: {
+            name: body.customer.name,
+            phone: body.customer.phone,
+            email: body.customer.email || ""
+          },
+          order
+        });
+      }
+
+      // Handle Online Payment (UPI, Cards, Net Banking) via Razorpay
       if (!razorpay) {
         return sendJSON(res, 400, {
           success: false,
           code: "GATEWAY_NOT_CONFIGURED",
           message:
-            "Razorpay payment gateway credentials are not yet configured in .env. Please set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET, or choose Cash on Delivery / WhatsApp."
+            "Cards/Netbanking credentials not configured. Please choose UPI / QR or Cash on Delivery."
         });
       }
 
@@ -406,6 +456,71 @@ const server = http.createServer(async (req, res) => {
         success: false,
         message: err.message || "Payment verification encountered an error"
       });
+    }
+  }
+
+  // 3b. POST /api/confirm-upi-payment — Confirmation after customer completes UPI transfer
+  if (req.method === "POST" && reqPath === "/api/confirm-upi-payment") {
+    try {
+      const body = await parseBody(req);
+      const { orderId, utrNumber } = body;
+      if (!orderId) {
+        return sendJSON(res, 400, { success: false, message: "Missing orderId" });
+      }
+
+      const updatedOrder = db.updateOrder(orderId, {
+        paymentStatus: "PAID",
+        orderStatus: "PROCESSING",
+        paymentNote: utrNumber ? `UPI Paid - Ref/UTR: ${utrNumber}` : "UPI Paid via Direct App/QR",
+        gateway: {
+          provider: "direct_upi",
+          utrNumber: utrNumber || null,
+          confirmedAt: new Date().toISOString()
+        }
+      });
+
+      console.log(`✓ Direct UPI Order ${orderId} marked PAID successfully`);
+      return sendJSON(res, 200, {
+        success: true,
+        orderId,
+        paymentStatus: "PAID",
+        order: updatedOrder
+      });
+    } catch (err) {
+      console.error("UPI confirmation error:", err);
+      return sendJSON(res, 500, {
+        success: false,
+        message: err.message || "UPI confirmation encountered an error"
+      });
+    }
+  }
+
+  // 3c. POST /api/youpi/webhook — Automated bank observation webhook
+  if (req.method === "POST" && reqPath === "/api/youpi/webhook") {
+    try {
+      const rawBody = await parseRawBody(req);
+      const payload = JSON.parse(rawBody || "{}");
+      const { orderId, event, settlementState, referenceNumber } = payload;
+
+      if (orderId && (event === "OBSERVED_SUCCESS" || event === "RECONCILED")) {
+        db.updateOrder(orderId, {
+          paymentStatus: settlementState === "RECONCILED" ? "RECONCILED" : "PAID",
+          orderStatus: "PROCESSING",
+          paymentNote: `YouPI Observer Confirmed - Ref: ${referenceNumber || "Bank Credit"}`,
+          gateway: {
+            provider: "youpi_pg",
+            event,
+            referenceNumber,
+            receivedAt: new Date().toISOString()
+          }
+        });
+        console.log(`✓ Order ${orderId} reconciled via YouPI Observer!`);
+      }
+
+      return sendJSON(res, 200, { received: true });
+    } catch (err) {
+      console.error("YouPI webhook error:", err);
+      return sendJSON(res, 500, { error: err.message });
     }
   }
 

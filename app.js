@@ -2173,7 +2173,13 @@ async function submitQuickBuyOrder() {
       return;
     }
 
-    // 2. Online Payment Gateway (UPI / Cards / Net Banking)
+    // 2. Direct UPI Intent & Dynamic QR (Atharva Giri / YouPI)
+    if (data.upiIntentUrl) {
+      showUPIPaymentModal(data, "qb");
+      return;
+    }
+
+    // 3. Online Payment Gateway (Razorpay fallback)
     launchRazorpayCheckout({
       keyId: data.keyId,
       amount: data.amount,
@@ -2278,7 +2284,13 @@ async function submitCartOrder() {
       return;
     }
 
-    // 2. Online Payment Gateway (UPI / Cards / Net Banking)
+    // 2. Direct UPI Intent & Dynamic QR (Atharva Giri / YouPI)
+    if (data.upiIntentUrl) {
+      showUPIPaymentModal(data, "cart");
+      return;
+    }
+
+    // 3. Online Payment Gateway (UPI / Cards / Net Banking)
     launchRazorpayCheckout({
       keyId: data.keyId,
       amount: data.amount,
@@ -2300,6 +2312,92 @@ async function submitCartOrder() {
       const delivery = subtotal - discount >= 799 ? 0 : 60;
       updatePaymentSubmitButtonLabel("cart", subtotal - discount + delivery);
     }
+  }
+}
+
+function showUPIPaymentModal(data, context) {
+  let modal = document.getElementById("directUPIModal");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "directUPIModal";
+    modal.style.cssText = `
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.75); display: flex; align-items: center; justify-content: center;
+      z-index: 99999; backdrop-filter: blur(4px); padding: 16px;
+    `;
+    document.body.appendChild(modal);
+  }
+
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(data.upiIntentUrl)}`;
+
+  modal.innerHTML = `
+    <div style="background: #ffffff; border-radius: 16px; max-width: 420px; width: 100%; padding: 24px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); font-family: inherit;">
+      <div style="font-size: 32px; margin-bottom: 8px;">💳</div>
+      <h3 style="margin: 0 0 4px; font-size: 20px; color: #17350a; font-weight: 700;">Pay via UPI / QR</h3>
+      <p style="margin: 0 0 16px; font-size: 13px; color: #64748b;">Instant Peer-to-Bank • 0% Gateway Fees</p>
+      
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; margin-bottom: 16px;">
+        <div style="font-size: 13px; color: #475569;">Payee: <strong>${data.payeeName}</strong></div>
+        <div style="font-size: 13px; color: #475569;">UPI ID: <strong style="color: #17350a;">${data.upiId}</strong></div>
+        <div style="font-size: 24px; font-weight: 800; color: #17350a; margin-top: 6px;">₹${data.amount}</div>
+      </div>
+
+      <div style="margin: 0 auto 16px; display: inline-block; padding: 8px; background: #fff; border: 2px solid #e2e8f0; border-radius: 12px;">
+        <img src="${qrUrl}" alt="Scan UPI QR" style="width: 180px; height: 180px; display: block;" />
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <a href="${data.upiIntentUrl}" style="background: #17350a; color: #ffffff; text-decoration: none; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; display: block;">
+          📲 Open in GPay / PhonePe / Paytm / CRED
+        </a>
+        <button id="upiConfirmPaidBtn" style="background: #10b981; color: #ffffff; border: none; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer;">
+          ✅ I Have Completed Payment
+        </button>
+        <button id="upiCancelBtn" style="background: transparent; color: #64748b; border: 1px solid #cbd5e1; padding: 8px; border-radius: 8px; font-size: 13px; cursor: pointer;">
+          Cancel & Return
+        </button>
+      </div>
+    </div>
+  `;
+
+  modal.style.display = "flex";
+
+  const confirmBtn = document.getElementById("upiConfirmPaidBtn");
+  if (confirmBtn) {
+    confirmBtn.onclick = async () => {
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = "Verifying payment... ⏳";
+      try {
+        const res = await fetch("/api/confirm-upi-payment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ orderId: data.orderId })
+        });
+        const resData = await res.json();
+        modal.style.display = "none";
+        if (context === "qb") {
+          closeQuickBuyModal();
+        } else {
+          cart = [];
+          saveCart(cart);
+          updateCartUI();
+          closeCart();
+        }
+        showOrderSuccessModal(resData.order || data.order);
+      } catch (e) {
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = "✅ I Have Completed Payment";
+        showToast("Could not confirm with server. Please try again.");
+      }
+    };
+  }
+
+  const cancelBtn = document.getElementById("upiCancelBtn");
+  if (cancelBtn) {
+    cancelBtn.onclick = () => {
+      modal.style.display = "none";
+      showRetryAlert(context, "Payment was cancelled. You can retry or choose Cash on Delivery.");
+    };
   }
 }
 
